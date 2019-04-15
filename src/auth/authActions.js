@@ -4,14 +4,15 @@ import axios from 'axios'
 import consts from '../consts'
 
 export function login(values) {
-    return submit(values, `${consts.OAPI_URL}/login`)
+    return submit(values, `${consts.API_URL}/auth/login`)
 }
 
 export function signup(values) {
-    return submit(values, `${consts.OAPI_URL}/signup`)
+    return submit(values, `${consts.API_URL}/auth/signup`)
 }
 
 function submit(values, url) {
+    console.log(values);
     return dispatch => {
         axios.post(url, values)
             .then(resp => {
@@ -20,8 +21,12 @@ function submit(values, url) {
                 ])
             })
             .catch(e => {
-                e.response.data.errors.forEach(
-                    error => toastr.error('Erro', error))
+                if (e.response.data.errors) {
+                    Object.entries(e.response.data.errors).forEach(
+                        ([key, error]) => toastr.error(key, error[0]))
+                } else {
+                    toastr.error('Erro', e.response.data.message)
+                }
             })
     }
 }

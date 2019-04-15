@@ -1,4 +1,4 @@
 export default {
-    API_URL: 'http://localhost:3003/api',
-    OAPI_URL: 'http://localhost:3003/oapi',
+    API_URL: 'http://10.2.1.15:8000/api',
+    OAPI_URL: 'http://10.2.1.15:8000/api',
 }
