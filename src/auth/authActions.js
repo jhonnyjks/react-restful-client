@@ -12,10 +12,10 @@ export function signup(values) {
 }
 
 function submit(values, url) {
-    console.log(values);
     return dispatch => {
         axios.post(url, values)
             .then(resp => {
+                toastr.success('Sucesso', resp.data.message)
                 dispatch([
                     { type: 'USER_FETCHED', payload: resp.data }
                 ])
