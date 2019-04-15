@@ -1,0 +1,39 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-scripts": "2.1.8",
+    "admin-lte": "2.3.11",
+    "axios": "0.18.0",
+    "font-awesome": "4.7.0",
+    "ionicons": "4.4.3",
+    "jquery": "2.2.3",
+    "react-redux": "5.0.7",
+    "react-redux-toastr": "7.4.0",
+    "react-router": "4.3.1",
+    "react-router-dom": "4.3.1",
+    "redux": "4.0.0",
+    "redux-form": "7.4.2",
+    "redux-multi": "0.1.12",
+    "redux-promise": "0.6.0",
+    "redux-thunk": "2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
