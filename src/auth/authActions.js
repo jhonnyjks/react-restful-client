@@ -21,9 +21,12 @@ function submit(values, url) {
                 ])
             })
             .catch(e => {
-                if (e.response.data.errors) {
+                console.log(e)
+                if (e.response.data && e.response.data.errors) {
                     Object.entries(e.response.data.errors).forEach(
                         ([key, error]) => toastr.error(key, error[0]))
+                } else if (e.response.data) {
+                    toastr.error('Erro', e.response.message)
                 } else {
                     toastr.error('Erro', e.response.data.message)
                 }
@@ -38,9 +41,10 @@ export function logout() {
 export function validateToken(token) {
     return dispatch => {
         if (token) {
-            axios.post(`${consts.OAPI_URL}/validateToken`, { token })
-                .then(resp => {
-                    dispatch({ type: 'TOKEN_VALIDATED', payload: resp.data.valid })
+            axios.get(`${consts.OAPI_URL}/auth/validate`, {
+                headers: { authorization: token.type + ' ' + token.token }
+            }).then(resp => {
+                    dispatch({ type: 'TOKEN_VALIDATED', payload: true })
                 })
                 .catch(e => dispatch({ type: 'TOKEN_VALIDATED', payload: false }))
         } else {
