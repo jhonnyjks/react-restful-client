@@ -21,7 +21,6 @@ function submit(values, url) {
                 ])
             })
             .catch(e => {
-                console.log(e)
                 if (e.response.data && e.response.data.errors) {
                     Object.entries(e.response.data.errors).forEach(
                         ([key, error]) => toastr.error(key, error[0]))

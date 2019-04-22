@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { getList, showUpdate, showDelete } from './billingCycleActions'
+import { getList, showUpdate, remove } from './actions'
 
 class List extends Component {
 
@@ -12,17 +12,19 @@ class List extends Component {
     renderRows() {
         const list = this.props.list || []
 
-        return list.map(bc => (
-            <tr key={bc._id}>
-                <td>{bc.name}</td>
-                <td>{bc.month}</td>
-                <td>{bc.year}</td>
+        return list.map(user => (
+            <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.login}</td>
+                <td>{user.user_type_id}</td>
+                <td>{user.user_situation_id}</td>
                 <td>
-                    <button className='btn btn-warning' onClick={() => this.props.showUpdate(bc)}>
-                        <i className='fa fa-pencil'></i>    
+                    <button className='btn btn-warning' onClick={() => this.props.showUpdate(user)}>
+                        <i className='fa fa-pencil'></i>
                     </button>
-                    <button className='btn btn-danger' onClick={() => this.props.showDelete(bc)}>
-                        <i className='fa fa-trash-o'></i>    
+                    <button className='btn btn-danger' onClick={() => this.props.remove(user)}>
+                        <i className='fa fa-trash-o'></i>
                     </button>
                 </td>
             </tr>
@@ -30,29 +32,27 @@ class List extends Component {
     }
 
     render() {
-        return(
-            <div>
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Login</th>
-                            <th>Tipo</th>
-                            <th>Status</th>
-                            <th className='table-actions'>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderRows()}
-                    </tbody>
-                </table>
-            </div>
+        return (
+            <table className='table'>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Login</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                        <th className='table-actions'>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.renderRows()}
+                </tbody>
+            </table>
         )
     }
 }
 
-const mapStateToProps = state => ({list: state.billingCycle.list})
-const mapDispatchToProps = dispatch => bindActionCreators({getList, showUpdate, showDelete}, dispatch)
+const mapStateToProps = state => ({ list: state.user.list })
+const mapDispatchToProps = dispatch => bindActionCreators({ getList, showUpdate, remove }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

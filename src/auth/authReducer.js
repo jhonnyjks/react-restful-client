@@ -19,6 +19,7 @@ export default (state = INITIAL_STATE, action) => {
                 user: action.payload.data.user,
                 token: action.payload.data.token
             }))
+            console.log('token: ' + action.payload.data.token.token)
             return { ...state, user: action.payload.data.user, token: action.payload.data.token, validToken: true }
         default:
             return state
