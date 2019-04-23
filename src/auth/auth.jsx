@@ -7,8 +7,8 @@ import './auth.css'
 import { login, signup } from './authActions'
 import Row from '../common/layout/row'
 import Grid from '../common/layout/grid'
-import Messages from '../common/msg/messages'
-import Input from '../common/form/inputAuth'
+import Messages from '../common/msg/Message'
+import Input from '../common/form/InputAuth'
 
 class Auth extends Component {
     constructor(props) {

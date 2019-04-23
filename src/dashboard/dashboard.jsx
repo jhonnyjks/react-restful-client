@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 import consts from '../consts'
-import ContentHeader from '../common/template/contentHeader'
-import Content from '../common/template/content'
+import ContentHeader from '../common/template/ContentHeader'
+import Content from '../common/template/Content'
 import ValueBox from '../common/widget/valueBox'
 import Row from '../common/layout/row'
 
