@@ -28,8 +28,11 @@ export function remove(values) {
 
 function submit(values, method) {
     return dispatch => {
-        const id = values.id ? values.id : ''
-        axios[method](`${consts.API_URL}/users/${id}`, values)
+        const id = values.id ? values.id+0 : ''
+        let filteredValues = {...values}
+        if(id) delete filteredValues.id
+        
+        axios[method](`${consts.API_URL}/users/${id}`, filteredValues)
         .then(resp => {
             toastr.success('Sucesso', 'Operação Realizada com sucesso.')
             dispatch(init())
@@ -39,9 +42,9 @@ function submit(values, method) {
                 Object.entries(e.response.data.errors).forEach(
                     ([key, error]) => toastr.error(key, error[0]))
             } else if (e.response.data) {
-                toastr.error('Erro', e.response.message)
-            } else {
                 toastr.error('Erro', e.response.data.message)
+            } else {
+                toastr.error('Erro', e.response.message)
             }
         })
     }
@@ -56,8 +59,7 @@ export function showContent(flag) {
 
 export function showUpdate(user) {
     return [
-        showTabs('tabUpdate'),
-        selectTab('tabUpdate'),
+        showContent('form'),
         initialize('userForm', user)
     ]
 }

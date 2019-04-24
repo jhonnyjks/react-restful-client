@@ -25,7 +25,7 @@ class User extends Component {
                         <List />
                     </If>
                     <If test={this.props.show === 'form'}>
-                        <Form onSubmit={this.props.create} submitLabel='Salvar' submitClass='primary' />
+                        <Form onSubmit={this.props.isEdit ? this.props.update : this.props.create} submitLabel='Salvar' submitClass='primary' />
                     </If>
                 </Content>
             </div>
@@ -33,7 +33,10 @@ class User extends Component {
     }
 }
 
-const mapStateToProps = state => ({show: state.user.show})
+const mapStateToProps = state => ({
+    show: state.user.show,
+    isEdit: state.form.userForm && state.form.userForm.initial && state.form.userForm.initial.id !== null
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getList, showContent, update, remove, init, create
