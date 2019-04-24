@@ -36,6 +36,7 @@ function submit(values, method) {
         .then(resp => {
             toastr.success('Sucesso', 'Operação Realizada com sucesso.')
             dispatch(init())
+            dispatch(getList())
         })
         .catch(e => {
             if (e.response.data && e.response.data.errors) {
