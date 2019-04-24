@@ -17,7 +17,7 @@ class Form extends Component {
                     type='email' label='E-mail' cols='12 4' placeholder='seu.email@mail.com' />
                     <Field name='login' component={LabelAndInput} readOnly={this.props.readOnly}
                     label='Login' cols='12 4' placeholder='Informe o login' />
-                    <Field name='password' component={LabelAndInput} readOnly={this.props.readOnly}
+                    <Field name='password' component={LabelAndInput} type="password" readOnly={this.props.readOnly}
                     label='Senha' cols='12 4' placeholder='Informe a senha' />
                     <Field name='user_type_id' component={LabelAndInput} readOnly={this.props.readOnly}
                     label='Tipo' cols='12 4' placeholder='Informe o user_type_id' />
