@@ -40,7 +40,7 @@ export function logout() {
 export function validateToken(token) {
     return dispatch => {
         if (token) {
-            axios.get(`${consts.OAPI_URL}/auth/validate`, {
+            axios.get(`${consts.API_URL}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
                     dispatch({ type: 'TOKEN_VALIDATED', payload: true })

@@ -9,7 +9,7 @@ import List from './List'
 import Form from './Form'
 import { getList, showContent, update, remove, init, create } from './actions'
 
-class User extends Component {
+class Profile extends Component {
 
     componentWillMount() {
         this.props.init()
@@ -19,7 +19,7 @@ class User extends Component {
     render() {
         return (
             <div>
-                <ContentHeader title='Usuários' small='Gerenciar usuários do sistema' createMethod={() => this.props.showContent('form')} />
+                <ContentHeader title='Perfis' small='Gerenciar perfis de usuário' createMethod={() => this.props.showContent('form')} />
                 <Content>
                     <If test={this.props.show === 'list'}>
                         <List />
@@ -34,11 +34,11 @@ class User extends Component {
 }
 
 const mapStateToProps = state => ({
-    show: state.user.show,
-    isEdit: state.form.userForm && state.form.userForm.initial && state.form.userForm.initial.id > 0
+    show: state.profile.show,
+    isEdit: state.form.profileForm && state.form.profileForm.initial && state.form.profileForm.initial.id > 0
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getList, showContent, update, remove, init, create
 }, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(User)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

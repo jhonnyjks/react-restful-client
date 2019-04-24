@@ -5,13 +5,15 @@ import {reducer as toastrReducer} from 'react-redux-toastr'
 import TabReducer from '../common/tab/tabReducer'
 import AuthReducer from '../auth/authReducer'
 import UserReducer from '../users/reducer'
+import ProfileReducer from '../profiles/reducer'
 
 const rootReducer = combineReducers({
     tab: TabReducer,
     auth: AuthReducer,
     form: formReducer,
     toastr: toastrReducer,
-    user: UserReducer
+    user: UserReducer,
+    profile: ProfileReducer
 })
 
 export default rootReducer
