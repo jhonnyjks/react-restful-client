@@ -43,7 +43,17 @@ export function validateToken(token) {
             axios.get(`${consts.API_URL}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
+
+                // ATIVANDO MODO DEVMASTER
+                axios.get(`${consts.API_URL}/auth/permissions/use-all`, {
+                    headers: { authorization: token.type + ' ' + token.token }
+                }).then(resp => {
+                    dispatch({ type: 'DEVMASTER_ACTIVATED', payload: true })
                     dispatch({ type: 'TOKEN_VALIDATED', payload: true })
+                })
+                .catch(e => dispatch({ type: 'DEVMASTER_ACTIVATED', payload: false }))
+                /////////////////////////
+                //dispatch({ type: 'TOKEN_VALIDATED', payload: true })
                 })
                 .catch(e => dispatch({ type: 'TOKEN_VALIDATED', payload: false }))
         } else {
