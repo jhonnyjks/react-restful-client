@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import LabelAndInput from '../common/form/LabelAndInput'
+import PermissionList from './permissions/List'
 import { init } from './actions'
 
 class Form extends Component {
@@ -12,9 +13,10 @@ class Form extends Component {
             <form role='form' onSubmit={this.props.handleSubmit}>
                 <div className='box-body'>
                     <Field name='noun' component={LabelAndInput} readOnly={this.props.readOnly}
-                    label='Nome' cols='12 4' placeholder='Informe o nome' />
+                    label='Nome' cols='12 6' placeholder='Informe o nome' />
                     <Field name='description' component={LabelAndInput} readOnly={this.props.readOnly}
-                    label='Descrição' cols='12 4' placeholder='Descreva o perfil' />
+                    label='Descrição' cols='12 6' placeholder='Descreva o perfil' />
+                    <PermissionList />
                 </div>
                 <div className='box-footer'>
                     <button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>

@@ -6,6 +6,7 @@ import TabReducer from '../common/tab/tabReducer'
 import AuthReducer from '../auth/authReducer'
 import UserReducer from '../users/reducer'
 import ProfileReducer from '../profiles/reducer'
+import PermissionReducer from '../profiles/permissions/reducer'
 
 const rootReducer = combineReducers({
     tab: TabReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     form: formReducer,
     toastr: toastrReducer,
     user: UserReducer,
-    profile: ProfileReducer
+    profile: ProfileReducer,
+    permission: PermissionReducer
 })
 
 export default rootReducer

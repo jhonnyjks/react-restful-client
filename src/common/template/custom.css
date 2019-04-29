@@ -15,3 +15,34 @@ button {
 .table-actions {
     width: 150px;
 }
+.content {
+    padding-bottom: 50px;
+}
+
+.box-body {
+    background-color: #fff;
+}
+
+.custom-list-group > li {
+    display: inline-table;
+}
+
+.custom-list-group > li > h5 {
+    font-weight: bold;
+}
+
+.custom-list-group > li > a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.custom-list-group > li:hover {
+    cursor: pointer;
+    background-color: #0000000d;
+}
+
+.center-block {
+    display: block;
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
