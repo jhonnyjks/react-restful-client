@@ -34,10 +34,11 @@ button {
 .custom-list-group > li > a {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
 
 .custom-list-group > li:hover {
-    cursor: pointer;
+    
     background-color: #0000000d;
 }
 

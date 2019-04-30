@@ -74,6 +74,6 @@ export function init() {
 export function selectPermission(permision) {
     return {
         type: 'PERMISSION_SELECTED',
-        payload: permision
+        payload: permision 
     }
 }

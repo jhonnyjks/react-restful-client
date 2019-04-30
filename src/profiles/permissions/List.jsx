@@ -38,7 +38,7 @@ class List extends Component {
 
         return list.map(item => (
             <li key={item.route} className='list-group-item col-xs-12'>
-                <a href className='row col-xs-12' onClick={() => this.props.selectPermission(item.route === this.props.selected.route ? {} : item)}>
+                <a className='row col-xs-12' onClick={() => this.props.selectPermission(item.route === this.props.selected.route ? {} : item)}>
                     <b>{item.route}</b>
                 </a>
                 <If test={item.route === this.props.selected.route}>
