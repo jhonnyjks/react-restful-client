@@ -16,7 +16,7 @@ class Form extends Component {
                     label='Nome' cols='12 6' placeholder='Informe o nome' />
                     <Field name='description' component={LabelAndInput} readOnly={this.props.readOnly}
                     label='Descrição' cols='12 6' placeholder='Descreva o perfil' />
-                    <PermissionList />
+                    <PermissionList profileId={this.props.id} />
                 </div>
                 <div className='box-footer'>
                     <button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>
@@ -30,6 +30,7 @@ class Form extends Component {
 Form = reduxForm({form: 'profileForm', destroyOnUnmount: false})(Form)
 const selector = formValueSelector('profileForm')
 const mapStateToProps = state => ({
+    id: selector(state, 'id'),
     noun: selector(state, 'noun'),
     description: selector(state, 'description')
 })
