@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getList, showUpdate, remove, selectPermission, changeAttribute } from './actions'
 import If from '../../common/operator/If'
+import CheckBox from '../../common/form/CheckBox'
+import Grid from '../../common/layout/grid'
 
 // Mapeando permissões específicas
 const codesPerOpetarion = {
@@ -21,29 +23,25 @@ class List extends Component {
     renderAttributes(list = []) {
         return list.map(item => (
             <div key={item.noun} className='col-xs-12'>
-                <div className='col-xs-4'>
+                <Grid cols='4'>
                     {item.noun}
-                </div>
-                <div className='col-xs-2'>
-                    <input className='center-block' type="checkbox" value="1"
-                        checked={this.props.list[0].actions[1].code} 
-                        onChange={event => this.props.changeAttribute(event, item)} />
-                </div>
-                <div className='col-xs-2'>
-                    <input className='center-block' type="checkbox" value="2"
-                        checked={codesPerOpetarion[2].indexOf(item.code) > -1} 
-                        onChange={event => this.props.changeAttribute(event, item)} />
-                </div>
-                <div className='col-xs-2'>
-                    <input className='center-block' type="checkbox" value="4"
-                        checked={codesPerOpetarion[4].indexOf(item.code) > -1} 
-                        onChange={event => this.props.changeAttribute(event, item)} />
-                </div>
-                <div className='col-xs-2'>
-                    <input className='center-block' type="checkbox" value="8"
-                        checked={codesPerOpetarion[8].indexOf(item.code) > -1} 
-                        onChange={event => this.props.changeAttribute(event, item)} />
-                </div>
+                </Grid>
+                <Grid cols='2'>
+                    <CheckBox value="1" checked={codesPerOpetarion[1].indexOf(item.code) > -1} 
+                        handleChange={this.props.changeAttribute} />
+                </Grid>
+                <Grid cols='2'>
+                    <CheckBox value="2" checked={codesPerOpetarion[2].indexOf(item.code) > -1} 
+                        handleChange={this.props.changeAttribute} />
+                </Grid>
+                <Grid cols='2'>
+                    <CheckBox value="4" checked={codesPerOpetarion[4].indexOf(item.code) > -1} 
+                        handleChange={this.props.changeAttribute} />
+                </Grid>
+                <Grid cols='2'>
+                    <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(item.code) > -1} 
+                        handleChange={this.props.changeAttribute} />
+                </Grid>
 
             </div>
         ))

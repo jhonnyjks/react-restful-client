@@ -131,10 +131,12 @@ export function selectPermission(index) {
     }
 }
 
-export function changeAttribute(event, attr) {
-
-        return {
+export function changeAttribute(event) {
+    return {
         type: 'PERMISSION_CHANGED',
-        payload: { ...attr, code: event.target.checked ? attr.code + +event.target.value : attr.code - event.target.value }
+        payload: {
+            noun: event.target.parentElement.parentElement.firstElementChild.textContent,
+            newCode: event.target.checked ? +event.target.value : -event.target.value
+        }
     }
 }

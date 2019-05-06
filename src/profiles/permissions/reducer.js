@@ -16,9 +16,12 @@ export default (state = INITIAL_STATE, action) => {
         case 'PERMISSION_CHANGED':
             let list = state.list
             let i = _.findIndex(list[state.selected].actions, { noun: action.payload.noun })
-            list[state.selected].actions[i] = action.payload
 
-            return { ...state, list: list }
+            list[state.selected].actions[i] = {
+                ...list[state.selected].actions[i],
+                code: list[state.selected].actions[i].code + action.payload.newCode
+            }
+            return { ...state, list: [...list] }
 
         default:
             return state;
