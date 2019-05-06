@@ -28,21 +28,20 @@ class List extends Component {
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="1" checked={codesPerOpetarion[1].indexOf(item.code) > -1} 
-                        handleChange={this.props.changeAttribute} />
+                        handleChange={event => this.props.changeAttribute(event, item)} />
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="2" checked={codesPerOpetarion[2].indexOf(item.code) > -1} 
-                        handleChange={this.props.changeAttribute} />
+                        handleChange={event => this.props.changeAttribute(event, item)} />
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="4" checked={codesPerOpetarion[4].indexOf(item.code) > -1} 
-                        handleChange={this.props.changeAttribute} />
+                        handleChange={event => this.props.changeAttribute(event, item)} />
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(item.code) > -1} 
-                        handleChange={this.props.changeAttribute} />
+                        handleChange={event => this.props.changeAttribute(event, item)} />
                 </Grid>
-
             </div>
         ))
     }

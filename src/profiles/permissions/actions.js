@@ -78,6 +78,11 @@ export function remove(values) {
     return submit(values, 'delete')
 }
 
+/**
+ * Método genérico para envio de requisições ao serviço de permissões
+ * @param {*} values 
+ * @param String method 
+ */
 function submit(values, method) {
     return dispatch => {
         const id = values.id ? values.id + 0 : ''
@@ -131,12 +136,48 @@ export function selectPermission(index) {
     }
 }
 
-export function changeAttribute(event) {
-    return {
-        type: 'PERMISSION_CHANGED',
-        payload: {
-            noun: event.target.parentElement.parentElement.firstElementChild.textContent,
-            newCode: event.target.checked ? +event.target.value : -event.target.value
-        }
+function actionSubmit(values, method) {
+    return dispatch => {
+        //'id' vai para a url se for positivo e não vazio e se o metodo não for 'post'
+        const id = values.id > 0 && method !== 'post' ? +values.id : ''
+        let filteredValues = { ...values }
+        // 'id' não pode ir como parâmetro
+        if (filteredValues.id !== undefined) delete filteredValues.id
+
+        axios[method](`${consts.API_URL}/actions/${id}`, filteredValues)
+            .then(resp => {
+                toastr.success('Sucesso', 'Operação Realizada com sucesso.')
+                dispatch({
+                    type: 'PERMISSION_CHANGED',
+                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null }
+                })
+            })
+            .catch(e => {
+                if (e.response.data && e.response.data.errors) {
+                    Object.entries(e.response.data.errors).forEach(
+                        ([key, error]) => toastr.error(key, error[0]))
+                } else if (e.response.data) {
+                    toastr.error('Erro', e.response.data.message)
+                } else {
+                    toastr.error('Erro', e.response.message)
+                }
+            })
     }
+}
+
+export function changeAttribute(event, item) {
+    const code = item.code + (event.target.checked ? +event.target.value : -event.target.value)
+    let method = 'post'
+
+    if (item.id > 0) {
+        if (code > 0) {
+            method = 'put'
+        } else {
+            method = 'delete'
+        }
+    } else if (code > 0) {
+
+    }
+
+    return actionSubmit({ ...item, code }, method)
 }
