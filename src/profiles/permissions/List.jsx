@@ -39,8 +39,8 @@ class List extends Component {
                         handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
                 <Grid cols='2'>
-                    <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
+                    <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(list[0].code) > -1} 
+                        handleChange={event => this.props.changeAttribute(event, list[0], this.props.list[this.props.selected])} />
                 </Grid>
             </div>
         ))
