@@ -17,6 +17,10 @@ export default (state = INITIAL_STATE, action) => {
             let list = state.list
             let i = _.findIndex(list[state.selected].actions, { noun: action.payload.noun })
             list[state.selected].actions[i] = action.payload
+            // Se a rota/permission ainda não existia nesse perfil, ele foi adicionado agora e gerou ID
+            if (list[state.selected].id < 1) {
+                list[state.selected].id = action.payload.permission_id
+            }
             return { ...state, list: [...list] }
 
         default:

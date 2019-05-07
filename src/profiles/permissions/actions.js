@@ -20,7 +20,8 @@ export function getList(profileId) {
 
                         // Para cada permissão, verifica de ela já está no array 'permissions', e trata como deve
                         resp2.data.data.forEach(el => {
-                            let i = _.findIndex(permissions, { cpath: el.route.replace('api/', '') })
+                            const cpath = el.route.replace('api/', '')
+                            let i = _.findIndex(permissions, { cpath })
 
                             // Se achou a permissão, verifica os atributos
                             if (i > -1) {
@@ -44,6 +45,22 @@ export function getList(profileId) {
                                         })
                                     }
                                 }
+                            } else {
+
+                                // concatenando à array as permissões que o perfil ainda não tem acesso
+                                permissions.push({
+                                    id: null,
+                                    profile_id: profileId,
+                                    permission_id: null,
+                                    priority: 1,
+                                    cpath,
+                                    actions: el.attributes.map(attr => ({
+                                        id: null,
+                                        permission_id: null,
+                                        noun: attr,
+                                        code: 0
+                                    }))
+                                })
                             }
                         });
 
@@ -66,15 +83,15 @@ export function getList(profileId) {
     }
 }
 
-export function create(values) {
-    return submit(values, 'post')
+export function createPermission(values, callback = null, params = null) {
+    return submit(values, 'post', callback, params)
 }
 
-export function update(values) {
+export function updatePermission(values) {
     return submit(values, 'put')
 }
 
-export function remove(values) {
+export function removePermission(values) {
     return submit(values, 'delete')
 }
 
@@ -83,17 +100,21 @@ export function remove(values) {
  * @param {*} values 
  * @param String method 
  */
-function submit(values, method) {
+function submit(values, method, callback = null, params = {}) {
     return dispatch => {
-        const id = values.id ? values.id + 0 : ''
+
+        //'id' vai para a url se for positivo e não vazio e se o metodo não for 'post'
+        const id = values.id > 0 && method !== 'post' ? +values.id : ''
         let filteredValues = { ...values }
-        if (id) delete filteredValues.id
+        // 'id' não pode ir como parâmetro
+        delete filteredValues.id
 
         axios[method](`${consts.API_URL}/permissions/${id}`, filteredValues)
             .then(resp => {
-                toastr.success('Sucesso', 'Operação Realizada com sucesso.')
-                dispatch(init())
-                dispatch(getList())
+                console.log(callback)
+                if (callback !== null) {
+                    dispatch(callback({ ...params, permission_id: resp.data.data.id }))
+                }
             })
             .catch(e => {
                 if (e.response.data && e.response.data.errors) {
@@ -142,7 +163,7 @@ function actionSubmit(values, method) {
         const id = values.id > 0 && method !== 'post' ? +values.id : ''
         let filteredValues = { ...values }
         // 'id' não pode ir como parâmetro
-        if (filteredValues.id !== undefined) delete filteredValues.id
+        delete filteredValues.id
 
         axios[method](`${consts.API_URL}/actions/${id}`, filteredValues)
             .then(resp => {
@@ -165,19 +186,48 @@ function actionSubmit(values, method) {
     }
 }
 
-export function changeAttribute(event, item) {
-    const code = item.code + (event.target.checked ? +event.target.value : -event.target.value)
-    let method = 'post'
+export function createAction(values) {
+    return actionSubmit(values, 'post')
+}
 
-    if (item.id > 0) {
+export function updateAction(values) {
+    return actionSubmit(values, 'put')
+}
+
+export function removeAction(values) {
+    return actionSubmit(values, 'delete')
+}
+
+export function changeAttribute(event, action, permission) {
+    const code = action.code + (event.target.checked ? +event.target.value : -event.target.value)
+
+    // Se tem ID, altera ou deleta
+    if (action.id > 0) {
         if (code > 0) {
-            method = 'put'
+            return updateAction({ ...action, code })
         } else {
-            method = 'delete'
+            return removeAction({ ...action, code })
         }
+        // Se não tem ID, mas tem código válido, insere a permissão ao atributo
     } else if (code > 0) {
 
+        // Se a rota já existe em permissions, insera a action. Senão, cria a rota em permissions
+        // e depois insere a action
+        if (action.permission_id > 0) {
+            return createAction({ ...action, code })
+        } else {
+
+            console.log({ ...action, code })
+            return createPermission({
+                profile_id: permission.profile_id,
+                cpath: permission.cpath,
+                priority: permission.priority
+            }, createAction, { ...action, code })
+        }
     }
 
-    return actionSubmit({ ...item, code }, method)
+    return {
+        type: 'PERMISSION_CHANGED',
+        payload: { ...action, code }
+    }
 }

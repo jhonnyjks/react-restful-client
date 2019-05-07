@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { getList, showUpdate, remove, selectPermission, changeAttribute } from './actions'
+import { getList, showUpdate, selectPermission, changeAttribute } from './actions'
 import If from '../../common/operator/If'
 import CheckBox from '../../common/form/CheckBox'
 import Grid from '../../common/layout/grid'
@@ -28,19 +28,19 @@ class List extends Component {
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="1" checked={codesPerOpetarion[1].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item)} />
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="2" checked={codesPerOpetarion[2].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item)} />
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="4" checked={codesPerOpetarion[4].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item)} />
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
                 <Grid cols='2'>
                     <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item)} />
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
             </div>
         ))
@@ -86,7 +86,6 @@ const mapStateToProps = state => ({ list: state.permission.list, selected: state
 const mapDispatchToProps = dispatch => bindActionCreators({
     getList,
     showUpdate,
-    remove,
     selectPermission,
     changeAttribute
 }, dispatch)
