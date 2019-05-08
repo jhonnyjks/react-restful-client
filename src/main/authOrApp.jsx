@@ -11,20 +11,18 @@ import { validateToken } from '../auth/authActions'
 class AuthOrApp extends Component {
     componentWillMount() {
         if (this.props.auth.token) {
-            this.props.validateToken(this.props.auth.token)
+            this.props.validateToken(this.props.auth.token, this.props.auth.profile)
         }
     }
 
     render() {
-        const { token, validToken } = this.props.auth
+        const { token, validToken, profile } = this.props.auth
 
-        if (token && validToken) {
+        if (token && validToken && profile) {
             axios.defaults.headers.common['authorization'] = token.type + ' ' + token.token
             return <App>{this.props.children}</App>
-        } else if (!token || !validToken) {
-            return <Auth />
         } else {
-            return false
+            return <Auth />
         }
     }
 }

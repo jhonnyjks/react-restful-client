@@ -1,5 +1,6 @@
 import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
+import _ from 'lodash'
 
 import consts from '../consts'
 
@@ -16,13 +17,18 @@ function submit(values, url) {
         axios.post(url, values)
             .then(resp => {
                 toastr.success('Sucesso', resp.data.message)
-                dispatch([
-                    selectProfile(
-                        resp.data.data.profiles.length ? resp.data.data.profiles[0] : null,
-                        resp.data.data.token
-                    ),
-                    { type: 'USER_FETCHED', payload: resp.data }
-                ])
+
+                if (resp.data.data.profiles.length === 1) {
+                    dispatch([
+                        selectProfile(
+                            resp.data.data.profiles.length ? resp.data.data.profiles[0] : null,
+                            resp.data.data.token
+                        )
+                    ])
+                }
+
+                dispatch({ type: 'USER_FETCHED', payload: resp.data })
+
             })
             .catch(e => {
                 if (e.response && e.response.data && e.response.data.errors) {
@@ -30,7 +36,7 @@ function submit(values, url) {
                         ([key, error]) => toastr.error(key, error[0]))
                 } else if (e.response && e.response.data) {
                     toastr.error('Erro', e.response.data.message)
-                } else if(e.response && e.response.message) {
+                } else if (e.response && e.response.message) {
                     toastr.error('Erro', e.response.message)
                 } else {
                     toastr.error('Erro', 'Desconhecido :-/')
@@ -44,16 +50,21 @@ export function logout() {
     return { type: 'USER_FETCHED', payload: {} }
 }
 
-export function validateToken(token) {
+export function validateToken(token, profile) {
     return dispatch => {
         if (token) {
             axios.get(`${consts.API_URL}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
-                dispatch([
-                    { type: 'USER_FETCHED', payload: resp.data },
-                    selectProfile(resp.data.data.profiles.length ? resp.data.data.profiles[0] : null, token)
-                ])
+                const data = resp.data.data
+
+                if (data.profiles.length === 1 && profile === null) {
+                    dispatch(selectProfile(data.profiles[0], token))
+                } else if (_.findIndex(data.profiles, { id: profile.id }) > -1) {
+                    dispatch(selectProfile(profile, token))
+                }
+
+                dispatch({ type: 'USER_FETCHED', payload: resp.data })
             })
                 .catch(e => dispatch({ type: 'USER_FETCHED', payload: false }))
         } else {
@@ -68,7 +79,7 @@ export function selectProfile(profile, token) {
             axios.get(`${consts.API_URL}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
-                dispatch({ type: 'PROFILE_SELECTED', payload: profile.id })
+                dispatch({ type: 'PROFILE_SELECTED', payload: profile })
             })
         } else {
             dispatch({ type: 'PROFILE_SELECTED', payload: null })

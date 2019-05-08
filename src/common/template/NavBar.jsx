@@ -32,7 +32,7 @@ class Navbar extends Component {
                             <li className="user-header">
                                 <img src="http://lorempixel.com/160/160/abstract"
                                     className="img-circle" alt="User Image" />
-                                <p>{name}<small>{email}</small></p>
+                                <p>{name}<small>{this.props.profile.noun}</small></p>
                             </li>
                             <li className="user-footer">
                                 <div className="pull-right">
@@ -47,6 +47,6 @@ class Navbar extends Component {
         )
     }
 }
-const mapStateToProps = state => ({ user: state.auth.user })
+const mapStateToProps = state => ({ user: state.auth.user, profile: state.auth.profile })
 const mapDispatchToProps = dispatch => bindActionCreators({ logout }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
