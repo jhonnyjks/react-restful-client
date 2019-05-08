@@ -71,13 +71,16 @@ export function getList(profileId) {
                     })
             })
             .catch(e => {
-                if (e.response.data && e.response.data.errors) {
+                if (!e.response) {
+                    toastr.error('Erro', 'Desconhecido :-/')
+                    console.log(e)
+                } else if (!e.response.data) {
+                    toastr.error('Erro', e.response.message)
+                } else if (e.response.data.errors) {
                     Object.entries(e.response.data.errors).forEach(
                         ([key, error]) => toastr.error(key, error[0]))
                 } else if (e.response.data) {
                     toastr.error('Erro', e.response.data.message)
-                } else {
-                    toastr.error('Erro', e.response.message)
                 }
             })
     }
@@ -117,13 +120,16 @@ function submit(values, method, callback = null, params = {}) {
                 }
             })
             .catch(e => {
-                if (e.response.data && e.response.data.errors) {
+                if (!e.response) {
+                    toastr.error('Erro', 'Desconhecido :-/')
+                    console.log(e)
+                } else if (!e.response.data) {
+                    toastr.error('Erro', e.response.message)
+                } else if (e.response.data.errors) {
                     Object.entries(e.response.data.errors).forEach(
                         ([key, error]) => toastr.error(key, error[0]))
                 } else if (e.response.data) {
                     toastr.error('Erro', e.response.data.message)
-                } else {
-                    toastr.error('Erro', e.response.message)
                 }
             })
     }
@@ -174,13 +180,16 @@ function actionSubmit(values, method) {
                 })
             })
             .catch(e => {
-                if (e.response.data && e.response.data.errors) {
+                if (!e.response) {
+                    toastr.error('Erro', 'Desconhecido :-/')
+                    console.log(e)
+                } else if (!e.response.data) {
+                    toastr.error('Erro', e.response.message)
+                } else if (e.response.data.errors) {
                     Object.entries(e.response.data.errors).forEach(
                         ([key, error]) => toastr.error(key, error[0]))
                 } else if (e.response.data) {
                     toastr.error('Erro', e.response.data.message)
-                } else {
-                    toastr.error('Erro', e.response.message)
                 }
             })
     }
@@ -216,8 +225,6 @@ export function changeAttribute(event, action, permission) {
         if (action.permission_id > 0) {
             return createAction({ ...action, code })
         } else {
-
-            console.log({ ...action, code })
             return createPermission({
                 profile_id: permission.profile_id,
                 cpath: permission.cpath,

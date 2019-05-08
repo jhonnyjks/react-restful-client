@@ -5,7 +5,7 @@ export default (state = INITIAL_STATE, action) => {
         case 'USERS_FETCHED':
             return {...state, list: action.payload.data ? action.payload.data.data : []}
 
-        case 'FORM_SHOWED':
+        case 'USER_CONTENT_CHANGED':
             return {...state, show: action.payload}
 
         default:

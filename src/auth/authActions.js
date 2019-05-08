@@ -31,16 +31,16 @@ function submit(values, url) {
 
             })
             .catch(e => {
-                if (e.response && e.response.data && e.response.data.errors) {
-                    Object.entries(e.response.data.errors).forEach(
-                        ([key, error]) => toastr.error(key, error[0]))
-                } else if (e.response && e.response.data) {
-                    toastr.error('Erro', e.response.data.message)
-                } else if (e.response && e.response.message) {
-                    toastr.error('Erro', e.response.message)
-                } else {
+                if (!e.response) {
                     toastr.error('Erro', 'Desconhecido :-/')
                     console.log(e)
+                } else if (!e.response.data) {
+                    toastr.error('Erro', e.response.message)
+                } else if (e.response.data.errors) {
+                    Object.entries(e.response.data.errors).forEach(
+                        ([key, error]) => toastr.error(key, error[0]))
+                } else if (e.response.data) {
+                    toastr.error('Erro', e.response.data.message)
                 }
             })
     }
@@ -56,11 +56,11 @@ export function validateToken(token, profile) {
             axios.get(`${consts.API_URL}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
-                const data = resp.data.data
+                const profiles = resp.data.data.profiles
 
-                if (data.profiles.length === 1 && profile === null) {
-                    dispatch(selectProfile(data.profiles[0], token))
-                } else if (_.findIndex(data.profiles, { id: profile.id }) > -1) {
+                if (profiles.length === 1 && profile === null) {
+                    dispatch(selectProfile(profiles[0], token))
+                } else if (_.findIndex(profiles, { id: profile.id }) > -1) {
                     dispatch(selectProfile(profile, token))
                 }
 

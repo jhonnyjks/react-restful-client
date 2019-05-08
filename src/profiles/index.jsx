@@ -7,7 +7,7 @@ import Content from '../common/template/Content'
 import If from '../common/operator/If'
 import List from './List'
 import Form from './Form'
-import { getList, showContent, update, remove, init, create } from './actions'
+import { getList, showContent, update, init, create } from './actions'
 
 class Profile extends Component {
 
@@ -19,13 +19,15 @@ class Profile extends Component {
     render() {
         return (
             <div>
-                <ContentHeader title='Perfis' small='Gerenciar perfis de usuário' createMethod={() => this.props.showContent('form')} />
+                <ContentHeader title='Perfis' small='Gerenciar perfis de usuário'
+                    createMethod={() => this.props.showContent('form')} />
                 <Content>
                     <If test={this.props.show === 'list'}>
                         <List />
                     </If>
                     <If test={this.props.show === 'form'}>
-                        <Form onSubmit={this.props.isEdit ? this.props.update : this.props.create} submitLabel='Salvar' submitClass='primary' />
+                        <Form onSubmit={this.props.isEdit ? this.props.update : this.props.create}
+                            submitLabel='Salvar' submitClass='primary' />
                     </If>
                 </Content>
             </div>
@@ -39,6 +41,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, showContent, update, remove, init, create
+    getList, showContent, update, init, create
 }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

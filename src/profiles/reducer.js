@@ -5,7 +5,7 @@ export default (state = INITIAL_STATE, action) => {
         case 'PROFILES_FETCHED':
             return {...state, list: action.payload.data ? action.payload.data.data : []}
 
-        case 'PROFILE_FORM_SHOWED':
+        case 'PROFILE_CONTENT_CHANGED':
             return {...state, show: action.payload}
 
         default:

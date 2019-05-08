@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
-import { reset as resetForm, initialize } from 'redux-form'
-import {showTabs, selectTab } from '../common/tab/tabActions'
+import { initialize } from 'redux-form'
 import consts from '../consts'
 
 const INITIAL_VALUES = {name: '', login: '', password: '', user_type_id: '', user_situation_id: ''}
@@ -39,13 +38,16 @@ function submit(values, method) {
             dispatch(getList())
         })
         .catch(e => {
-            if (e.response.data && e.response.data.errors) {
+            if (!e.response) {
+                toastr.error('Erro', 'Desconhecido :-/')
+                console.log(e)
+            } else if (!e.response.data) {
+                toastr.error('Erro', e.response.message)
+            } else if (e.response.data.errors) {
                 Object.entries(e.response.data.errors).forEach(
                     ([key, error]) => toastr.error(key, error[0]))
             } else if (e.response.data) {
                 toastr.error('Erro', e.response.data.message)
-            } else {
-                toastr.error('Erro', e.response.message)
             }
         })
     }
@@ -53,7 +55,7 @@ function submit(values, method) {
 
 export function showContent(flag) {
     return {
-        type: 'FORM_SHOWED',
+        type: 'USER_CONTENT_CHANGED',
         payload: flag
     }
 }

@@ -38,13 +38,16 @@ function submit(values, method) {
             dispatch(getList())
         })
         .catch(e => {
-            if (e.response.data && e.response.data.errors) {
+            if (!e.response) {
+                toastr.error('Erro', 'Desconhecido :-/')
+                console.log(e)
+            } else if (!e.response.data) {
+                toastr.error('Erro', e.response.message)
+            } else if (e.response.data.errors) {
                 Object.entries(e.response.data.errors).forEach(
                     ([key, error]) => toastr.error(key, error[0]))
             } else if (e.response.data) {
                 toastr.error('Erro', e.response.data.message)
-            } else {
-                toastr.error('Erro', e.response.message)
             }
         })
     }
@@ -52,7 +55,7 @@ function submit(values, method) {
 
 export function showContent(flag) {
     return {
-        type: 'PROFILE_FORM_SHOWED',
+        type: 'PROFILE_CONTENT_CHANGED',
         payload: flag
     }
 }
