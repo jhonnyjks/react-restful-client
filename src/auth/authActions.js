@@ -2,14 +2,14 @@ import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import _ from 'lodash'
 
-import consts from '../consts'
+import env from '../app/env.js'
 
 export function login(values) {
-    return submit(values, `${consts.API_URL}/auth/login`)
+    return submit(values, `${env.API_URL}/auth/login`)
 }
 
 export function signup(values) {
-    return submit(values, `${consts.API_URL}/auth/signup`)
+    return submit(values, `${env.API_URL}/auth/signup`)
 }
 
 function submit(values, url) {
@@ -53,7 +53,7 @@ export function logout() {
 export function validateToken(token, profile) {
     return dispatch => {
         if (token) {
-            axios.get(`${consts.API_URL}/auth/validate`, {
+            axios.get(`${env.API_URL}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
                 const profiles = resp.data.data.profiles
@@ -76,7 +76,7 @@ export function validateToken(token, profile) {
 export function selectProfile(profile, token) {
     return dispatch => {
         if (profile) {
-            axios.get(`${consts.API_URL}/auth/define_profile/${profile.id}`, {
+            axios.get(`${env.API_URL}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
                 dispatch({ type: 'PROFILE_SELECTED', payload: profile })

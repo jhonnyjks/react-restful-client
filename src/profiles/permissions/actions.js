@@ -2,20 +2,21 @@ import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { initialize } from 'redux-form'
 import _ from 'lodash'
-import consts from '../../consts'
+
+import env from '../../app/env.js'
 
 const INITIAL_VALUES = { route: '', attributes: {} }
 
 export function getList(profileId) {
 
     return dispatch => {
-        axios.get(`${consts.API_URL}/permissions?search=profile_id:${profileId}&with=actions`)
+        axios.get(`${env.API_URL}/permissions?search=profile_id:${profileId}&with=actions`)
             .then(resp => {
                 // Declarando em um array para manipulável
                 let permissions = resp.data.data
 
                 // Concatenando o array de permissões a todas as permissões disponíveis
-                axios.get(`${consts.API_URL}/permissions/all`)
+                axios.get(`${env.API_URL}/permissions/all`)
                     .then(resp2 => {
 
                         // Para cada permissão, verifica de ela já está no array 'permissions', e trata como deve
@@ -112,7 +113,7 @@ function submit(values, method, callback = null, params = {}) {
         // 'id' não pode ir como parâmetro
         delete filteredValues.id
 
-        axios[method](`${consts.API_URL}/permissions/${id}`, filteredValues)
+        axios[method](`${env.API_URL}/permissions/${id}`, filteredValues)
             .then(resp => {
                 console.log(callback)
                 if (callback !== null) {
@@ -171,7 +172,7 @@ function actionSubmit(values, method) {
         // 'id' não pode ir como parâmetro
         delete filteredValues.id
 
-        axios[method](`${consts.API_URL}/actions/${id}`, filteredValues)
+        axios[method](`${env.API_URL}/actions/${id}`, filteredValues)
             .then(resp => {
                 toastr.success('Sucesso', 'Operação Realizada com sucesso.')
                 dispatch({
