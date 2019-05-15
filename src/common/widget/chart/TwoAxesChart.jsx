@@ -20,19 +20,22 @@ import {
     Legend,
     Title
 } from '@devexpress/dx-react-chart-material-ui'
-import { EventTracker, HoverState } from '@devexpress/dx-react-chart'
+import { EventTracker, HoverState, ArgumentScale, ValueScale, Animation } from '@devexpress/dx-react-chart'
 import { symbol, symbolCircle } from 'd3-shape'
 import { withStyles } from '@material-ui/core/styles'
 
 const Point = (type, styles) => (props) => {
     const { x, y, color } = props
     return (
+
         <path
             fill={color}
             transform={`translate(${x} ${y})`}
             d={symbol().size([10 ** 2]).type(type)()}
             style={styles}
-        />
+        >
+        </path>
+
     )
 }
 
@@ -88,7 +91,7 @@ const ValueLabel = (props) => {
     return (
         <ValueAxis.Label
             {...props}
-            text={`${text.replace(',', '.')}`}
+            text={`${('' + text).replace(',', '.')}`}
         />
     )
 }
@@ -139,7 +142,10 @@ const TitleText = withStyles(titleStyles)(({ classes, ...props }) => (
     <Title.Text {...props} className={classes.title} />
 ))
 
-export default class AreaChart extends React.PureComponent {
+// Aumentando scala de altura em 5%, para melhor visualização do gráfico
+const modifyDomain = domain => [domain[0], 1.05 * domain[1]]
+
+export default class TwoAxesChart extends React.PureComponent {
     constructor(props) {
         super(props)
 
@@ -155,7 +161,7 @@ export default class AreaChart extends React.PureComponent {
                     return <AreaSeries
                         seriesComponent={AreaWithCirclePoint}
                         valueField={serie.key}
-                        argumentField='argument'
+                        argumentField={this.props.argumentField}
                         {...serie}
                     />
 
@@ -163,7 +169,7 @@ export default class AreaChart extends React.PureComponent {
                     return <LineSeries
                         seriesComponent={LineWithCirclePoint}
                         valueField={serie.key}
-                        argumentField='argument'
+                        argumentField={this.props.argumentField}
                         {...serie}
                     />
             }
@@ -176,6 +182,9 @@ export default class AreaChart extends React.PureComponent {
         return (
             <Paper>
                 <Chart data={chartData} >
+
+                    <ArgumentScale />
+                    <ValueScale modifyDomain={modifyDomain} />
                     <ArgumentAxis />
                     <ValueAxis labelComponent={ValueLabel} />
 
@@ -200,10 +209,11 @@ export default class AreaChart extends React.PureComponent {
 
                     <Tooltip
                         targetItem={this.state.target}
-                        contentComponent={props => TooltipContent({ chartData, series, ...props })}
+                        contentComponent={props => TooltipContent({ chartData, series, ...props, style: { display: 'block' } })}
                     />
+                    <Animation />
                 </Chart>
             </Paper >
         )
     }
-}               
+}
