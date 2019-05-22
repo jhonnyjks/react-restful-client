@@ -1,61 +1,33 @@
 /**
  * Gráfico genérico de dois eixos.
  * @props {
- *  series: [{ name: '', key: 'Unique Key', color: '#000', type: 'area' || 'line' || null }, ...]
+ *  series: [{ name: '', key: 'Unique Key', color: '#000', type: 'area' || 'line' || 'bar' || null }, ...]
  *  chartData: [{ argument: 'X axis', ...series.key:values }, ...]
  * }
  */
 
 import * as React from 'react'
-import _ from 'lodash'
 import Paper from '@material-ui/core/Paper'
 import {
-    Chart,
-    LineSeries,
-    AreaSeries,
-    ScatterSeries,
-    Tooltip,
-    ValueAxis,
-    ArgumentAxis,
-    Legend,
-    Title
+    Chart, LineSeries, BarSeries, AreaSeries, ScatterSeries,
+    Tooltip, ValueAxis, ArgumentAxis, Legend, Title
 } from '@devexpress/dx-react-chart-material-ui'
-import { EventTracker, HoverState, ArgumentScale, ValueScale, Animation } from '@devexpress/dx-react-chart'
+import {
+    EventTracker, HoverState, ArgumentScale,
+    ValueScale, Animation, Stack
+} from '@devexpress/dx-react-chart'
 import { symbol, symbolCircle } from 'd3-shape'
 import { withStyles } from '@material-ui/core/styles'
 
-const Point = (type, styles) => (props) => {
-    const { x, y, color } = props
-    return (
+import If from '../../operator/If'
 
-        <path
-            fill={color}
-            transform={`translate(${x} ${y})`}
-            d={symbol().size([10 ** 2]).type(type)()}
-            style={styles}
-        >
-        </path>
-
-    )
-}
-
-const CirclePoint = Point(symbolCircle, {
-    stroke: 'white',
-    strokeWidth: '1px',
-})
-
-const LineWithCirclePoint = props => (
-    <React.Fragment>
-        <LineSeries.Path {...props} />
-        <ScatterSeries.Path {...props} pointComponent={CirclePoint} />
-    </React.Fragment>
-)
-
-const AreaWithCirclePoint = props => (
-    <React.Fragment>
-        <AreaSeries.Path {...props} />
-        <ScatterSeries.Path {...props} pointComponent={CirclePoint} />
-    </React.Fragment>
+const svgDefs = (
+    <defs>
+        <filter x="0" y="0" width="1" height="1" id="solid-bg">
+            <feFlood floodColor="#ffffffc0" />
+            <feComposite in="SourceGraphic" />
+        </filter>
+    </defs>
 )
 
 const TooltipContent = props => {
@@ -118,7 +90,7 @@ const legendItemStyles = () => ({
 })
 
 const legendRootBase = ({ classes, ...restProps }) => (
-    <Legend.Root {...restProps} className={classes.root} />
+    <Legend.Root {...restProps} className={classes.root} style={{ paddingBottom: 0 }} />
 )
 
 const legendLabelBase = ({ classes, ...restProps }) => (
@@ -136,21 +108,34 @@ const Item = withStyles(legendItemStyles, { name: 'LegendItem' })(legendItemBase
 const titleStyles = {
     title: {
         whiteSpace: 'pre',
+        marginBottom: '10px'
     }
 }
-const TitleText = withStyles(titleStyles)(({ classes, ...props }) => (
+const TitleText = withStyles(titleStyles)(({ classes, ...props }) =>
     <Title.Text {...props} className={classes.title} />
-))
+)
 
-// Aumentando scala de altura em 5%, para melhor visualização do gráfico
-const modifyDomain = domain => [domain[0], 1.05 * domain[1]]
+// Aumentando scala de altura para melhor visualização do gráfico
+const modifyDomain = props => domain => {
+    // Reduz em 50% a menor escala do chart
+    domain[0] -= 0.5 * domain[0]
+
+    // Se deve exibir label horizontal, aumenta a maior escala em 10%
+    if (props.serieLabel && props.serieLabel === 'horizontal') {
+        domain[1] *= 1.10
+    } else {
+        // Senão, aumenta apenas 3%
+        domain[1] *= 1.03
+    }
+
+    return domain
+}
 
 export default class TwoAxesChart extends React.PureComponent {
     constructor(props) {
         super(props)
 
         this.state = { target: null }
-
         this.changeHover = target => this.setState({ target })
     }
 
@@ -159,7 +144,15 @@ export default class TwoAxesChart extends React.PureComponent {
             switch (serie.type) {
                 case 'area':
                     return <AreaSeries
-                        seriesComponent={AreaWithCirclePoint}
+                        seriesComponent={this.areaPointSeries}
+                        valueField={serie.key}
+                        argumentField={this.props.argumentField}
+                        {...serie}
+                    />
+
+                case 'bar':
+                    return <BarSeries
+                        pointComponent={this.barPoint}
                         valueField={serie.key}
                         argumentField={this.props.argumentField}
                         {...serie}
@@ -167,7 +160,7 @@ export default class TwoAxesChart extends React.PureComponent {
 
                 default:
                     return <LineSeries
-                        seriesComponent={LineWithCirclePoint}
+                        seriesComponent={this.linePointSeries}
                         valueField={serie.key}
                         argumentField={this.props.argumentField}
                         {...serie}
@@ -177,16 +170,18 @@ export default class TwoAxesChart extends React.PureComponent {
     }
 
     render() {
-        const { chartData, series } = this.props
+        const { chart, series } = this.props
 
         return (
             <Paper>
-                <Chart data={chartData} >
+                <Chart {...chart} >
 
                     <ArgumentScale />
-                    <ValueScale modifyDomain={modifyDomain} />
+                    <ValueScale modifyDomain={modifyDomain(this.props)} />
                     <ArgumentAxis />
-                    <ValueAxis labelComponent={ValueLabel} />
+                    {
+                        this.props.showValueAxi === false ? '' : <ValueAxis labelComponent={ValueLabel} />
+                    }
 
                     {this.renderSeries(series)}
 
@@ -194,6 +189,8 @@ export default class TwoAxesChart extends React.PureComponent {
                         text={this.props.title}
                         textComponent={TitleText}
                     />
+
+                    {this.props.stack ? <Stack /> : ''}
 
                     <Legend position="bottom"
                         rootComponent={Root}
@@ -209,11 +206,85 @@ export default class TwoAxesChart extends React.PureComponent {
 
                     <Tooltip
                         targetItem={this.state.target}
-                        contentComponent={props => TooltipContent({ chartData, series, ...props, style: { display: 'block' } })}
+                        contentComponent={props => TooltipContent({
+                            chartData: chart.data,
+                            series,
+                            ...props,
+                            style: { display: 'block' }
+                        })}
                     />
                     <Animation />
                 </Chart>
             </Paper >
         )
     }
+
+    point = (type, styles) => (props) => {
+        const { x, y, color, value } = props
+        console.log(props)
+        return (
+            <React.Fragment>
+                <path
+                    fill={color}
+                    transform={`translate(${x} ${y})`}
+                    d={symbol().size([6 ** 2]).type(type)()}
+                    style={styles}
+                />
+                <If test={this.props.serieLabel && this.props.serieLabel === 'horizontal'}>
+                    <Chart.Label filter="url(#solid-bg)"
+                        style={{ fill: 'rgba(0, 0, 0, 0.73)' }}
+                        x={x}
+                        y={y}
+                        dominantBaseline="middle"
+                        textAnchor="middle"
+                    >
+                        {value}
+                    </Chart.Label>
+                </If>
+            </React.Fragment>
+        )
+    }
+
+    circlePoint = this.point(symbolCircle, {
+        stroke: 'white',
+        strokeWidth: '1px',
+    })
+
+    areaPointSeries = props => (
+        <React.Fragment>
+            {svgDefs}
+            <AreaSeries.Path {...props} />
+            <ScatterSeries.Path {...props} pointComponent={this.circlePoint} />
+        </React.Fragment>
+    )
+
+    linePointSeries = props => {
+        console.log(props)
+        return (
+            <React.Fragment>
+                {svgDefs}
+                <LineSeries.Path {...props} />
+                <ScatterSeries.Path {...props} pointComponent={this.circlePoint} >
+                </ScatterSeries.Path>
+            </React.Fragment>
+        )
+    }
+
+    barPoint = props => (
+        <React.Fragment>
+            <BarSeries.Point {...props} />
+
+            <If test={this.props.serieLabel && this.props.serieLabel === 'horizontal'}>
+                <Chart.Label
+                    style={{ fill: 'rgba(0, 0, 0, 0.54)' }}
+                    x={props.x}
+                    y={props.y - 6}
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                >
+                    {props.value}
+                </Chart.Label>
+            </If>
+        </React.Fragment>
+    )
 }
