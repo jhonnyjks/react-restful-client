@@ -1,9 +1,9 @@
 import React from 'react'
-import Grid from '../layout/grid'
+import Grid from '../grid'
 
 export default props => (
     <Grid cols={props.cols}>
-        <div className={`small-box bg-${props.color}`}>
+        <div className={`small-box material-item bg-${props.color}`} style={{ marginBottom: 0 }}>
             <div className='inner'>
                 <h3>{props.value}</h3>
                 <p>{props.text}</p>

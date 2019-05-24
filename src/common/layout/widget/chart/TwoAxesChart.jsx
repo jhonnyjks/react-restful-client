@@ -19,7 +19,7 @@ import {
 import { symbol, symbolCircle } from 'd3-shape'
 import { withStyles } from '@material-ui/core/styles'
 
-import If from '../../operator/If'
+import If from '../../../operator/If'
 
 const svgDefs = (
     <defs>
@@ -134,7 +134,6 @@ const modifyDomain = props => domain => {
 export default class TwoAxesChart extends React.PureComponent {
     constructor(props) {
         super(props)
-
         this.state = { target: null }
         this.changeHover = target => this.setState({ target })
     }
@@ -221,7 +220,7 @@ export default class TwoAxesChart extends React.PureComponent {
 
     point = (type, styles) => (props) => {
         const { x, y, color, value } = props
-        console.log(props)
+
         return (
             <React.Fragment>
                 <path
@@ -258,17 +257,14 @@ export default class TwoAxesChart extends React.PureComponent {
         </React.Fragment>
     )
 
-    linePointSeries = props => {
-        console.log(props)
-        return (
-            <React.Fragment>
-                {svgDefs}
-                <LineSeries.Path {...props} />
-                <ScatterSeries.Path {...props} pointComponent={this.circlePoint} >
-                </ScatterSeries.Path>
-            </React.Fragment>
-        )
-    }
+    linePointSeries = props => (
+        <React.Fragment>
+            {svgDefs}
+            <LineSeries.Path {...props} />
+            <ScatterSeries.Path {...props} pointComponent={this.circlePoint} >
+            </ScatterSeries.Path>
+        </React.Fragment>
+    )
 
     barPoint = props => (
         <React.Fragment>
