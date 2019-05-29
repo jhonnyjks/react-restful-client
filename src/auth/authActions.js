@@ -52,10 +52,27 @@ export function logout() {
 
 export function validateToken(token, profile) {
     return dispatch => {
+
+        // Obtendo sessão salva para evitar requisição em ambiente dev
+        if (env.APP_ENV === 'local') {
+            let devSession = JSON.parse(localStorage.getItem('devSession'))
+            if (devSession) {
+                dispatch({ type: 'USER_FETCHED', payload: devSession })
+                dispatch({ type: 'PROFILE_SELECTED', payload: profile })
+                return
+            }
+        }
+
         if (token) {
             axios.get(`${env.API_URL}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
+
+                // Salvando request para evitar requisição de validação de sessão em ambiente dev
+                if (env.APP_ENV === 'local') {
+                    localStorage.setItem('devSession', JSON.stringify(resp.data))
+                }
+
                 const profiles = resp.data.data.profiles
 
                 if (profiles.length === 1 && profile === null) {
