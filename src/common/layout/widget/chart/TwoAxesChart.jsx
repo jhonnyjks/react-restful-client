@@ -134,8 +134,108 @@ const modifyDomain = props => domain => {
 export default class TwoAxesChart extends React.PureComponent {
     constructor(props) {
         super(props)
-        this.state = { target: null }
+
+        this.state = {
+            title: props.title,
+            target: null,
+            chart: props.chart,
+            series: (
+                !props.slider ?
+                    props.series :
+                    props.series.map((serie, index) => (
+                        { ...serie, type: 'line' }
+                    ))
+            )
+        }
+
         this.changeHover = target => this.setState({ target })
+        if (props.slider) this.doSlide()
+    }
+
+    componentWillReceiveProps(newProps) {
+
+        let state = {}
+
+        if (newProps.title !== this.props.title) {
+            state.title = newProps.title
+        }
+
+        if (newProps.chart !== this.props.chart) {
+            state.chart = newProps.chart
+        }
+
+        if (newProps.series !== this.props.series) {
+            state.series = (
+                !newProps.slider ?
+                    newProps.series :
+                    newProps.series.map((serie, index) => (
+                        { ...serie, type: 'line' }
+                    ))
+            )
+        }
+
+        if (Object.keys(state).length > 0) {
+            this.setState(state)
+
+            if (newProps.slider && state.chart) {
+                console.log('clearInterval(' + this.slideInterval + ')')
+                clearInterval(this.slideInterval)
+                this.doSlide()
+            }
+        }
+    }
+
+    doSlide() {
+        let { title, series, chart } = this.props
+        const { time, showFullChart, seriesOnLastSlide } = this.props.slider
+        let i = -chart.data.length
+
+        console.log('doSlide(' + this.slideInterval + ')')
+
+        // Definindo intervalo do slider
+        this.slideInterval = setInterval(() => {
+
+            console.log(i)
+            const dataLength = chart.data.length
+            // Remover bug de assincronia, onde a state.chart muda, mas não atualiza 'chart'
+            if (chart.data !== this.props.chart.data) chart = this.props.chart
+
+            // Enquanto 'i < -1', puxa o próximo período do array e incrementa 'i'
+            if (i < 0) {
+                if (i === -dataLength) this.setState({ series: [] })
+                let period = chart.data[dataLength -1 + (++i)]
+                this.setState({
+                    title: title + '  ' + period[this.props.argumentField], series, chart: {
+                        ...chart, data: [period]
+                    }
+                })
+
+                // Após exibir iterar em todos os períodos, exibe uma timeline com todos,
+                // em gráfico de linhas, caso 'showFullChart === true'
+            } else if (showFullChart) {
+
+                if (i === 0 && dataLength > 0) {
+                    this.setState({ series: [] })
+
+                    this.setState({
+                        title: title + '  '
+                            + chart.data[0][this.props.argumentField] + '-'
+                            + chart.data[dataLength - 1][this.props.argumentField]
+                        ,
+                        chart,
+                        series: series.filter((serie, index) => (
+                            !seriesOnLastSlide || seriesOnLastSlide.indexOf(index) > -1
+                        )).map((serie, index) => ({ ...serie, type: 'line' }))
+                    })
+                }
+
+                if (++i > 1) i = -dataLength
+                // Se não for para exibir o FullChart, apenas reinicia a iteração
+            } else {
+                i = -dataLength
+            }
+
+        }, time)
     }
 
     renderSeries(series) {
@@ -168,8 +268,24 @@ export default class TwoAxesChart extends React.PureComponent {
         })
     }
 
+    renderLegend(legend) {
+        // eslint-disable-next-line default-case
+        switch (legend.position || 'bottom') {
+            case 'top':
+            case 'bottom':
+                legend.rootComponent = Root
+                legend.itemComponent = Item
+                legend.labelComponent = Label
+        }
+
+        return <Legend position="bottom"
+            {...legend}
+        />
+    }
+
     render() {
-        const { chart, series } = this.props
+        const { legend, slider } = this.props
+        const { title, chart, series } = this.state
 
         return (
             <Paper>
@@ -177,7 +293,9 @@ export default class TwoAxesChart extends React.PureComponent {
 
                     <ArgumentScale />
                     <ValueScale modifyDomain={modifyDomain(this.props)} />
-                    <ArgumentAxis />
+
+                    {slider ? '' : <ArgumentAxis />}
+
                     {
                         this.props.showValueAxi === false ? '' : <ValueAxis labelComponent={ValueLabel} />
                     }
@@ -185,17 +303,13 @@ export default class TwoAxesChart extends React.PureComponent {
                     {this.renderSeries(series)}
 
                     <Title
-                        text={this.props.title}
+                        text={title}
                         textComponent={TitleText}
                     />
 
                     {this.props.stack ? <Stack /> : ''}
 
-                    <Legend position="bottom"
-                        rootComponent={Root}
-                        itemComponent={Item}
-                        labelComponent={Label}
-                    />
+                    {this.renderLegend(legend || {})}
 
                     <EventTracker />
                     <HoverState
@@ -203,15 +317,18 @@ export default class TwoAxesChart extends React.PureComponent {
                         onHoverChange={this.changeHover}
                     />
 
-                    <Tooltip
-                        targetItem={this.state.target}
-                        contentComponent={props => TooltipContent({
-                            chartData: chart.data,
-                            series,
-                            ...props,
-                            style: { display: 'block' }
-                        })}
-                    />
+                    {
+                        slider ? '' : (<Tooltip
+                            targetItem={this.state.target}
+                            contentComponent={props => TooltipContent({
+                                chartData: chart.data,
+                                series,
+                                ...props,
+                                style: { display: 'block' }
+                            })}
+                        />
+                        )
+                    }
                     <Animation />
                 </Chart>
             </Paper >
