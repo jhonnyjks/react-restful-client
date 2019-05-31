@@ -14,7 +14,14 @@ export default props => (
 
             <div className='info-box-content'>
                 <span className='info-box-text'>{props.title}</span>
-                <span className='info-box-number'>{props.text}</span>
+
+                <If test={props.text}>
+                    <span className='info-box-number'>{props.text}</span>
+                </If>
+
+                <If test={props.content}>
+                    {props.content}
+                </If>
 
                 <If test={props.progress}>
                     <div className='progress'>
