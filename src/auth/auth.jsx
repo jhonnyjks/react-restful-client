@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import './auth.css'
-import env from '../app/env'
 import { login, signup, selectProfile } from './authActions'
 import Row from '../common/layout/row'
 import Grid from '../common/layout/grid'
@@ -69,7 +68,7 @@ class Auth extends Component {
 
         return (
             <div className="login-box">
-                <div className="login-logo"><b>{env.APP_NAME}</b></div>
+                <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div>
                 <div className="login-box-body col-xs-12">
                     <h4 className="login-box-msg">{this.props.profiles.length === 1 ? 'Bem vindo!' : 'Selecione um perfil'}</h4>
                     {this.props.profiles.length > 1 ? selectProfile : loginForm}

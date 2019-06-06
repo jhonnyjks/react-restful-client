@@ -7,13 +7,9 @@ import '../common/template/dependences'
 import App from './app'
 import Auth from '../auth/auth'
 import { validateToken } from '../auth/authActions'
-import env from '../app/env'
 
 class AuthOrApp extends Component {
     componentWillMount() {
-        
-        document.title = env.APP_NAME
-
         if (this.props.auth.token) {
             this.props.validateToken(this.props.auth.token, this.props.auth.profile)
         }

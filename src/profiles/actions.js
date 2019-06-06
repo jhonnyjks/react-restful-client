@@ -2,12 +2,10 @@ import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { initialize } from 'redux-form'
 
-import env from '../app/env.js'
-
 const INITIAL_VALUES = { noun: '', description: '' }
 
 export function getList() {
-    const request = axios.get(`${env.API_URL}/profiles`)
+    const request = axios.get(`${process.env.REACT_APP_API_HOST}/profiles`)
     return {
         type: 'PROFILES_FETCHED',
         payload: request
@@ -32,7 +30,7 @@ function submit(values, method) {
         let filteredValues = {...values}
         if(id) delete filteredValues.id
         
-        axios[method](`${env.API_URL}/profiles/${id}`, filteredValues)
+        axios[method](`${process.env.REACT_APP_API_HOST}/profiles/${id}`, filteredValues)
         .then(resp => {
             toastr.success('Sucesso', 'Operação Realizada com sucesso.')
             dispatch(init())

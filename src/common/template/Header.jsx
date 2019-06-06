@@ -1,14 +1,13 @@
 import React from 'react'
 
-import env from '../../app/env'
 import Navbar from './NavBar'
 
 export default props => (
     <header className='main-header'>
         <a href='/#/' className='logo'>
-            <span className='logo-mini'><b>{env.APP_MIN_NAME}</b></span>
+            <span className='logo-mini'><b>{process.env.REACT_APP_MIN_NAME}</b></span>
             <span className='logo-lg'>
-                {env.APP_NAME}
+                {process.env.REACT_APP_NAME}
             </span>
         </a>
         <nav className='navbar navbar-static-top'>

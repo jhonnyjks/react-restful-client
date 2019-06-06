@@ -2,14 +2,12 @@ import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import _ from 'lodash'
 
-import env from '../app/env.js'
-
 export function login(values) {
-    return submit(values, `${env.API_URL}/auth/login`)
+    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/login`)
 }
 
 export function signup(values) {
-    return submit(values, `${env.API_URL}/auth/signup`)
+    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/signup`)
 }
 
 function submit(values, url) {
@@ -54,7 +52,7 @@ export function validateToken(token, profile) {
     return dispatch => {
 
         // Obtendo sessão salva para evitar requisição em ambiente dev
-        if (env.APP_ENV === 'local') {
+        if (process.env.NODE_ENV === 'local') {
             let devSession = JSON.parse(localStorage.getItem('devSession'))
             if (devSession) {
                 dispatch({ type: 'USER_FETCHED', payload: devSession })
@@ -64,12 +62,12 @@ export function validateToken(token, profile) {
         }
 
         if (token) {
-            axios.get(`${env.API_URL}/auth/validate`, {
+            axios.get(`${process.env.REACT_APP_API_HOST}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
 
                 // Salvando request para evitar requisição de validação de sessão em ambiente dev
-                if (env.APP_ENV === 'local') {
+                if (process.env.NODE_ENV === 'local') {
                     localStorage.setItem('devSession', JSON.stringify(resp.data))
                 }
 
@@ -93,7 +91,7 @@ export function validateToken(token, profile) {
 export function selectProfile(profile, token) {
     return dispatch => {
         if (profile) {
-            axios.get(`${env.API_URL}/auth/define_profile/${profile.id}`, {
+            axios.get(`${process.env.REACT_APP_API_HOST}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
                 dispatch({ type: 'PROFILE_SELECTED', payload: profile })
