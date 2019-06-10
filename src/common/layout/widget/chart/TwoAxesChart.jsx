@@ -215,8 +215,9 @@ export default class TwoAxesChart extends React.PureComponent {
             } else if (showFullChart) {
                 console.log('Interval showFullChart')
                 if (i === 0 && dataLength > 0) {
-                    this.setState({ series: [] })
                     console.log('Interval i === 0 && dataLength > 0')
+                    this.setState({ series: [] })
+                    
                     this.setState({
                         title: title + '  '
                             + chart.data[0][this.props.argumentField] + '-'
