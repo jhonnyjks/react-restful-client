@@ -188,17 +188,19 @@ export default class TwoAxesChart extends React.PureComponent {
         let { title, series, chart } = this.props
         const { time, showFullChart, seriesOnLastSlide } = this.props.slider
         let i = -chart.data.length
-
+        console.log('doSlide')
         // Definindo intervalo do slider
         clearInterval(this.slideInterval)
         this.slideInterval = setInterval(() => {
 
+            console.log('Interval ' + i)
             const dataLength = chart.data.length
             // Remover bug de assincronia, onde a state.chart muda, mas não atualiza 'chart'
             if (chart.data !== this.props.chart.data) chart = this.props.chart
 
             // Enquanto 'i < -1', puxa o próximo período do array e incrementa 'i'
             if (i < 0) {
+                console.log('Interval i < 0')
                 if (i === -dataLength) this.setState({ series: [] })
                 let period = chart.data[dataLength - 1 + (++i)]
                 this.setState({
@@ -210,10 +212,10 @@ export default class TwoAxesChart extends React.PureComponent {
                 // Após exibir iterar em todos os períodos, exibe uma timeline com todos,
                 // em gráfico de linhas, caso 'showFullChart == true'
             } else if (showFullChart) {
-
+                console.log('Interval showFullChart')
                 if (i === 0 && dataLength > 0) {
                     this.setState({ series: [] })
-
+                    console.log('Interval i === 0 && dataLength > 0')
                     this.setState({
                         title: title + '  '
                             + chart.data[0][this.props.argumentField] + '-'
