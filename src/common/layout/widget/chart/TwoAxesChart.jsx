@@ -179,7 +179,6 @@ export default class TwoAxesChart extends React.PureComponent {
 
             // Se o props.chart mudar, reinicia o slide
             if (newProps.slider && state.chart) {
-                clearInterval(this.slideInterval)
                 this.doSlide()
             }
         }
@@ -191,6 +190,7 @@ export default class TwoAxesChart extends React.PureComponent {
         let i = -chart.data.length
 
         // Definindo intervalo do slider
+        clearInterval(this.slideInterval)
         this.slideInterval = setInterval(() => {
 
             const dataLength = chart.data.length
