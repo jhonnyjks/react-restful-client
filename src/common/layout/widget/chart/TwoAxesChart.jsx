@@ -200,16 +200,15 @@ export default class TwoAxesChart extends React.PureComponent {
 
             // Enquanto 'i < -1', puxa o próximo período do array e incrementa 'i'
             if (i < 0) {
-                console.log('Interval i < 0')
+                
                 if (i === -dataLength) this.setState({ series: [] })
                 let period = chart.data[dataLength - 1 + (++i)]
-
-                setTimeout(                this.setState({
+                console.log('Interval i < 0', period)
+                this.setState({
                     title: title + '  ' + period[this.props.argumentField], series, chart: {
                         ...chart, data: [period]
                     }
-                }), 1000)
-
+                })
 
                 // Após exibir iterar em todos os períodos, exibe uma timeline com todos,
                 // em gráfico de linhas, caso 'showFullChart == true'
