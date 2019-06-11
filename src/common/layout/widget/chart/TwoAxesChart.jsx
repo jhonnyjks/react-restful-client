@@ -190,7 +190,7 @@ export default class TwoAxesChart extends React.PureComponent {
         let i = -chart.data.length
 
         clearInterval(this.slideInterval)
-        
+
         // Definindo intervalo do slider
         this.slideInterval = setInterval(() => {
 
