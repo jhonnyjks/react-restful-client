@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  financeiro-client:
+    container_name: financeiro-client
+    build:
+      context: .
+    restart: always
+    environment:
+      - NODE_ENV=production
+    ports:
+      - '3003:80'
