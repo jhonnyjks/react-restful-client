@@ -52,7 +52,7 @@ export function validateToken(token, profile) {
     return dispatch => {
 
         // Obtendo sessão salva para evitar requisição em ambiente dev
-        if (process.env.NODE_ENV === 'local') {
+        if (process.env.NODE_ENV === 'development') {
             let devSession = JSON.parse(localStorage.getItem('devSession'))
             if (devSession) {
                 dispatch({ type: 'USER_FETCHED', payload: devSession })
