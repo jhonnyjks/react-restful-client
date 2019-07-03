@@ -18,12 +18,12 @@ class Menu extends Component {
         const scopes = this.props.scopes
         return (
             <ul className='sidebar-menu'>
-                <MenuItem path='/' label='Dashboard' icon='dashboard' />
+                {Object.keys(menu).map((path) => {
 
-                {Object.keys(scopes).map((path) => {
+                    const item = menu[path]
 
-                    if (menu[path]) {
-                        const item = menu[path]
+                    if (scopes[path] || scopes[path.replace('/', '')]) {
+
                         if (item.children) {
                             return <MenuTree
                                 key={path} path={path}
@@ -37,6 +37,9 @@ class Menu extends Component {
                         } else {
                             return this.renderDinamicMenu(path, item)
                         }
+
+                    } else if (path === ('/' || '')) {
+                        return this.renderDinamicMenu(path, item)
                     }
 
                     return false
