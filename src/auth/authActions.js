@@ -52,7 +52,7 @@ export function validateToken(token, profile) {
     return dispatch => {
 
         // Obtendo sessão salva para evitar requisição em ambiente dev
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'developmentt') {
             let devSession = JSON.parse(localStorage.getItem('devSession'))
             if (devSession) {
                 dispatch({ type: 'USER_FETCHED', payload: devSession })
@@ -67,7 +67,7 @@ export function validateToken(token, profile) {
             }).then(resp => {
 
                 // Salvando request para evitar requisição de validação de sessão em ambiente dev
-                if (process.env.NODE_ENV === 'local') {
+                if (process.env.NODE_ENV === 'developmentt') {
                     localStorage.setItem('devSession', JSON.stringify(resp.data))
                 }
 
@@ -94,7 +94,7 @@ export function selectProfile(profile, token) {
             axios.get(`${process.env.REACT_APP_API_HOST}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
-                dispatch({ type: 'PROFILE_SELECTED', payload: profile })
+                dispatch({ type: 'PROFILE_SELECTED', payload: { ...profile, scopes: resp.data.scopes } })
             })
         } else {
             dispatch({ type: 'PROFILE_SELECTED', payload: null })

@@ -1,15 +1,53 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import MenuItem from './MenuItem'
 import MenuTree from './MenuTree'
+import { menu } from '../../app/exports'
 
-export default props => (
-    <ul className='sidebar-menu'>
-        <MenuItem path='/' label='Dashboard' icon='dashboard' />
-        <MenuItem path='users' label='Usuários' icon='user' />
-        <MenuItem path='profiles' label='Perfis' icon='users' />
-        {/* <MenuTree label='Cadastro' icon='edit'>
-        <MenuItem path='billingCycles' label='Ciclos de Pagamentos' icon='usd' />
-        </MenuTree> */}
-    </ul>
-)
+class Menu extends Component {
+
+    renderDinamicMenu(path, menuItem) {
+        return <MenuItem
+            key={path} path={path}
+            label={menuItem.title} icon={menuItem.icon}
+        />
+    }
+
+    render() {
+        const scopes = this.props.scopes
+        return (
+            <ul className='sidebar-menu'>
+                {Object.keys(menu).map((path) => {
+
+                    const item = menu[path]
+
+                    if (scopes[path] || scopes[path.replace('/', '')]) {
+
+                        if (item.children) {
+                            return <MenuTree
+                                key={path} path={path}
+                                label={item.title} icon='users'
+                            >
+                                {Object.keys(item.children).map((childPath) => {
+                                    return this.renderDinamicMenu(childPath, item.children[childPath])
+                                })}
+                            </MenuTree>
+
+                        } else {
+                            return this.renderDinamicMenu(path, item)
+                        }
+
+                    } else if (path === ('/' || '')) {
+                        return this.renderDinamicMenu(path, item)
+                    }
+
+                    return false
+                })}
+            </ul>
+        )
+    }
+}
+
+const mapStateToProps = state => ({ scopes: state.auth.profile.scopes })
+export default connect(mapStateToProps, null)(Menu)
