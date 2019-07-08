@@ -1,6 +1,7 @@
 # React Restful Client Base
 Projeto base para desenvolvimento de Apps React. Esse projeto já vem com gerenciamento de usuários e permissões, deixando para o desenvolvedor apenas a preocupação com as funcionalidades específicas do seu projeto. A ideia é não se preocupar com o funcionamento desse projeto base, e nem mesmo alterá-lo. **Leia com atenção as instruções**.
 ## Instruções
+- **0** Preparar a API integrada: https://github.com/jhonnyjks/laravel-api-generator
 - **1** Instalar o NodeJS: https://nodejs.org/
 - **2** Clonar este repositório, depois entrar no diretório que foi criado na clonagem.
 - **3** Baixar dependências com o comando "npm i" dentro do diretório raiz do projeto.
