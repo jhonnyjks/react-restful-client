@@ -1,3 +1,12 @@
+# React Restful Client Base
+Projeto base para desenvolvimento de Apps React. Esse projeto já vem com gerenciamento de usuários e permissões, deixando para o desenvolvedor apenas a preocupação com as funcionalidades específicas do seu projeto. A ideia é não se preocupar com o funcionamento desse projeto base, e nem mesmo alterá-lo. **Leia com atenção as instruções**.
+## Instruções
+- **1** Instalar o NodeJS: https://nodejs.org/
+- **2** Clonar este repositório, depois entrar no diretório que foi criado na clonagem.
+- **3** Baixar dependências com o comando "npm i" dentro do diretório raiz do projeto.
+- **4** Clonar o rep https://github.com/jhonnyjks/rrc-app-skeleton no diretório '/src' deste projeto, renomear o diretório clonado para 'app', ficando '/src/app', onde deve ficar todo código implementado/customizado do desenvolvedor. 
+
+## Demais configurações conforme padrão React
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
