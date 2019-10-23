@@ -4,7 +4,7 @@ import If from '../../operator/If'
 
 export default props => (
     <Grid {...props.grid}>
-        <div className={`info-box material-item bg-${props.bg || ' '}`} style={{ marginBottom: 0 }} >
+        <div className={`box info-box material-item bg-${props.bg || ' '}`} style={{ marginBottom: 0 }} >
             <span
                 className={`info-box-icon bg-${props.iconBg || ' '}`}
                 style={{ borderRadius: '3px 0 0 3px' }}
@@ -32,6 +32,12 @@ export default props => (
                     </span>
                 </If>
             </div>
+
+            <If test={props.loading}>
+                <div className="overlay">
+                    <i className="fa fa-refresh fa-spin"></i>
+                </div>
+            </If>
         </div>
     </Grid>
 )

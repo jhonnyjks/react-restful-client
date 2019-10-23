@@ -4,7 +4,7 @@ import If from '../../operator/If'
 
 export default props => (
     <Grid cols={props.cols} {...props.grid}>
-        <div className={`small-box material-item bg-${props.color}`} style={{ marginBottom: 0 }}>
+        <div className={`box small-box material-item bg-${props.color}`} style={{ marginBottom: 0 }}>
             <div className='inner'>
                 <h3>{props.value}</h3>
                 <p>{props.text}</p>
@@ -16,6 +16,12 @@ export default props => (
                 <a className='small-box-footer' {...props.link}>
                 {props.link ? props.link.title : 'Mais informações' } <i className='fa fa-arrow-circle-right'></i>
                 </a>
+            </If>
+
+            <If test={props.loading}>
+                <div class="overlay">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
             </If>
         </div>
     </Grid>
