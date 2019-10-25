@@ -22,12 +22,12 @@ class Menu extends Component {
 
                     const item = menu[path]
 
-                    if (scopes[path] || scopes[path.replace('/', '')]) {
+                    if (item.fixed || scopes[path] || scopes[path.replace('/', '')]) {
 
                         if (item.children) {
                             return <MenuTree
                                 key={path} path={path}
-                                label={item.title} icon='users'
+                                label={item.title} icon={item.icon}
                             >
                                 {Object.keys(item.children).map((childPath) => {
                                     return this.renderDinamicMenu(childPath, item.children[childPath])
@@ -35,7 +35,7 @@ class Menu extends Component {
                             </MenuTree>
 
                         } else {
-                            return this.renderDinamicMenu(path, item)
+                            // return this.renderDinamicMenu(path, item)
                         }
 
                     } else if (path === ('/' || '')) {

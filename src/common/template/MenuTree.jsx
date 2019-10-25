@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default props => (
     <li className='treeview'>
-        <Link to={props.path}>
+        <Link to=''>
             <i className={`fa fa-${props.icon}`}></i> <span>{props.label}</span>
             <i className='fa fa-angle-left pull-right'></i> 
         </Link>
