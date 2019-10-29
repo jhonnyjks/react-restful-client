@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { withRouter } from "react-router-dom";

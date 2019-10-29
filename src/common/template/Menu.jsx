@@ -35,7 +35,7 @@ class Menu extends Component {
                             </MenuTree>
 
                         } else {
-                            // return this.renderDinamicMenu(path, item)
+                            return this.renderDinamicMenu(path, item)
                         }
 
                     } else if (path === ('/' || '')) {
