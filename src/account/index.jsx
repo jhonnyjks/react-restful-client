@@ -3,6 +3,8 @@ import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { withRouter } from "react-router-dom";
 
+import ContentHeader from '../common/template/ContentHeader'
+import Content from '../common/template/Content'
 import LabelAndInput from '../common/form/LabelAndInput'
 
 class ChangePassword extends Component {
@@ -76,28 +78,31 @@ class ChangePassword extends Component {
     render() {
         const { user } = this.state
         return (
-            <form>
-                <div className='box-body'>
-                    <LabelAndInput name='name' type="text"
-                        label='Nome' cols='12 6' placeholder='Informe seu nome'
-                        input={{ onChange: this.handleChangeName, value: user.name }} />
-                    <LabelAndInput name='email' type="email"
-                        label='Email' cols='12 6' placeholder='Informe seu email'
-                        input={{ onChange: this.handleChangeEmail, value: user.email }} />
-                    <LabelAndInput name='celphone' type="number" min="10000000000" max="99999999999"
-                        label='Celular' cols='12 6' placeholder='Celular no formato 98988776655'
-                        input={{ onChange: this.handleChangeCelphone, value: user.celphone }} />
-                    <LabelAndInput name='login' type="text"
-                        label='Login' cols='12 6' placeholder='login necessário para conectar'
-                        input={{ onChange: this.handleChangeLogin, value: user.login }} />
-                    
-                   
-                </div>
-                <div className='box-footer'>
-                    <button type='button' className={`btn btn-primary`} onClick={this.changeUserData}>Salvar</button>
-                    <button type='button' className='btn btn-default' onClick={this.props.init}>Cancelar</button>
-                </div>
-            </form>
+            <div>
+                <ContentHeader title='Meus dados' small='Mantenha-os atualizados' />
+                <Content>
+                    <form>
+                        <div className='box-body'>
+                            <LabelAndInput name='name' type="text"
+                                label='Nome' cols='12 6' placeholder='Informe seu nome'
+                                input={{ onChange: this.handleChangeName, value: user.name }} />
+                            <LabelAndInput name='email' type="email"
+                                label='Email' cols='12 6' placeholder='Informe seu email'
+                                input={{ onChange: this.handleChangeEmail, value: user.email }} />
+                            <LabelAndInput name='celphone' type="number" min="10000000000" max="99999999999"
+                                label='Celular' cols='12 6' placeholder='Celular no formato 98988776655'
+                                input={{ onChange: this.handleChangeCelphone, value: user.celphone }} />
+                            <LabelAndInput name='login' type="text"
+                                label='Login' cols='12 6' placeholder='login necessário para conectar'
+                                input={{ onChange: this.handleChangeLogin, value: user.login }} />
+                        </div>
+                        <div className='box-footer'>
+                            <button type='button' className={`btn btn-primary`} onClick={this.changeUserData}>Salvar</button>
+                            <button type='button' className='btn btn-default' onClick={this.props.init}>Cancelar</button>
+                        </div>
+                    </form>
+                </Content>
+            </div>
         )
     }
 }

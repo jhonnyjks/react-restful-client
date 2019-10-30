@@ -3,6 +3,8 @@ import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { withRouter } from "react-router-dom";
 
+import ContentHeader from '../common/template/ContentHeader'
+import Content from '../common/template/Content'
 import LabelAndInput from '../common/form/LabelAndInput'
 
 class ChangePassword extends Component {
@@ -48,20 +50,25 @@ class ChangePassword extends Component {
 
     render() {
         return (
-            <form>
-                <div className='box-body'>
-                    <LabelAndInput name='password' type="password"
-                        label='Senha Atual' cols='12 6' placeholder='*****'
-                        input={{ onChange: this.handleChangePassword, value: this.state.password }} />
-                    <LabelAndInput name='new_password' type="password"
-                        label='Nova Senha' cols='12 6' placeholder='*****'
-                        input={{ onChange: this.handleChangeNewPassword, value: this.state.new_password }}/>
-                </div>
-                <div className='box-footer'>
-                    <button type='button' className={`btn btn-primary`} onClick={this.changePassword}>Salvar</button>
-                    <button type='button' className='btn btn-default' onClick={this.props.init}>Cancelar</button>
-                </div>
-            </form>
+            <div>
+                <ContentHeader title='Alterar senha' small='' />
+                <Content>
+                    <form>
+                        <div className='box-body'>
+                            <LabelAndInput name='password' type="password"
+                                label='Senha Atual' cols='12 6' placeholder='*****'
+                                input={{ onChange: this.handleChangePassword, value: this.state.password }} />
+                            <LabelAndInput name='new_password' type="password"
+                                label='Nova Senha' cols='12 6' placeholder='*****'
+                                input={{ onChange: this.handleChangeNewPassword, value: this.state.new_password }}/>
+                        </div>
+                        <div className='box-footer'>
+                            <button type='button' className={`btn btn-primary`} onClick={this.changePassword}>Salvar</button>
+                            <button type='button' className='btn btn-default' onClick={this.props.init}>Cancelar</button>
+                        </div>
+                    </form>
+                </Content>
+            </div>
         )
     }
 }
