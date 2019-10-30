@@ -14,7 +14,7 @@ export default props => (
                 </div>
             </div>
 
-            <div className='box-body'>
+            <div className='box-body' style={{color:'#222'}}>
                 {props.children}
             </div>
 
