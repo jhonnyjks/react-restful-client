@@ -44,7 +44,7 @@ class Auth extends Component {
                         </button>
                     </Grid>
                     <Grid cols="12 7" className="col-sm-offset-1">
-                        <a onClick={() => this.changeMode()}>
+                        <a href="!#" onClick={() => this.changeMode()}>
                             {loginMode ? 'Novo usuário? Registrar aqui!' :
                                 'Já é cadastrado? Entrar aqui!'}
                         </a>
@@ -57,7 +57,7 @@ class Auth extends Component {
             <ul className='list-group custom-list-group'>
                 { this.props.profiles.map(profile => (
                     <li key={profile.id} className='list-group-item col-xs-12'>
-                        <a className=' text-center col-xs-12'
+                        <a href="!#" className=' text-center col-xs-12'
                         onClick={() => this.props.selectProfile(profile, this.props.token)}>
                             <b>{profile.noun}</b>
                         </a>
