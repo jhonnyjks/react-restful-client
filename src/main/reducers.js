@@ -4,10 +4,10 @@ import {reducer as toastrReducer} from 'react-redux-toastr'
 
 import TabReducer from '../common/layout/tab/tabReducer'
 import TemplateReducer from '../common/template/templateReducer'
-import AuthReducer from '../auth/authReducer'
-import UserReducer from '../users/reducer'
-import ProfileReducer from '../profiles/reducer'
-import PermissionReducer from '../profiles/permissions/reducer'
+import AuthReducer from '../default/auth/authReducer'
+import UserReducer from '../default/users/reducer'
+import ProfileReducer from '../default/profiles/reducer'
+import PermissionReducer from '../default/profiles/permissions/reducer'
 import { reducers } from '../app/exports'
 
 const rootReducer = combineReducers({

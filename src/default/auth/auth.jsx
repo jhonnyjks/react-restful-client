@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux'
 
 import './auth.css'
 import { login, signup, selectProfile } from './authActions'
-import Row from '../common/layout/row'
-import Grid from '../common/layout/grid'
-import Messages from '../common/msg/Message'
-import Input from '../common/form/InputAuth'
+import Row from '../../common/layout/row'
+import Grid from '../../common/layout/grid'
+import Messages from '../../common/msg/Message'
+import Input from '../../common/form/InputAuth'
 
 class Auth extends Component {
     constructor(props) {
