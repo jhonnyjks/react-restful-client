@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getList, showUpdate, selectPermission, changeAttribute } from './actions'
-import If from '../../common/operator/If'
-import CheckBox from '../../common/form/CheckBox'
-import Grid from '../../common/layout/grid'
+import If from '../../../common/operator/If'
+import CheckBox from '../../../common/form/CheckBox'
+import Grid from '../../../common/layout/grid'
 
 // Mapeando permissões específicas
 const codesPerOpetarion = {

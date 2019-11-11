@@ -21,7 +21,7 @@ class Header extends Component {
           </span>
         </a>
         <nav className="navbar navbar-static-top" onClick={() => this.props.openCloseSideBar()}>
-          <a href="#!" className="sidebar-toggle">toggle</a>
+          <a href="#!" className="sidebar-toggle"></a>
           <Navbar />
         </nav>
       </header>

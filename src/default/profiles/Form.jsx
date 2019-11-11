@@ -3,7 +3,7 @@ import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 
-import LabelAndInput from '../common/form/LabelAndInput'
+import LabelAndInput from '../../common/form/LabelAndInput'
 import PermissionList from './permissions/List'
 import { init } from './actions'
 
