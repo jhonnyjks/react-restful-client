@@ -33,21 +33,25 @@ class List extends Component {
 
     render() {
         return (
-            <table className='table'>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Login</th>
-                        <th>Tipo</th>
-                        <th>Status</th>
-                        <th className='table-actions'>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.renderRows()}
-                </tbody>
-            </table>
+            <div className='box material-item' style={{ paddingBottom: '3px' }}>
+                <div className='box-body no-padding'>
+                    <table className='table table-striped'>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Login</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th className='table-actions'>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderRows()}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         )
     }
 }

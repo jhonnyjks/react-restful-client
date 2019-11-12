@@ -11,7 +11,7 @@ class Header extends Component {
   render () {
       return (
       <header className="main-header">
-        <a href="/#/" className="logo">
+        <a href="/" className="logo">
           <span className="logo-mini">
             <img alt='Logo' src={img} height={35} width={35} />
           </span>
@@ -21,7 +21,7 @@ class Header extends Component {
           </span>
         </a>
         <nav className="navbar navbar-static-top" onClick={() => this.props.openCloseSideBar()}>
-          <a href="#!" className="sidebar-toggle"></a>
+          <a href="#!" className="sidebar-toggle">.</a>
           <Navbar />
         </nav>
       </header>

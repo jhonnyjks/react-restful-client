@@ -51,7 +51,7 @@ class List extends Component {
 
         return list.map((item, index) => (
             <li key={item.cpath} className='list-group-item col-xs-12'>
-                <a className='row col-xs-12' onClick={() => this.props.selectPermission(index)}>
+                <a href="#!" className='row col-xs-12' onClick={() => this.props.selectPermission(index)}>
                     <b>{item.cpath}</b>
                 </a>
                 <If test={index === this.props.selected}>

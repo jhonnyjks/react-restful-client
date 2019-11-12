@@ -10,7 +10,7 @@ import { init } from './actions'
 class Form extends Component {
     render() {
         return (
-            <form role='form' onSubmit={this.props.handleSubmit}>
+            <form onSubmit={this.props.handleSubmit}>
                 <div className='box-body'>
                     <Field name='noun' component={LabelAndInput} readOnly={this.props.readOnly}
                     label='Nome' cols='12 6' placeholder='Informe o nome' />
