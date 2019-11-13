@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/src/adminlte
 /src/app/*/
 /.pnp
 .pnp.js

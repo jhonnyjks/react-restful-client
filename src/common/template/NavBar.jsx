@@ -15,10 +15,10 @@ class Navbar extends Component {
     render() {
         const { name, /*email*/ } = this.props.user
         return (
-            <div className="navbar-custom-menu">
+            <div className="navbar-nav ml-auto">
                 <ul className="nav navbar-nav">
                     <li onMouseLeave={() => this.changeOpen()}
-                        className={`dropdown user user-menu ${this.state.open ? 'open' :
+                        className={`dropdown user user-menu ${this.state.open ? 'show' :
                             ''}`}>
                         <a href="#!" onClick={() => this.changeOpen()}
                             aria-expanded={this.state.open ? 'true' : 'false'}
