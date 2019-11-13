@@ -9,11 +9,11 @@ import { openCloseSideBar } from './templateActions'
 class Header extends Component {
   render() {
     return (
-      <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+      <nav className="main-header navbar navbar-expand navbar-green navbar-dark">
         <ul className="navbar-nav">
           <li className="nav-item">
             <a href="#!" className="nav-link" onClick={() => this.props.openCloseSideBar()} data-widget="pushmenu">
-              <i class="fas fa-bars"></i>
+              <i className="fas fa-bars"></i>
             </a>
           </li>
         </ul>

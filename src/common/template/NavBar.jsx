@@ -22,7 +22,7 @@ class Navbar extends Component {
                             ''}`}>
                         <a href="#!" onClick={() => this.changeOpen()}
                             aria-expanded={this.state.open ? 'true' : 'false'}
-                            className="dropdown-toggle"
+                            className="dropdown-toggle nav-link"
                             data-toggle="dropdown">
                             <img src="http://lorempixel.com/160/160/abstract"
                                 className="user-image" alt="User 1" />
