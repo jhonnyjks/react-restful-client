@@ -19,7 +19,7 @@ class User extends Component {
     render() {
         return (
             <div>
-                <ContentHeader title='Usuários' small='Gerenciar usuários do sistema'
+                <ContentHeader title='Usuários' small='Gerenciar usuários'
                     createMethod={() => this.props.showContent('form')} />
                 <Content>
                     <If test={this.props.show === 'list'}>
