@@ -2,6 +2,10 @@ body {
     background: #ecf0f5;
 }
 
+.sidebar--sema {
+    padding-right: 1.2rem;
+}
+
 .content-header {
     min-height: 50px;
 }

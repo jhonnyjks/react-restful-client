@@ -8,7 +8,7 @@ export default props => (
            style={{opacity: .8}}></img>
             <span className="brand-text font-weight-light text-center">{process.env.REACT_APP_NAME}</span>
         </a>
-        <div className='sidebar'>
+        <div className='sidebar sidebar--sema'>
             <Menu />
         </div>
     </aside>
