@@ -2,7 +2,7 @@ import React from 'react'
 
 export default props => (
     <section className='content'>
-        <div class="container-fluid">
+        <div className="container-fluid">
             {props.children}
         </div>
     </section>

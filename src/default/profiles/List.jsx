@@ -18,10 +18,10 @@ class List extends Component {
                 <td>{item.description}</td>
                 <td>
                     <button className='btn btn-warning' onClick={() => this.props.showUpdate(item)}>
-                        <i className='fa fa-pencil'></i>
+                        <i className='fa fa-edit'></i>
                     </button>
                     <button className='btn btn-danger' onClick={() => this.props.remove(item)}>
-                        <i className='fa fa-trash-o'></i>
+                        <i className='fa fa-trash'></i>
                     </button>
                 </td>
             </tr>
