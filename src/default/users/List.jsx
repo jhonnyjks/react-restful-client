@@ -35,7 +35,7 @@ class List extends Component {
         return (
             <div className='box material-item' style={{ paddingBottom: '3px' }}>
                 <div className='box-body no-padding table-responsive'>
-                    <table className='table table-striped'>
+                    <table className='table table-hover'>
                         <thead>
                             <tr>
                                 <th>Nome</th>
