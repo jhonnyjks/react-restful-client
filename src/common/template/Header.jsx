@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import Navbar from "./NavBar";
-import { openCloseSideBar } from './templateActions'
+import { openCloseSideBar, openCloseMiniSideBar } from './templateActions'
 
 
 class Header extends Component {
@@ -12,7 +12,10 @@ class Header extends Component {
       <nav className="main-header navbar navbar-expand navbar-green navbar-dark">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a href="#!" className="nav-link" onClick={() => this.props.openCloseSideBar()} data-widget="pushmenu">
+            <a href="#!" className="nav-link nav-link--bg" onClick={(e) => this.props.openCloseSideBar(e)} data-widget="pushmenu">
+              <i className="fas fa-bars"></i>
+            </a>
+            <a href="#!" className="nav-link nav-link--sm" onClick={(e) => this.props.openCloseMiniSideBar(e)} data-widget="pushmenu">
               <i className="fas fa-bars"></i>
             </a>
           </li>
@@ -23,5 +26,5 @@ class Header extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ openCloseSideBar }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ openCloseSideBar, openCloseMiniSideBar }, dispatch)
 export default connect(null, mapDispatchToProps)(Header)

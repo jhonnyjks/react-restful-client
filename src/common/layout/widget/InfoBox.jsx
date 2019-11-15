@@ -4,7 +4,7 @@ import If from '../../operator/If'
 
 export default props => (
     <Grid {...props.grid}>
-        <div className={`box info-box material-item bg-${props.bg || ' '}`} style={{ marginBottom: 0 }} >
+        <div className={`info-box bg-${props.bg || ' '}`} style={{ marginBottom: 0 }} >
             <span
                 className={`info-box-icon bg-${props.iconBg || ' '}`}
                 style={{ borderRadius: '3px 0 0 3px' }}
