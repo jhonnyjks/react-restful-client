@@ -11,6 +11,7 @@ import "bootstrap";
 import "../../assets/css/adminlte.css";
 //import '../../adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css'
 import '../../assets/css/fontawesome-free/css/all.min.css'
+import '../../adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css'
 //import 'admin-lte/bootstrap/css/bootstrap.css'
 //import 'admin-lte/dist/css/AdminLTE.css'
 //import 'admin-lte/dist/css/skins/_all-skins.css'

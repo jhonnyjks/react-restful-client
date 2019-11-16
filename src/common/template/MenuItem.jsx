@@ -10,7 +10,7 @@ class MenuItem extends Component {
         return (
             <li className="nav-item">
                 <Link to={this.props.path} className="nav-link">
-                    <i className={`nav-icon fa fa-${this.props.icon}`}></i> <span>{this.props.label}</span>
+                    <i className={`nav-icon fas fa-${this.props.icon}`}></i> <span>{this.props.label}</span>
                 </Link>
             </li>
         )

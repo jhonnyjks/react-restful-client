@@ -8,8 +8,8 @@ export default props => (
                 placeholder={props.placeholder}
                 readOnly={props.readOnly}
                 type={props.type} />
-            <div class="input-group-append">
-                <div class="input-group-text">
+            <div className="input-group-append">
+                <div className="input-group-text">
                     <span className={`fas fa-${props.icon}`}></span>
                 </div>
             </div>
