@@ -4,19 +4,9 @@ import { connect } from 'react-redux'
 import MenuItem from './MenuItem'
 import MenuTree from './MenuTree'
 import { menu } from '../../app/exports'
+import ProfileHeader from './ProfileHeader';
 
 class Menu extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            openSidebarMenu: false
-        }
-    }
-
-    openClose = () => {
-        this.setState({ openSidebarMenu: !this.state.openSidebarMenu })
-    }
 
     renderDinamicMenu(path, menuItem) {
         return <MenuItem
@@ -25,39 +15,11 @@ class Menu extends Component {
         />
     }
 
-    RenderSidebarMenu = () => {
-        return (
-            <React.Fragment>
-                <div className="mt-2">
-                    <ul className='nav nav-pills nav-sidebar flex-column'>
-                        <li className="nav-item">
-                            <a href="#!" className="nav-link">
-                                <i className="nav-icon fas fa-power-off"></i>
-                                <span> Sair</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div className="user-panel mt-1 pb-1 mb-1 d-flex"></div>
-            </React.Fragment>
-        )
-    }
-
     render() {
         const scopes = this.props.scopes
-        const { RenderSidebarMenu } = this
         return (
             <div>
-                <div className="user-panel mt-3 pb-3 mb-1 d-flex">
-                    <div className="image">
-                        <img src="http://lorempixel.com/160/160/people" className="img-circle elevation-2" alt="User" />
-                    </div>
-                    <div className="info">
-                        <a href="#!" className="d-block">Alexander Pierce</a>
-                        <a href="#!" className="d-block" onClick={() => this.openClose()}>Menu</a>
-                    </div>
-                </div>
-                {this.state.openSidebarMenu && (<RenderSidebarMenu />)}
+                <ProfileHeader/>
                 <div className="mt-2">
                     <ul className='nav nav-pills nav-sidebar flex-column'>
                         {Object.keys(menu).map((path) => {

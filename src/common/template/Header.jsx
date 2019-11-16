@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import Navbar from "./NavBar";
 import { openCloseSideBar, openCloseMiniSideBar } from './templateActions'
 
 
@@ -20,7 +19,7 @@ class Header extends Component {
             </a>
           </li>
         </ul>
-        <Navbar />
+        <div className="navbar-nav ml-auto"></div>
       </nav>
     )
   }
