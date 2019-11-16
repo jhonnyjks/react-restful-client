@@ -17,7 +17,8 @@ class Navbar extends Component {
         return (
             <div className="navbar-nav ml-auto">
                 <ul className="nav navbar-nav">
-                    <li onMouseLeave={() => this.changeOpen()}
+                    <li 
+                    // onMouseLeave={() => this.changeOpen()}
                         className={`dropdown user user-menu ${this.state.open ? 'show' :
                             ''}`}>
                         <a href="#!" onClick={() => this.changeOpen()}
@@ -26,9 +27,10 @@ class Navbar extends Component {
                             data-toggle="dropdown">
                             <img src="http://lorempixel.com/160/160/abstract"
                                 className="user-image" alt="User 1" />
-                            <span className="hidden-xs">{name}</span>
+                            <span className="hidden-xs">MENU</span>
                         </a>
-                        <ul className="dropdown-menu">
+                        <ul className={`dropdown-menu dropdown-menu-lg dropdown-menu-right ${this.state.open ? 'show' :
+                            ''}`}>
                             <li className="user-header">
                                 <img src="http://lorempixel.com/160/160/abstract"
                                     className="img-circle" alt="User 2" />

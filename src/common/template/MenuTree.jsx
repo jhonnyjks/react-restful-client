@@ -17,7 +17,7 @@ export default class MenuTree extends React.Component {
     render() {
         return (
             <li className={`nav-item has-treeview ${this.state.open ? 'menu-open' : ''}`}>
-                <Link to='' className={`nav-link ${this.state.open ? 'active' : ''}`} onClick={() => this.openClose()}>
+                <Link to='#!' className={`nav-link ${this.state.open ? 'active' : ''}`} onClick={() => this.openClose()}>
                     <i className={`nav-icon fa fa-${this.props.icon}`}></i> <span>{this.props.label}</span>
                     <i className='right fas fa-angle-left'></i>
                 </Link>
