@@ -9,7 +9,8 @@ class ProfileHeader extends Component {
         super(props)
         this.state = { open: false }
     }
-    changeOpen() {
+    changeOpen(e) {
+        e.preventDefault()
         this.setState({ open: !this.state.open })
     }
 
@@ -31,7 +32,7 @@ class ProfileHeader extends Component {
                             </a>
                         </li>
                         <li className="nav-item mb-1">
-                            <a href="#!" className="nav-link bg-danger" onClick={() => this.changeOpen()}>
+                            <a href="#!" className="nav-link bg-danger" onClick={(e) => this.changeOpen(e)}>
                                 <i className="nav-icon fas fa-times"></i>
                                 <span> Não</span>
                             </a>
@@ -54,7 +55,7 @@ class ProfileHeader extends Component {
                     </div>
                     <div className="info">
                         <a href="#!" className="d-block">{name}</a>
-                        <a href="#!" className="d-block mt-2 btn btn-primary btn-sm" onClick={() => this.changeOpen()}>
+                        <a href="#!" className="d-block mt-2 btn btn-secondary btn-sm" onClick={(e) => this.changeOpen(e)}>
                             <i className="nav-icon fas fa-power-off"></i>
                             <span> Sair</span>
                         </a>
