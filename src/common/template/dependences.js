@@ -1,4 +1,4 @@
-import './jquery'
+//import './jquery'
 
 //import 'admin-lte/plugins/jQueryUI/jquery-ui'
 //import 'admin-lte/plugins/fastclick/fastclick'

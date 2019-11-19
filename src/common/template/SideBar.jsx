@@ -54,9 +54,9 @@ class SideBar extends React.Component {
                 sidebar={<b>Sidebar content</b>}
                 open={this.state.sidebarOpen}
                 docked={this.state.sidebarDocked}
-                onSetOpen={() => this.props.openCloseMiniSideBar()}
+                onSetOpen={(e) => this.props.openCloseMiniSideBar(e)}
                 shadow={false}
-                styles={{ sidebar: { background: "none" } }}
+                styles={{ root: { position: "relative" },  sidebar: { background: "none" } }}
             >
                 <SidebarSema />
             </Sidebar>

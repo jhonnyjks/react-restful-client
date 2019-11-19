@@ -12,7 +12,10 @@ export function openCloseSideBar(e) {
     }
 }
 
-export function openCloseMiniSideBar() {
+export function openCloseMiniSideBar(e) {
+    if (typeof e === 'object') {
+        e.preventDefault()
+    }
     if (document.body.getAttribute('class').indexOf('sidebar-open') > -1) {
         document.body.setAttribute('class', document.body.getAttribute('class').replace('sidebar-open', ''))
     } else {
