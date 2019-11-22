@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getList, showUpdate, remove } from './actions'
+import Table from '../../common/layout/Table';
 
 class List extends Component {
 
@@ -9,43 +10,9 @@ class List extends Component {
         this.props.getList();
     }
 
-    renderRows() {
-        const list = this.props.list || []
-
-        return list.map(item => (
-            <tr key={item.id}>
-                <td>{item.noun}</td>
-                <td>{item.description}</td>
-                <td>
-                    <button className='btn btn-warning' onClick={() => this.props.showUpdate(item)}>
-                        <i className='fa fa-edit'></i>
-                    </button>
-                    <button className='btn btn-danger' onClick={() => this.props.remove(item)}>
-                        <i className='fa fa-trash'></i>
-                    </button>
-                </td>
-            </tr>
-        ))
-    }
-
     render() {
         return (
-            <div className='box material-item' style={{ paddingBottom: '3px' }}>
-                <div className='box-body no-padding'>
-                <table className='table table-striped'>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th className='table-actions'>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderRows()}
-                    </tbody>
-                </table>
-                </div>
-            </div>
+            <Table body={this.props.list} defaultActions={true} update={this.props.showUpdate} remove={this.props.remove} />
         )
     }
 }
