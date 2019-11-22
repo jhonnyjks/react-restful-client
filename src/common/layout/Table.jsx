@@ -65,18 +65,42 @@ export default class Table extends Component {
                 <React.Fragment>
                     {
                         this.props.body.map((ntr, index) => {
-                            return <div class="card">
-                                <div class="card-header" id={`heading${index}`}>
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
-                                            {ntr.name || "p"}
+                            let body = Object.values(ntr)
+                            return <div className="card" key={index}>
+                                <div className="card-header" id={`heading${index}`}>
+                                    <h5 className="mb-0">
+                                        <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
+                                            <strong>{ntr["name"] || "p"}</strong>
                                         </button>
                                     </h5>
                                 </div>
 
-                                <div id={`collapse${index}`} class="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
-                                    <div class="card-body">
-                                        Anim pariatur cliche reprehenderit
+                                <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
+                                    <div className="card-body">
+                                        {
+                                            body.map((tr, index) => {
+                                                let keytoFind = Object.keys(ntr)[index];
+                                                return <div key={index}>
+                                                    {
+                                                        <div className="row" key={index}>
+                                                            <strong>{keytoFind}</strong> : {tr}
+                                                        </div>
+                                                    }
+                                                </div>
+                                            })
+                                        }
+                                    </div>
+                                    <div className="card-footer">
+                                        {this.props.defaultActions === true &&
+                                            <div>
+                                                <button className='btn btn-warning' onClick={() => this.props.update(ntr)}>
+                                                    <i className='fa fa-edit'></i> Editar
+                                                </button>
+                                                <button className='btn btn-danger' onClick={() => this.props.remove(ntr)}>
+                                                    <i className='fa fa-trash'></i> Excluir
+                                                </button>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
