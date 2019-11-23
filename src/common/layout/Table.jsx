@@ -76,7 +76,7 @@ export default class Table extends Component {
                                 </div>
 
                                 <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
-                                    <div className="card-body">
+                                    <div className="card-body ml-4 mr-4">
                                         {
                                             body.map((tr, index) => {
                                                 let keytoFind = Object.keys(ntr)[index];
@@ -90,13 +90,13 @@ export default class Table extends Component {
                                             })
                                         }
                                     </div>
-                                    <div className="card-footer">
+                                    <div className="card-footer text-center">
                                         {this.props.defaultActions === true &&
                                             <div>
-                                                <button className='btn btn-warning' onClick={() => this.props.update(ntr)}>
+                                                <button className='btn btn-warning col-5' onClick={() => this.props.update(ntr)}>
                                                     <i className='fa fa-edit'></i> Editar
                                                 </button>
-                                                <button className='btn btn-danger' onClick={() => this.props.remove(ntr)}>
+                                                <button className='btn btn-danger col-5' onClick={() => this.props.remove(ntr)}>
                                                     <i className='fa fa-trash'></i> Excluir
                                                 </button>
                                             </div>
