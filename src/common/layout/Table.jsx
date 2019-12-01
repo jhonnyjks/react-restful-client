@@ -131,7 +131,6 @@ export default class Table extends Component {
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}
-                                {this.state.width}
                             </table>
                         </div>
                     </div>
