@@ -4,7 +4,7 @@
 /node_modules
 /mock-server
 /src/adminlte
-/src/app/*/
+/src/app/*
 /.pnp
 .pnp.js
 
