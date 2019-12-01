@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 
 import MenuItem from './MenuItem'
 import MenuTree from './MenuTree'
+import { menu as defaultMenu } from '../../default'
 import { menu } from '../../app/exports'
 import ProfileHeader from './ProfileHeader';
+
+const MainMenu = {...defaultMenu, ...menu}
 
 class Menu extends Component {
 
@@ -22,9 +25,9 @@ class Menu extends Component {
                 <ProfileHeader/>
                 <div className="mt-2">
                     <ul className='nav nav-pills nav-sidebar flex-column'>
-                        {Object.keys(menu).map((path) => {
+                        {Object.keys(MainMenu).map((path) => {
 
-                            const item = menu[path]
+                            const item = MainMenu[path]
 
                             if (item.fixed || scopes[path] || scopes[path.replace('/', '')]) {
 

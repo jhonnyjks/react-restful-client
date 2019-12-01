@@ -1,13 +1,16 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router'
 
+import { routes as defaultRoutes } from '../default'
 import { routes } from '../app/exports'
+
+const AppRoutes = [...defaultRoutes, ...routes]
 
 export default props => (
     <div className='content-wrapper'>
         <Switch>
             {/* Mapeando rotas do projeto filho */}
-            {routes.map(route => (
+            {AppRoutes.map(route => (
                 <Route key={route.path} exact={route.exact || false} path={route.path} component={route.component} />
             ))}
 

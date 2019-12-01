@@ -10,5 +10,5 @@ export const routes = [
 
 // Menu do projeto
 export const menu = {
-
+    '/': { title: 'Dashboard', icon: 'tachometer-alt' },
 }
