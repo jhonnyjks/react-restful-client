@@ -5,8 +5,8 @@ import { bindActionCreators } from 'redux'
 
 import '../common/template/dependences'
 import App from './app'
-import Auth from '../auth/auth'
-import { validateToken } from '../auth/authActions'
+import Auth from '../default/auth/auth'
+import { validateToken } from '../default/auth/authActions'
 
 class AuthOrApp extends Component {
     componentWillMount() {

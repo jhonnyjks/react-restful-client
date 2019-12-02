@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import ContentHeader from '../common/template/ContentHeader'
-import Content from '../common/template/Content'
-import If from '../common/operator/If'
+import ContentHeader from '../../common/template/ContentHeader'
+import Content from '../../common/template/Content'
+import If from '../../common/operator/If'
 import List from './List'
 import Form from './Form'
 import { getList, showContent, update, init, create } from './actions'
@@ -19,7 +19,7 @@ class User extends Component {
     render() {
         return (
             <div>
-                <ContentHeader title='Usuários' small='Gerenciar usuários do sistema'
+                <ContentHeader title='Usuários' small='Gerenciar usuários'
                     createMethod={() => this.props.showContent('form')} />
                 <Content>
                     <If test={this.props.show === 'list'}>

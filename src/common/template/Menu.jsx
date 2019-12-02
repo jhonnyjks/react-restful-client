@@ -3,7 +3,11 @@ import { connect } from 'react-redux'
 
 import MenuItem from './MenuItem'
 import MenuTree from './MenuTree'
+import { menu as defaultMenu } from '../../default'
 import { menu } from '../../app/exports'
+import ProfileHeader from './ProfileHeader';
+
+const MainMenu = {...defaultMenu, ...menu}
 
 class Menu extends Component {
 
@@ -17,34 +21,39 @@ class Menu extends Component {
     render() {
         const scopes = this.props.scopes
         return (
-            <ul className='sidebar-menu'>
-                {Object.keys(menu).map((path) => {
+            <div>
+                <ProfileHeader/>
+                <div className="mt-2">
+                    <ul className='nav nav-pills nav-sidebar flex-column'>
+                        {Object.keys(MainMenu).map((path) => {
 
-                    const item = menu[path]
+                            const item = MainMenu[path]
 
-                    if (item.fixed || scopes[path] || scopes[path.replace('/', '')]) {
+                            if (item.fixed || scopes[path] || scopes[path.replace('/', '')]) {
 
-                        if (item.children) {
-                            return <MenuTree
-                                key={path} path={path}
-                                label={item.title} icon={item.icon}
-                            >
-                                {Object.keys(item.children).map((childPath) => {
-                                    return this.renderDinamicMenu(childPath, item.children[childPath])
-                                })}
-                            </MenuTree>
+                                if (item.children) {
+                                    return <MenuTree
+                                        key={path} path={path}
+                                        label={item.title} icon={item.icon}
+                                    >
+                                        {Object.keys(item.children).map((childPath) => {
+                                            return this.renderDinamicMenu(childPath, item.children[childPath])
+                                        })}
+                                    </MenuTree>
 
-                        } else {
-                            return this.renderDinamicMenu(path, item)
-                        }
+                                } else {
+                                    return this.renderDinamicMenu(path, item)
+                                }
 
-                    } else if (path === ('/' || '')) {
-                        return this.renderDinamicMenu(path, item)
-                    }
+                            } else if (path === ('/' || '')) {
+                                return this.renderDinamicMenu(path, item)
+                            }
 
-                    return false
-                })}
-            </ul>
+                            return false
+                        })}
+                    </ul>
+                </div>
+            </div>
         )
     }
 }

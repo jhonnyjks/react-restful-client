@@ -2,32 +2,28 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import Navbar from "./NavBar";
-import { openCloseSideBar } from './templateActions'
+import { openCloseSideBar, openCloseMiniSideBar } from './templateActions'
 
-const img = process.env.REACT_APP_LOGO;
 
 class Header extends Component {
-  render () {
-      return (
-      <header className="main-header">
-        <a href="/#/" className="logo">
-          <span className="logo-mini">
-            <img alt='Logo' src={img} height={35} width={35} />
-          </span>
-          <span className="logo-lg">
-            <img alt='Logo' src={img} height={35} width={35} />
-            {process.env.REACT_APP_NAME}
-          </span>
-        </a>
-        <nav className="navbar navbar-static-top" onClick={() => this.props.openCloseSideBar()}>
-          <a className="sidebar-toggle" />
-          <Navbar />
-        </nav>
-      </header>
+  render() {
+    return (
+      <nav className="main-header navbar navbar-expand navbar-green navbar-dark">
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a href="#!" className="nav-link nav-link--bg" onClick={(e) => this.props.openCloseSideBar(e)} data-widget="pushmenu">
+              <i className="fas fa-bars"></i>
+            </a>
+            <a href="#!" className="nav-link nav-link--sm" onClick={(e) => this.props.openCloseMiniSideBar(e)} data-widget="pushmenu">
+              <i className="fas fa-bars"></i>
+            </a>
+          </li>
+        </ul>
+        <div className="navbar-nav ml-auto"></div>
+      </nav>
     )
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ openCloseSideBar }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ openCloseSideBar, openCloseMiniSideBar }, dispatch)
 export default connect(null, mapDispatchToProps)(Header)

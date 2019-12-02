@@ -162,3 +162,6 @@
 .skin-blue.layout-top-nav .main-header > .logo:hover {
   background-color: #3b8ab8;
 }
+.skin-blue .main-header .navbar {
+    background-color: #0d4b81;
+}

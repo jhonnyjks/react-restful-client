@@ -2,7 +2,9 @@
 
 # dependencies
 /node_modules
-/src/app
+/mock-server
+/src/adminlte
+/src/app/*
 /.pnp
 .pnp.js
 

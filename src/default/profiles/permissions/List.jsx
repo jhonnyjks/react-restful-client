@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getList, showUpdate, selectPermission, changeAttribute } from './actions'
-import If from '../../common/operator/If'
-import CheckBox from '../../common/form/CheckBox'
-import Grid from '../../common/layout/grid'
+import If from '../../../common/operator/If'
+import CheckBox from '../../../common/form/CheckBox'
+import Grid from '../../../common/layout/grid'
 
 // Mapeando permissões específicas
 const codesPerOpetarion = {
@@ -51,7 +51,7 @@ class List extends Component {
 
         return list.map((item, index) => (
             <li key={item.cpath} className='list-group-item col-xs-12'>
-                <a className='row col-xs-12' onClick={() => this.props.selectPermission(index)}>
+                <a href="#!" className='row col-xs-12' onClick={() => this.props.selectPermission(index)}>
                     <b>{item.cpath}</b>
                 </a>
                 <If test={index === this.props.selected}>

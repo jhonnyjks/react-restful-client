@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux'
 
 import './auth.css'
 import { login, signup, selectProfile } from './authActions'
-import Row from '../common/layout/row'
-import Grid from '../common/layout/grid'
-import Messages from '../common/msg/Message'
-import Input from '../common/form/InputAuth'
+import Row from '../../common/layout/row'
+// import Grid from '../../common/layout/grid'
+import Messages from '../../common/msg/Message'
+import Input from '../../common/form/InputAuth'
 
 class Auth extends Component {
     constructor(props) {
@@ -37,43 +37,45 @@ class Auth extends Component {
                 <Field component={Input} type="password" name="confirm_password"
                     placeholder="Confirmar Senha" icon='lock' hide={loginMode} />
                 <Row>
-                    <Grid cols="4">
-                        <button type="submit"
-                            className="btn btn-primary btn-block btn-flat">
-                            {loginMode ? 'Entrar' : 'Registrar'}
-                        </button>
-                    </Grid>
-                    <Grid cols="12 7" className="col-sm-offset-1">
-                        <a onClick={() => this.changeMode()}>
-                            {loginMode ? 'Novo usuário? Registrar aqui!' :
-                                'Já é cadastrado? Entrar aqui!'}
-                        </a>
-                    </Grid>
+                    <div className="col-4">
+                        <button type="submit" className="btn btn-primary btn-block">Sign In</button>
+                    </div>
                 </Row>
+                <div className="social-auth-links text-center mb-3">
+                    <p>- OU -</p>
+                    <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeMode()}>
+                        {loginMode ? 'Novo usuário? Registrar aqui!' :
+                            'Já é cadastrado? Entrar aqui!'}
+                    </a>
+                </div>
             </form>
         )
 
         const selectProfile = (
             <ul className='list-group custom-list-group'>
-                { this.props.profiles.map(profile => (
+                {this.props.profiles.map(profile => (
                     <li key={profile.id} className='list-group-item col-xs-12'>
-                        <a className=' text-center col-xs-12'
-                        onClick={() => this.props.selectProfile(profile, this.props.token)}>
+                        <a href="#!" className=' text-center col-xs-12'
+                            onClick={() => this.props.selectProfile(profile, this.props.token)}>
                             <b>{profile.noun}</b>
                         </a>
                     </li>
-                )) }
+                ))}
             </ul>
         )
 
         return (
-            <div className="login-box">
-                <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div>
-                <div className="login-box-body col-xs-12">
-                    <h4 className="login-box-msg">{this.props.profiles.length === 1 ? 'Bem vindo!' : 'Selecione um perfil'}</h4>
-                    {this.props.profiles.length > 1 ? selectProfile : loginForm}
+            <div className="login-page">
+                <div className="login-box">
+                    <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div>
+                    <div className="card">
+                        <div className="card-body login-card-body col-xs-12">
+                            <p className="login-box-msg">{this.props.profiles.length === 1 ? 'Bem vindo!' : 'Selecione um perfil'}</p>
+                            {this.props.profiles.length > 1 ? selectProfile : loginForm}
+                        </div>
+                        <Messages />
+                    </div>
                 </div>
-                <Messages />
             </div>
         )
     }

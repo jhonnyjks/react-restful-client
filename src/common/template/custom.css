@@ -2,8 +2,8 @@ body {
     background: #ecf0f5;
 }
 
-.skin-blue .main-header .navbar {
-    background-color: #0d4b81;
+.sidebar--sema {
+    padding-right: 1.2rem;
 }
 
 .content-header {
@@ -67,4 +67,22 @@ button {
 /* Aumentando fonte das legendas dos Charts*/
 .MuiTypography-subheading-38 {
     font-size: 1.3rem !important;
+}
+
+.nav-link--bg {
+    display: inline;
+}
+
+.nav-link--sm {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .nav-link--bg {
+        display: none;
+    }
+    
+    .nav-link--sm {
+        display: inline;
+    }
 }

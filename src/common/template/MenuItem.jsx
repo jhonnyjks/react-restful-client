@@ -8,9 +8,9 @@ import { openCloseSideBar } from './templateActions'
 class MenuItem extends Component {
     render() {
         return (
-            <li>
-                <Link to={this.props.path} onClick={this.props.openCloseSideBar}>
-                    <i className={`fa fa-${this.props.icon}`}></i> <span>{this.props.label}</span>
+            <li className="nav-item">
+                <Link to={this.props.path} className="nav-link">
+                    <i className={`nav-icon fas fa-${this.props.icon}`}></i> <span>{this.props.label}</span>
                 </Link>
             </li>
         )
