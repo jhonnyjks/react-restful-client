@@ -21,7 +21,16 @@ export default class Table extends Component {
             let head = Object.getOwnPropertyNames(this.props.body[0])
             return <thead>
                 <tr>
-                    {head.map((val, index) => <th key={index}>{val}</th>)}
+                    {(
+                        head.map((val, index) => {
+                            if(this.props.attributes) {
+                                return this.props.attributes[val] ? <th key={index}>{this.props.attributes[val]}</th> : null
+                            } else {
+                                return <th key={index}>{val}</th>    
+                            }
+                        })
+                    )}
+                    
                     {this.props.actions && <th>Ações</th>}
                 </tr>
             </thead>
@@ -33,14 +42,16 @@ export default class Table extends Component {
             return <tbody>
                 {
                     this.props.body.map((ntr, index) => {
-                        let tr = Object.values(ntr)
-                        return <tr key={tr.key || tr.id || index}>
+                        let tr = Object.keys(ntr)
+                        return <tr key={tr.id || index}>
                             {
-                                tr.map((val, index) =>
-                                    <td key={index}>
-                                        {val}
-                                    </td>
-                                )
+                                tr.map((val, index) =>{
+                                    if(this.props.attributes) {
+                                        return this.props.attributes[val] ? <td key={index}>{ntr[val]}</td> : null
+                                    } else {
+                                        return <th key={index}>{ntr[val]}</th>    
+                                    }
+                                })
                             }
                             {this.props.actions &&
                                 <td>
@@ -65,7 +76,7 @@ export default class Table extends Component {
                 <React.Fragment>
                     {
                         this.props.body.map((ntr, index) => {
-                            let body = Object.values(ntr)
+                            let body = Object.keys(ntr)
                             return <div className="card" key={index}>
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
@@ -78,25 +89,30 @@ export default class Table extends Component {
                                 <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
                                     <div className="card-body ml-4 mr-4">
                                         {
-                                            body.map((tr, index) => {
-                                                let keytoFind = Object.keys(ntr)[index];
-                                                return <div key={index}>
-                                                    {
+                                            body.map((key, index) => {
+                                                if(this.props.attributes) {
+                                                    return this.props.attributes[key] ? <div key={index}>
                                                         <div className="row" key={index}>
-                                                            <strong>{keytoFind}</strong> : {tr}
+                                                            <strong>{this.props.attributes[key]}</strong> : {ntr[key]}
                                                         </div>
-                                                    }
-                                                </div>
+                                                    </div> : null
+                                                } else {
+                                                    return <div key={index}>
+                                                        <div className="row" key={index}>
+                                                            <strong>{key}</strong> : {ntr[key]}
+                                                        </div>
+                                                    </div>
+                                                }
                                             })
                                         }
                                     </div>
                                     <div className="card-footer text-center">
                                         {this.props.actions &&
                                             <div>
-                                                <button className='btn btn-warning col-5' onClick={() => this.props.update(ntr)}>
+                                                <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(ntr)}>
                                                     <i className='fa fa-edit'></i> Editar
                                                 </button>
-                                                <button className='btn btn-danger col-5' onClick={() => this.props.remove(ntr)}>
+                                                <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(ntr)}>
                                                     <i className='fa fa-trash'></i> Excluir
                                                 </button>
                                             </div>
