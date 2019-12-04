@@ -17,12 +17,12 @@ export default class Table extends Component {
     }
 
     renderHead = () => {
-        if (this.props.body.length > 1) {
+        if (this.props.body.length > 0) {
             let head = Object.getOwnPropertyNames(this.props.body[0])
             return <thead>
                 <tr>
                     {head.map((val, index) => <th key={index}>{val}</th>)}
-                    {this.props.defaultActions === true && <th>Ações</th>}
+                    {this.props.actions && <th>Ações</th>}
                 </tr>
             </thead>
         }
@@ -42,12 +42,12 @@ export default class Table extends Component {
                                     </td>
                                 )
                             }
-                            {this.props.defaultActions === true &&
+                            {this.props.actions &&
                                 <td>
-                                    <button className='btn btn-warning' onClick={() => this.props.update(ntr)}>
+                                    <button className='btn btn-warning' onClick={() => this.props.actions.update(ntr)}>
                                         <i className='fa fa-edit'></i>
                                     </button>
-                                    <button className='btn btn-danger' onClick={() => this.props.remove(ntr)}>
+                                    <button className='btn btn-danger' onClick={() => this.props.actions.remove(ntr)}>
                                         <i className='fa fa-trash'></i>
                                     </button>
                                 </td>
@@ -91,7 +91,7 @@ export default class Table extends Component {
                                         }
                                     </div>
                                     <div className="card-footer text-center">
-                                        {this.props.defaultActions === true &&
+                                        {this.props.actions &&
                                             <div>
                                                 <button className='btn btn-warning col-5' onClick={() => this.props.update(ntr)}>
                                                     <i className='fa fa-edit'></i> Editar
