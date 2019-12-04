@@ -12,7 +12,8 @@ class List extends Component {
 
     render() {
         return (
-            <Table body={this.props.list} defaultActions={true} update={this.props.showUpdate} remove={this.props.remove} />
+            <Table body={this.props.list} actions={{update: this.props.showUpdate, remove: this.props.remove}}
+            attributes={{login: 'Login', name: 'Nome', email: 'E-mail', user_situation_id: 'Status', user_type_id: 'Tipo'}} />
         )
     }
 }
