@@ -8,7 +8,7 @@ export default props => (
             <select name={props.name} {...props.input}
                 readOnly={props.readOnly} className="custom-select mb-3">
                 <option value="">{props.placeholder}</option>
-                {props.options && props.options.map(e => (<option value={e.id}>{e.name}</option>))}
+                {props.options && props.options.map(e => (<option key={e.id} value={e.id}>{e.name}</option>))}
             </select>
         </div>
     </Grid>
