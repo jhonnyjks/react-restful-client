@@ -26638,7 +26638,7 @@ input.btn:-moz-focusring {
 }
 
 .elevation-4 {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
+  box-shadow: 0 14px 0px rgba(0, 0, 0, 0.25), 0 10px 0px rgba(0, 0, 0, 0.22) !important;
 }
 
 .elevation-5 {
