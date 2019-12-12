@@ -155,7 +155,8 @@ export function init() {
     ]
 }
 
-export function selectPermission(index) {
+export function selectPermission(e, index) {
+    e.preventDefault()
     return {
         type: 'PERMISSION_SELECTED',
         payload: index
