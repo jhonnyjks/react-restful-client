@@ -23,14 +23,14 @@ export default class Table extends Component {
                 <tr>
                     {(
                         head.map((val, index) => {
-                            if(this.props.attributes) {
+                            if (this.props.attributes) {
                                 return this.props.attributes[val] ? <th key={index}>{this.props.attributes[val]}</th> : null
                             } else {
-                                return <th key={index}>{val}</th>    
+                                return <th key={index}>{val}</th>
                             }
                         })
                     )}
-                    
+
                     {this.props.actions && <th>Ações</th>}
                 </tr>
             </thead>
@@ -45,11 +45,16 @@ export default class Table extends Component {
                         let tr = Object.keys(ntr)
                         return <tr key={tr.id || index}>
                             {
-                                tr.map((val, index) =>{
-                                    if(this.props.attributes) {
-                                        return this.props.attributes[val] ? <td key={index}>{ntr[val]}</td> : null
+                                tr.map((val, index) => {
+                                    let n = ntr[val]
+                                    if (this.props.translate && this.props.translate[val] !== undefined) {
+                                        let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
+                                        n = name_value ? name_value.nome : ntr[val]
+                                    }
+                                    if (this.props.attributes) {
+                                        return this.props.attributes[val] ? <td key={index}>{n}</td> : null
                                     } else {
-                                        return <th key={index}>{ntr[val]}</th>    
+                                        return <th key={index}>{n}</th>
                                     }
                                 })
                             }
@@ -90,7 +95,7 @@ export default class Table extends Component {
                                     <div className="card-body ml-4 mr-4">
                                         {
                                             body.map((key, index) => {
-                                                if(this.props.attributes) {
+                                                if (this.props.attributes) {
                                                     return this.props.attributes[key] ? <div key={index}>
                                                         <div className="row" key={index}>
                                                             <strong>{this.props.attributes[key]}</strong> : {ntr[key]}
