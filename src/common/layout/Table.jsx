@@ -86,7 +86,7 @@ export default class Table extends Component {
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
                                         <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
-                                            <strong>{ntr["name"] || "p"}</strong>
+                                            <strong>{ntr[this.props.labelMobile] || ntr["name"] || "p"}</strong>
                                         </button>
                                     </h5>
                                 </div>
