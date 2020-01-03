@@ -32,6 +32,10 @@ button {
     background-color: #fff;
 }
 
+.brand-image--custom {
+    margin-left: 0 !important;
+}
+
 .custom-list-group>li {
     display: inline-table;
 }
