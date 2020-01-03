@@ -66,8 +66,13 @@ class Auth extends Component {
 
         return (
             <div className="login-page">
-                <div className="login-box">
-                    <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div>
+                <div className="login-box">{
+                    process.env.REACT_APP_LOGIN_LOGO === undefined || process.env.REACT_APP_LOGIN_LOGO === "" ?
+                        <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div> :
+                        <div className="login-logo">
+                            <img className="image-logo" alt="logo" src={process.env.REACT_APP_LOGIN_LOGO} />
+                        </div>
+                }
                     <div className="card">
                         <div className="card-body login-card-body col-xs-12">
                             <p className="login-box-msg">{this.props.profiles.length === 1 ? 'Bem vindo!' : 'Selecione um perfil'}</p>
