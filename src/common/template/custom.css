@@ -81,6 +81,10 @@ button {
     display: none;
 }
 
+.btn--get_taxpayer {
+    margin-top: 21% !important
+}
+
 @media (max-width: 767px) {
     .nav-link--bg {
         display: none;
@@ -88,5 +92,9 @@ button {
     
     .nav-link--sm {
         display: inline;
+    }
+
+    .btn--get_taxpayer {
+        margin-top: 0% !important
     }
 }
