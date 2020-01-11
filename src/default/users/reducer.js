@@ -1,4 +1,4 @@
-const INITIAL_STATE = {list: [], show: 'list'}
+const INITIAL_STATE = {list: [], show: 'list', errors: {}}
 
 export default (state = INITIAL_STATE, action) => {
     switch(action.type) {

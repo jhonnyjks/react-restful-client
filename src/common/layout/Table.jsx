@@ -49,7 +49,7 @@ export default class Table extends Component {
                                     let n = ntr[val]
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
                                         let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
-                                        n = name_value ? name_value.nome : ntr[val]
+                                        n = name_value ? name_value.name : ntr[val]
                                     }
                                     if (this.props.attributes) {
                                         return this.props.attributes[val] ? <td key={index}>{n}</td> : null

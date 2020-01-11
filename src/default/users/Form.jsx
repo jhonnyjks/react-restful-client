@@ -18,19 +18,19 @@ class Form extends Component {
                     <div className='card-body'>
                         <Row>
                             <Field name='name' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Nome' cols='12 4' placeholder='Informe o nome' />
+                                label='Nome' cols='12 4' placeholder='Informe o nome' error={this.props.errors} />
                             <Field name='email' component={LabelAndInput} readOnly={this.props.readOnly}
-                                type='email' label='E-mail' cols='12 4' placeholder='seu.email@mail.com' />
+                                type='email' label='E-mail' cols='12 4' placeholder='seu.email@mail.com' error={this.props.errors} />
                             <Field name='login' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Login' cols='12 4' placeholder='Informe o login' />
+                                label='Login' cols='12 4' placeholder='Informe o login' error={this.props.errors} />
                         </Row>
                         <Row>
                             <Field name='password' component={LabelAndInput} type="password" readOnly={this.props.readOnly}
-                                label='Senha' cols='12 4' placeholder='Informe a senha' />
+                                label='Senha' cols='12 4' placeholder='Informe a senha' error={this.props.errors} />
                             <Field name='user_type_id' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Tipo' cols='12 4' placeholder='Informe o user_type_id' />
+                                label='Tipo' cols='12 4' placeholder='Informe o user_type_id' error={this.props.errors} />
                             <Field name='user_situation_id' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Status' cols='12 4' placeholder='Informe o status' />
+                                label='Status' cols='12 4' placeholder='Informe o status' error={this.props.errors} />
                         </Row>
                     </div>
                     <div className='card-footer'>
@@ -51,7 +51,8 @@ const mapStateToProps = state => ({
     login: selector(state, 'login'),
     password: selector(state, 'password'),
     user_type_id: selector(state, 'user_type_id'),
-    user_situation_id: selector(state, 'user_situation_id')
+    user_situation_id: selector(state, 'user_situation_id'),
+    errors: state.user.errors
 })
 const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Form)

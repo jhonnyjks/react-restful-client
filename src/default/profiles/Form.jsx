@@ -19,9 +19,9 @@ class Form extends Component {
                     <div className='card-body'>
                         <Row>
                             <Field name='noun' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Nome' cols='12 6' placeholder='Informe o nome' />
+                                label='Nome' cols='12 6' placeholder='Informe o nome' error={this.props.errors} />
                             <Field name='description' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Descrição' cols='12 6' placeholder='Descreva o perfil' />
+                                label='Descrição' cols='12 6' placeholder='Descreva o perfil' error={this.props.errors} />
                         </Row>
                         <PermissionList profileId={this.props.id} />
                     </div>
@@ -40,7 +40,8 @@ const selector = formValueSelector('profileForm')
 const mapStateToProps = state => ({
     id: selector(state, 'id'),
     noun: selector(state, 'noun'),
-    description: selector(state, 'description')
+    description: selector(state, 'description'),
+    errors: state.profile.errors
 })
 const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Form)
