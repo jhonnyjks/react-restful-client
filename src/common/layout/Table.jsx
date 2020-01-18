@@ -47,10 +47,19 @@ export default class Table extends Component {
                             {
                                 tr.map((val, index) => {
                                     let n = ntr[val]
+
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
                                         let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
                                         n = name_value ? name_value.name : ntr[val]
                                     }
+
+                                    // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
+                                    if(n && n.id) {
+                                       n = n.name || n.title || Object.values(n)[1]
+                                       if(n.length > 64) n = n.slice(0, 63) + '...' 
+                                    }
+
+                                    // Se 'attributes' estiver setado, e se o atributo atual estiver no array setado, exibe a coluna.
                                     if (this.props.attributes) {
                                         return this.props.attributes[val] ? <td key={index}>{n}</td> : null
                                     } else {
@@ -95,16 +104,24 @@ export default class Table extends Component {
                                     <div className="card-body ml-4 mr-4">
                                         {
                                             body.map((key, index) => {
+                                                let n = ntr[key]
+
+                                                // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
+                                                if(n && n.id) {
+                                                    n = n.name || n.title || Object.values(n)[1]
+                                                    if(n.length > 64) n = n.slice(0, 63) + '...' 
+                                                }
+
                                                 if (this.props.attributes) {
                                                     return this.props.attributes[key] ? <div key={index}>
                                                         <div className="row" key={index}>
-                                                            <strong>{this.props.attributes[key]}</strong> : {ntr[key]}
+                                                            <strong>{this.props.attributes[key]}</strong> : {n}
                                                         </div>
                                                     </div> : null
                                                 } else {
                                                     return <div key={index}>
                                                         <div className="row" key={index}>
-                                                            <strong>{key}</strong> : {ntr[key]}
+                                                            <strong>{key}</strong> : {n}
                                                         </div>
                                                     </div>
                                                 }
