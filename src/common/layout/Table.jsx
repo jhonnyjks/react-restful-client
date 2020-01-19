@@ -16,9 +16,14 @@ export default class Table extends Component {
         window.removeEventListener('resize', this.updateDimensions);
     }
 
+    getBody(){
+        return this.props.paginate ? this.props.body.data : this.props.body
+    }
+    
     renderHead = () => {
-        if (this.props.body.length > 0) {
-            let head = Object.getOwnPropertyNames(this.props.body[0])
+        let b = this.getBody()
+        if (b !== undefined && b.length > 0) {
+            let head = Object.getOwnPropertyNames(b[0])
             return <thead>
                 <tr>
                     {(
@@ -38,10 +43,11 @@ export default class Table extends Component {
     }
 
     renderBody = () => {
-        if (this.props.body) {
+        let body = this.getBody()
+        if (body) {
             return <tbody>
                 {
-                    this.props.body.map((ntr, index) => {
+                    body.map((ntr, index) => {
                         let tr = Object.keys(ntr)
                         return <tr key={tr.id || index}>
                             {
@@ -85,11 +91,12 @@ export default class Table extends Component {
     }
 
     renderBodyAccordion = () => {
-        if (this.props.body) {
+        let bodyAccordion = this.getBody()
+        if (bodyAccordion) {
             return (
                 <React.Fragment>
                     {
-                        this.props.body.map((ntr, index) => {
+                        bodyAccordion.map((ntr, index) => {
                             let body = Object.keys(ntr)
                             return <div className="card" key={index}>
                                 <div className="card-header" id={`heading${index}`}>
