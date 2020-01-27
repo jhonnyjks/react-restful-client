@@ -69,12 +69,16 @@ export default class Table extends Component {
                             }
                             {this.props.actions &&
                                 <td>
-                                    <button className='btn btn-warning' onClick={() => this.props.actions.update(ntr)}>
-                                        <i className='fa fa-edit'></i>
-                                    </button>
-                                    <button className='btn btn-danger' onClick={() => this.props.actions.remove(ntr)}>
-                                        <i className='fa fa-trash'></i>
-                                    </button>
+                                    {this.props.actions.update && 
+                                        <button className='btn btn-warning' onClick={() => this.props.actions.update(ntr)}>
+                                            <i className='fa fa-edit'></i>
+                                        </button>
+                                    }
+                                    {this.props.actions.remove && 
+                                        <button className='btn btn-danger' onClick={() => this.props.actions.remove(ntr)}>
+                                            <i className='fa fa-trash'></i>
+                                        </button>
+                                    }
                                 </td>
                             }
                         </tr>

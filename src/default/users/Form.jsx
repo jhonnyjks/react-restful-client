@@ -2,12 +2,41 @@ import React, { Component } from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import axios from 'axios'
+import { toastr } from 'react-redux-toastr'
 
 import Row from '../../common/layout/row'
 import LabelAndInput from '../../common/form/LabelAndInput'
+import LabelAndSelect from '../../common/form/LabelAndSelect'
 import { init } from './actions'
 
 class Form extends Component {
+    constructor(props) {
+        super(props)
+        this.state = { generalStatuses: [] }
+    }
+
+    componentWillMount() {
+        this.getGeneralStatuses()
+    }
+
+    getGeneralStatuses = () => {
+        axios.get(`${process.env.REACT_APP_API_HOST}/general_statuses`)
+        .then(resp => {
+            this.setState({ generalStatuses: resp.data.data })
+        })
+        .catch(e => {
+            if (!e.response) {
+                toastr.error('Erro', 'Desconhecido :-/')
+                console.log(e)
+            } else if (!e.response.data) {
+                toastr.error('Erro', e.response.message)
+            } else if (e.response.data) {
+                toastr.error('Erro', e.response.data.message)
+            }
+        })
+    }
+
     render() {
         return (
             <form onSubmit={this.props.handleSubmit}>
@@ -27,10 +56,9 @@ class Form extends Component {
                         <Row>
                             <Field name='password' component={LabelAndInput} type="password" readOnly={this.props.readOnly}
                                 label='Senha' cols='12 4' placeholder='Informe a senha' error={this.props.errors} />
-                            <Field name='user_type_id' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Tipo' cols='12 4' placeholder='Informe o user_type_id' error={this.props.errors} />
-                            <Field name='user_situation_id' component={LabelAndInput} readOnly={this.props.readOnly}
-                                label='Status' cols='12 4' placeholder='Informe o status' error={this.props.errors} />
+                            <Field name='general_status_id' component={LabelAndSelect} readOnly={this.props.readOnly}
+                                label='Status' cols='12 4' placeholder=' - Selecione - ' 
+                                options={this.state.generalStatuses} error={this.props.errors} />
                         </Row>
                     </div>
                     <div className='card-footer'>
@@ -50,8 +78,7 @@ const mapStateToProps = state => ({
     email: selector(state, 'email'),
     login: selector(state, 'login'),
     password: selector(state, 'password'),
-    user_type_id: selector(state, 'user_type_id'),
-    user_situation_id: selector(state, 'user_situation_id'),
+    general_status_id: selector(state, 'general_status_id'),
     errors: state.user.errors
 })
 const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch)

@@ -2,10 +2,10 @@ import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { initialize } from 'redux-form'
 
-const INITIAL_VALUES = {name: '', login: '', password: '', user_type_id: '', user_situation_id: ''}
+const INITIAL_VALUES = {name: '', login: '', password: '', general_status_id: ''}
 
 export function getList() {
-    const request = axios.get(`${process.env.REACT_APP_API_HOST}/users`)
+    const request = axios.get(`${process.env.REACT_APP_API_HOST}/users?with=generalStatus`)
     return {
         type: 'USERS_FETCHED',
         payload: request
@@ -17,6 +17,12 @@ export function create(values) {
 }
 
 export function update(values) {
+
+    // Removendo atributos do tipo Objeto.
+    Object.keys(values).forEach(function(value, index) {
+        if(!values[value] || values[value].id) delete values[value]
+    })
+
     return submit(values, 'put')
 }
 
