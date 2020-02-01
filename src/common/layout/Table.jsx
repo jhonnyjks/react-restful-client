@@ -68,7 +68,7 @@ export default class Table extends Component {
                                     if(n && n.id) {
 
                                         // Se houver callback no atributo, call back o callback
-                                        if(this.props.attributes[val].callback) {
+                                        if(this.props.attributes[val] && this.props.attributes[val].callback) {
                                             n = this.props.attributes[val].callback(n)
                                         } else {
                                             n = n.name || n.title || Object.values(n)[1]
@@ -78,10 +78,18 @@ export default class Table extends Component {
 
                                     // Se 'attributes' estiver setado, e se o atributo atual estiver no array setado, exibe a coluna.
                                     if (this.props.attributes) {
-                                        return this.props.attributes[val] ? <td key={index}>{n}</td> : null
-                                    } else {
-                                        return <th key={index}>{n}</th>
+                                        // Se houver callback no atributo, call back o callback
+                                        if(this.props.attributes[val]) {
+                                            if(this.props.attributes[val].callback) {
+                                                return <td key={index}>{this.props.attributes[val].callback(n)}</td>
+                                            } 
+                                            return <td key={index}>{n}</td>
+                                        } else {
+                                            return null;
+                                        }
                                     }
+
+                                    return <th key={index}>{n}</th>
                                 })
                             }
                             {this.props.actions &&
