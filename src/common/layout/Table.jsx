@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import If from '../operator/If'
+import Grid from './grid';
 
 export default class Table extends Component {
 
@@ -102,11 +103,14 @@ export default class Table extends Component {
                     {
                         bodyAccordion.map((ntr, index) => {
                             let body = Object.keys(ntr)
+                            let val = ntr
+                            if(val[this.props.labelMobile] && val[this.props.labelMobile].id) val = val[this.props.labelMobile]
+                            
                             return <div className="card" key={index}>
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
                                         <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
-                                            <strong>{ntr[this.props.labelMobile] || ntr["name"] || "p"}</strong>
+                                            <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] }</strong>
                                         </button>
                                     </h5>
                                 </div>
@@ -115,7 +119,7 @@ export default class Table extends Component {
                                     <div className="card-body ml-4 mr-4">
                                         {
                                             body.map((key, index) => {
-                                                let n = ntr[key]
+                                                let n = val[key]
 
                                                 // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
                                                 if(n && n.id) {
@@ -142,10 +146,10 @@ export default class Table extends Component {
                                     <div className="card-footer text-center">
                                         {this.props.actions &&
                                             <div>
-                                                <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(ntr)}>
+                                                <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
                                                     <i className='fa fa-edit'></i> Editar
                                                 </button>
-                                                <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(ntr)}>
+                                                <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
                                                     <i className='fa fa-trash'></i> Excluir
                                                 </button>
                                             </div>
@@ -172,10 +176,14 @@ export default class Table extends Component {
                     <div className='box material-item' style={{ paddingBottom: '3px' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
-                                <h3 className='box-title'>{this.props.title}</h3>
+                                <h4 className='box-title' style={{paddingTop: '1rem', textAlign: 'center'}}>{this.props.title}</h4>
+                                <hr/>
                             </div>
                         </If>
                         <div className='box-body no-padding'>
+                            <If test={this.props.headComponent}>
+                                {this.props.headComponent}
+                            </If>
                             <table className='table table-hover'>
                                 {this.renderHead()}
                                 {this.renderBody()}
