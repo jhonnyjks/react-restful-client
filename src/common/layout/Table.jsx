@@ -30,10 +30,14 @@ export default class Table extends Component {
                     {(
                         head.map((val, index) => {
                             if (this.props.attributes) {
-                                return this.props.attributes[val] ? <th key={index}>{this.props.attributes[val]}</th> : null
-                            } else {
-                                return <th key={index}>{val}</th>
+                                if(this.props.attributes[val]) {
+                                    return <th key={index}>{ this.props.attributes[val].title || this.props.attributes[val]}</th>
+                                } else {
+                                    return null
+                                }
                             }
+
+                            return <th key={index}>{val}</th>
                         })
                     )}
 
@@ -62,8 +66,14 @@ export default class Table extends Component {
 
                                     // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
                                     if(n && n.id) {
-                                       n = n.name || n.title || Object.values(n)[1]
-                                       if(n.length > 64) n = n.slice(0, 63) + '...' 
+
+                                        // Se houver callback no atributo, call back o callback
+                                        if(this.props.attributes[val].callback) {
+                                            n = this.props.attributes[val].callback(n)
+                                        } else {
+                                            n = n.name || n.title || Object.values(n)[1]
+                                            if(n.length > 64) n = n.slice(0, 63) + '...' 
+                                        }
                                     }
 
                                     // Se 'attributes' estiver setado, e se o atributo atual estiver no array setado, exibe a coluna.
@@ -130,7 +140,7 @@ export default class Table extends Component {
                                                 if (this.props.attributes) {
                                                     return this.props.attributes[key] ? <div key={index}>
                                                         <div className="row" key={index}>
-                                                            <strong>{this.props.attributes[key]}</strong> : {n}
+                                                            <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {n}
                                                         </div>
                                                     </div> : null
                                                 } else {
