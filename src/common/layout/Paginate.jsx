@@ -5,7 +5,7 @@ class Paginate extends Component {
         super(props);
         this.state = {
             page: 1,
-            limit: 1
+            limit: 10
         }
         this.onChangeLimit = this.onChangeLimit.bind(this)
     }

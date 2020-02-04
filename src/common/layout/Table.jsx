@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import If from '../operator/If'
-import Grid from './grid';
 
 export default class Table extends Component {
 
