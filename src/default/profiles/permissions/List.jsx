@@ -22,23 +22,23 @@ class List extends Component {
 
     renderAttributes(list = []) {
         return list.map(item => (
-            <div key={item.noun} className='col-xs-12'>
-                <Grid cols='4'>
+            <div key={item.noun} className='row col-xs-12 col-md-12'>
+                <Grid cols='4 4 4'>
                     {item.noun}
                 </Grid>
-                <Grid cols='2'>
+                <Grid cols='2 2 2'>
                     <CheckBox value="1" checked={codesPerOpetarion[1].indexOf(item.code) > -1} 
                         handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
-                <Grid cols='2'>
+                <Grid cols='2 2 2'>
                     <CheckBox value="2" checked={codesPerOpetarion[2].indexOf(item.code) > -1} 
                         handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
-                <Grid cols='2'>
+                <Grid cols='2 2 2'>
                     <CheckBox value="4" checked={codesPerOpetarion[4].indexOf(item.code) > -1} 
                         handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
                 </Grid>
-                <Grid cols='2'>
+                <Grid cols='2 2 2'>
                     <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(list[0].code) > -1} 
                         handleChange={event => this.props.changeAttribute(event, list[0], this.props.list[this.props.selected])} />
                 </Grid>
@@ -55,14 +55,14 @@ class List extends Component {
                     <b>{item.cpath}</b>
                 </a>
                 <If test={index === this.props.selected}>
-                    <div className='col-xs-12'>
-                        <b className='tex-center col-xs-4'>Atributo</b>
-                        <b className='tex-center col-xs-2'>Visualizar</b>
-                        <b className='tex-center col-xs-2'>Adicionar</b>
-                        <b className='tex-center col-xs-2'>Editar</b>
-                        <b className='tex-center col-xs-2'>Remover</b>
-                        {this.renderAttributes(item.actions)}
+                    <div className='row col-xs-12 col-md-12'>
+                        <b className='tex-center col-xs-4 col-md-4'>Atributo</b>
+                        <b className='tex-center col-xs-2 col-md-2'>Visualizar</b>
+                        <b className='tex-center col-xs-2 col-md-2'>Adicionar</b>
+                        <b className='tex-center col-xs-2 col-md-2'>Editar</b>
+                        <b className='tex-center col-xs-2 col-md-2'>Remover</b>
                     </div>
+                    {this.renderAttributes(item.actions)}
                 </If>
             </li>
         ))
