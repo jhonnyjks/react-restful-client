@@ -24,7 +24,7 @@ export const routes = [
 export const menu = {
     '/': { title: 'Dashboard', icon: 'tachometer-alt' },
     '/users': { title: 'Usuários', icon: 'user' },
-    '/profiles': { title: 'Permissões', icon: 'user' }
+    '/profiles': { title: 'Perfis', icon: 'user' }
     // 'profiles': {
     //     title: 'Perfis', icon: 'users',
     //     //Exemplo de menu cascateado
