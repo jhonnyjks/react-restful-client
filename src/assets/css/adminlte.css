@@ -11474,13 +11474,8 @@ body,
 }
 
 .brand-link .brand-image {
-  float: left;
-  line-height: .8;
-  margin-left: .8rem;
-  margin-right: .5rem;
-  margin-top: -3px;
-  max-height: 33px;
-  width: auto;
+  width: 80%;
+  margin: 5% 11%;
 }
 
 .brand-link .brand-image-xs {

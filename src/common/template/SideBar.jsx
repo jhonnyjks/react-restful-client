@@ -8,9 +8,11 @@ import Menu from './Menu'
 const SidebarSema = props => (
     <aside className='main-sidebar sidebar-dark-success elevation-4'>
         <a href="#!" className="brand-link">
+            { process.env.REACT_APP_LOGO ?
             <img src={process.env.REACT_APP_LOGO} alt="AdminLTE Logo" className="brand-image brand-image--custom elevation-3"
                 style={{ opacity: .8 }}></img>
-            <span className="brand-text font-weight-light text-center"><strong>{process.env.REACT_APP_NAME}</strong></span>
+            : <span className="brand-text font-weight-light text-center"><strong>{process.env.REACT_APP_NAME}</strong></span>
+            }
         </a>
         <div className='sidebar sidebar--sema'>
             <Menu />

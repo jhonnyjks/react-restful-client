@@ -33,7 +33,7 @@ button {
 }
 
 .brand-image--custom {
-    margin-left: 0 !important;
+    /* margin-left: 0 !important; */
 }
 
 .custom-list-group>li {
