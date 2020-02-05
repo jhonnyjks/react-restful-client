@@ -11466,6 +11466,7 @@ body,
 [class*='sidebar-dark'] .brand-link {
   border-bottom: 1px solid #4b545c;
   color: rgba(255, 255, 255, 0.8);
+  text-align: center;
 }
 
 [class*='sidebar-light'] .brand-link {
