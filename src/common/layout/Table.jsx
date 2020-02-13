@@ -57,6 +57,7 @@ export default class Table extends Component {
                             {
                                 tr.map((val, index) => {
                                     let n = ntr[val]
+                                    let isObj = false
 
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
                                         let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
@@ -65,13 +66,13 @@ export default class Table extends Component {
 
                                     // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
                                     if(n && n.id) {
-
+                                        isObj = true
                                         // Se houver callback no atributo, call back o callback
                                         if(this.props.attributes[val] && this.props.attributes[val].callback) {
                                             n = this.props.attributes[val].callback(n)
                                         } else {
                                             n = n.name || n.title || Object.values(n)[1]
-                                            if(n.length > 64) n = n.slice(0, 63) + '...' 
+                                            if(n.length > 32) n = n.slice(0, 31) + '...' 
                                         }
                                     }
 
@@ -79,7 +80,7 @@ export default class Table extends Component {
                                     if (this.props.attributes) {
                                         // Se houver callback no atributo, call back o callback
                                         if(this.props.attributes[val]) {
-                                            if(this.props.attributes[val].callback) {
+                                            if(!isObj && this.props.attributes[val].callback) {
                                                 return <td key={index}>{this.props.attributes[val].callback(n)}</td>
                                             } 
                                             return <td key={index}>{n}</td>
