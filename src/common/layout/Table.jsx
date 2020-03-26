@@ -21,6 +21,9 @@ export default class Table extends Component {
     }
     
     renderHead = () => {
+
+        if(this.props.renderHead === false) return null
+        
         let b = this.getBody()
         if (b !== undefined && b.length > 0) {
             let head = {}
