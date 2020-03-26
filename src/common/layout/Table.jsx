@@ -23,20 +23,20 @@ export default class Table extends Component {
     renderHead = () => {
         let b = this.getBody()
         if (b !== undefined && b.length > 0) {
-            let head = Object.getOwnPropertyNames(b[0])
+            let head = {}
+
+            if (this.props.attributes) {
+                head = this.props.attributes
+            } else {
+                const bodyAttrs = Object.getOwnPropertyNames(b[0])
+                bodyAttrs.forEach((val, index) => head[val] = val )
+            }
+
             return <thead>
                 <tr>
                     {(
-                        head.map((val, index) => {
-                            if (this.props.attributes) {
-                                if(this.props.attributes[val]) {
-                                    return <th key={index}>{ this.props.attributes[val].title || this.props.attributes[val]}</th>
-                                } else {
-                                    return null
-                                }
-                            }
-
-                            return <th key={index}>{val}</th>
+                        Object.getOwnPropertyNames(head).map((val, index) => {
+                            return <th key={index}>{head[val].title || head[val]}</th>
                         })
                     )}
 
@@ -52,7 +52,14 @@ export default class Table extends Component {
             return <tbody>
                 {
                     body.map((ntr, index) => {
-                        let tr = Object.keys(ntr)
+                        let tr = []
+
+                        if (this.props.attributes) {
+                            tr = Object.keys(this.props.attributes)
+                        } else {
+                            tr = Object.keys(ntr)
+                        }
+
                         return <tr key={tr.id || index}>
                             {
                                 tr.map((val, index) => {
