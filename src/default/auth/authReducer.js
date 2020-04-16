@@ -43,6 +43,18 @@ export default (state = INITIAL_STATE, action) => {
             localStorage.setItem(profileKey, JSON.stringify(action.payload))
             return { ...state, profile: action.payload }
 
+        case 'USER_CHANGED':
+            localStorage.setItem(sesionKey, JSON.stringify({
+                user: action.payload,
+                token: state.token
+            }))
+
+            return {
+                ...state,
+                user: action.payload
+                }
+           
+
         default:
             return state
     }
