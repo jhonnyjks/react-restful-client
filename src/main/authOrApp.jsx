@@ -11,8 +11,8 @@ import { validateToken } from '../default/auth/authActions'
 const Loading = () => {
     return (
         <div className="login-page text-center">
-            <div class="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
-                <span class="sr-only">Loading...</span>
+            <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
+                <span className="sr-only">Loading...</span>
             </div>
         </div>
     )

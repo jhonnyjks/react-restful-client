@@ -99,7 +99,6 @@ export function validateToken(token, profile) {
 
 export function selectProfile(profile, token) {
     return dispatch => {
-        console.log(profile)
         if (profile) {
             axios.get(`${process.env.REACT_APP_API_HOST}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
