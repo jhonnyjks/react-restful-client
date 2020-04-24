@@ -8,6 +8,16 @@ import App from './app'
 import Auth from '../default/auth/auth'
 import { validateToken } from '../default/auth/authActions'
 
+const Loading = () => {
+    return (
+        <div className="login-page text-center">
+            <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
+        </div>
+    )
+}
+
 class AuthOrApp extends Component {
     componentWillMount() {
         if (this.props.auth.token) {
@@ -16,14 +26,17 @@ class AuthOrApp extends Component {
     }
 
     render() {
-        const { token, validToken, profile } = this.props.auth
+        const { token, validToken, profile, loading } = this.props.auth
 
-        if (token && validToken && profile) {
+        if (loading || (validToken && profile === null)) {
+            return <Loading />
+        } else if (token && validToken && profile) {
             axios.defaults.headers.common['authorization'] = token.type + ' ' + token.token
             return <App>{this.props.children}</App>
         } else {
             return <Auth />
         }
+
     }
 }
 const mapStateToProps = state => ({ auth: state.auth })

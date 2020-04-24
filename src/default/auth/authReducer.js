@@ -5,9 +5,10 @@ const INITIAL_STATE = JSON.parse(localStorage.getItem(sesionKey)) ? {
     token: JSON.parse(localStorage.getItem(sesionKey)).token,
     profile: JSON.parse(localStorage.getItem(profileKey)),
     profiles: [],
-    validToken: false
+    validToken: false,
+    loading: false
 } : {
-        validToken: false, user: null, token: null, profile: null, profiles: []
+        validToken: false, user: null, token: null, profile: null, profiles: [], loading: false
     }
 
 export default (state = INITIAL_STATE, action) => {
@@ -42,6 +43,21 @@ export default (state = INITIAL_STATE, action) => {
         case 'PROFILE_SELECTED':
             localStorage.setItem(profileKey, JSON.stringify(action.payload))
             return { ...state, profile: action.payload }
+
+        case 'USER_CHANGED':
+            localStorage.setItem(sesionKey, JSON.stringify({
+                user: action.payload,
+                token: state.token
+            }))
+
+            return {
+                ...state,
+                user: action.payload
+                }
+        
+        case 'AUTH_LOADING':
+            localStorage.setItem(profileKey, JSON.stringify(action.payload))
+            return { ...state, loading: action.payload }
 
         default:
             return state

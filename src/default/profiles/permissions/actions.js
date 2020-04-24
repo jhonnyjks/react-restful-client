@@ -222,8 +222,8 @@ export function changeAttribute(event, action, permission) {
 
         // Se a rota já existe em permissions, insera a action. Senão, cria a rota em permissions
         // e depois insere a action
-        if (action.permission_id > 0) {
-            return createAction({ ...action, code })
+        if (action.permission_id > 0 || permission.id > 0) {
+            return createAction({ ...action, permission_id: permission.id , code })
         } else {
             return createPermission({
                 profile_id: permission.profile_id,

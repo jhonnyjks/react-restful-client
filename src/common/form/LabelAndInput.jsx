@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Grid from '../layout/grid'
+import InputMask from 'react-input-mask';
 export default class LabelAndInput extends Component {
 
     constructor(props) {
@@ -39,7 +40,8 @@ export default class LabelAndInput extends Component {
             <Grid cols={this.props.cols}>
                 <div className='form-group'>
                     <label htmlFor={this.props.name}>{this.props.label}</label>
-                    <input name={this.props.name} {...this.props.input} className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
+                    <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} 
+                        className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
                         readOnly={this.props.readOnly}
                         type={this.props.type} />
