@@ -39,7 +39,7 @@ export default class LabelAndInput extends Component {
         return (
             <Grid cols={this.props.cols}>
                 <div className='form-group'>
-                    <label htmlFor={this.props.name}>{this.props.label}</label>
+                    { this.props.label && <label htmlFor={this.props.name}>{this.props.label}</label> }
                     <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} 
                         className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
