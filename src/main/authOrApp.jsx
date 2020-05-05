@@ -53,11 +53,12 @@ class AuthOrApp extends Component {
     }
 
     interceptRequest = (conf) => {
+
+        const scopes = this.props.auth.profile ? this.props.auth.profile.scopes : {}
         let url = conf.url
+
         // Tratando as permissões das entidades relacionadas na queryString
         if(url.indexOf('with=') > -1) {
-
-            const scopes = this.props.auth.profile.scopes
             
             // Dividindo url e queryString
             url = url.split('?')
@@ -98,7 +99,34 @@ class AuthOrApp extends Component {
             url = url.join('?').split('=;').join('=')
         }
 
-        return {...conf, url}
+        // Tratando as permissões dos atributos enviados na requisição
+        let data = {}
+        if(conf.data) {
+            // Mapeando os métodos às permissões (Action->code)
+            const methodToPermission = {
+                'get': [1, 3, 5, 7, 9, 11, 13, 15],
+                'post': [2, 3, 6, 7, 10, 11, 14, 15],
+                'put': [4, 5, 6, 7, 12, 13, 14, 15],
+                'delete': [8, 9, 10, 11, 12, 13, 14, 15]
+            }
+
+            // Removendo API, a fim de isolar a rota contida na url
+            let route = url.replace(process.env.REACT_APP_API_HOST, '').split('/')
+            // Se tinha '/' no começo da string, a rota ficou na segunda posição
+            if(route[0] == '') route = route[1]
+            else route = route[0] 
+
+            // Se o escopo existe, remove atributos sem permissão
+            if(scopes[route]) {
+                Object.keys(conf.data).forEach(attr => {
+                    if(methodToPermission[conf.method].indexOf(scopes[route].actions[attr]) > -1) data[attr] = conf.data[attr]
+                })
+            } else {
+                data = conf.data
+            }
+        }
+
+        return {...conf, url, data}
     }
 }
 const mapStateToProps = state => ({ auth: state.auth })
