@@ -28,8 +28,9 @@ class Menu extends Component {
                         {Object.keys(MainMenu).map((path) => {
 
                             const item = MainMenu[path]
-
-                            if (item.fixed || scopes[path] || scopes[path.replace('/', '')]) {
+                            
+                            if (!(item.excludeFromProfiles && item.excludeFromProfiles.indexOf(this.props.profile.id) > -1) && 
+                                (item.fixed || scopes[path] || scopes[path.replace('/', '')])) {
 
                                 if (item.children) {
                                     return <MenuTree
@@ -58,5 +59,5 @@ class Menu extends Component {
     }
 }
 
-const mapStateToProps = state => ({ scopes: state.auth.profile.scopes })
+const mapStateToProps = state => ({ scopes: state.auth.profile.scopes, profile: state.auth.profile })
 export default connect(mapStateToProps, null)(Menu)

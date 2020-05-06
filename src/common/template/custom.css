@@ -85,6 +85,10 @@ button {
     margin-top: 21% !important
 }
 
+hr.dashed {
+    border-top: 2px dashed #b1b2b3;
+}
+
 @media (max-width: 767px) {
     .nav-link--bg {
         display: none;
