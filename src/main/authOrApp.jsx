@@ -67,7 +67,7 @@ class AuthOrApp extends Component {
             // Dividindo evalidando entidades com permissões de escopos
             url[1] = url[1].map((queryy) => {
                 let query = queryy.split('=')
-                if(query[0] == 'with') {
+                if(query[0] === 'with') {
                     query[1] = query[1].split(';').map((objStr) => {
                         // Dividindo entidade de atributos
                         let obj = objStr.split(':')
@@ -113,7 +113,7 @@ class AuthOrApp extends Component {
             // Removendo API, a fim de isolar a rota contida na url
             let route = url.replace(process.env.REACT_APP_API_HOST, '').split('/')
             // Se tinha '/' no começo da string, a rota ficou na segunda posição
-            if(route[0] == '') route = route[1]
+            if(route[0] === '') route = route[1]
             else route = route[0] 
 
             // Se o escopo existe, remove atributos sem permissão
