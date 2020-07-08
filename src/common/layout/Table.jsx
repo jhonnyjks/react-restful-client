@@ -66,8 +66,12 @@ export default class Table extends Component {
                         return <tr key={tr.id || index}>
                             {
                                 tr.map((val, index) => {
-                                    let n = ntr[val]
+                                    let n = ntr
                                     let isObj = false
+
+                                    val.split('.').forEach((i) => {
+                                        n = n[i]
+                                    })
 
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
                                         let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
