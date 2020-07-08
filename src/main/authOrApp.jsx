@@ -97,6 +97,7 @@ class AuthOrApp extends Component {
 
             // Junta url e remove caracteres indesejados
             url = url.join('?').split('=;').join('=')
+            if(url[url.length-1] == ';') url = url.substring(0, url.length-1)
         }
 
         // Tratando as permissões dos atributos enviados na requisição
