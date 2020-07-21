@@ -74,7 +74,6 @@ class LabelAndInput extends Component {
     }
 
     render() {
-console.log(this.props.readOnly)
         // const permission = this.props.scopes[this.props.meta.form];
         const scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
