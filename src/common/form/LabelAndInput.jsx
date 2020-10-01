@@ -74,7 +74,6 @@ class LabelAndInput extends Component {
     }
 
     render() {
-console.log(this.props.readOnly)
         // const permission = this.props.scopes[this.props.meta.form];
         const scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
@@ -88,7 +87,8 @@ console.log(this.props.readOnly)
                         className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
-                        type={this.props.type} />
+                        type={this.props.type}
+                        maxlength={this.props.maxLength} />
                     <div className="invalid-feedback">
                         {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
                     </div>
