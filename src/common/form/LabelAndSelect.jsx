@@ -89,9 +89,9 @@ class LabelAndSelect extends Component {
                         className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}>
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
-                            e => (<option key={e.id} value={e.id}>
+                            e => ((e && e.id) ? (<option key={e.id} value={e.id}>
                                     { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.title  || e.id }
-                                </option>)
+                                </option>) : '')
                         )}
                     </select>
                     <div className="invalid-feedback">
