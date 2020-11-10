@@ -90,8 +90,8 @@ class LabelAndSelect extends Component {
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => ((e && e.id) ? (<option key={e.id} value={e.id}>
-                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.title  || e.id }
-                                </option>) : '')
+                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.title || e.description || e.id }
+                                </option>) : <></>)
                         )}
                     </select>
                     <div className="invalid-feedback">
