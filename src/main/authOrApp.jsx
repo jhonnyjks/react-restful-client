@@ -34,7 +34,7 @@ class AuthOrApp extends Component {
     }
 
     render() {
-        const { token, validToken, profile, loading } = this.props.auth
+        const { token, validToken, profile, loading, profiles } = this.props.auth
 
         // Tratamentos antes do request
         axios.interceptors.request.use(this.interceptRequest, function (error) {
@@ -42,7 +42,7 @@ class AuthOrApp extends Component {
             return Promise.reject(error)
         })
 
-        if (loading || (validToken && profile === null)) {
+        if (loading || (validToken && profile === null && profiles.length < 2)) {
             return <Loading />
         } else if (token && validToken && profile) {
             axios.defaults.headers.common['authorization'] = token.type + ' ' + token.token

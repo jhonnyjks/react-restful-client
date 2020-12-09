@@ -55,7 +55,7 @@ export default (state = INITIAL_STATE, action) => {
                 user: action.payload
                 }
         
-        case 'AUTH_LOADING':
+        case 'AUTH_LOADINGG':
             localStorage.setItem(profileKey, JSON.stringify(action.payload))
             return { ...state, loading: action.payload }
 
