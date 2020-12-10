@@ -66,7 +66,7 @@ class FormUserProfile extends Component {
        return <Row style={{marginBottom: '-2rem', paddingLeft: '1rem'}}>               
             <Field name='profile_id' component={LabelAndSelect} readOnly={this.props.readOnly}
                 cols='12 6' placeholder=' - Selecione o perfil - '
-                options={this.state.profiles} error={this.props.errors} />
+                options={this.state.filteredProfiles} error={this.props.errors} />
             <button type='submit' className={`btn btn-${this.props.submitClass}`} style={{height: 'min-content'}}>
                 {this.props.submitLabel}
             </button>
