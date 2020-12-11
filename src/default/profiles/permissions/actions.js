@@ -111,7 +111,7 @@ function submit(values, method, callback = null, params = {}) {
         // 'id' não pode ir como parâmetro
         delete filteredValues.id
 
-        axios[method](`${process.env.REACT_APP_API_HOST}/permissions/${id}`, filteredValues)
+        axios[method](`${process.env.REACT_APP_API_HOST}/permissions${id ? '/'+id : ''}`, filteredValues)
             .then(resp => {
                 console.log(callback)
                 if (callback !== null) {
@@ -171,7 +171,7 @@ function actionSubmit(values, method) {
         // 'id' não pode ir como parâmetro
         delete filteredValues.id
 
-        axios[method](`${process.env.REACT_APP_API_HOST}/actions/${id}`, filteredValues)
+        axios[method](`${process.env.REACT_APP_API_HOST}/actions${id ? '/'+id : ''}`, filteredValues)
             .then(resp => {
                 toastr.success('Sucesso', 'Operação Realizada com sucesso.')
                 dispatch({
