@@ -23,7 +23,7 @@ class Form extends Component {
                             <Field name='description' component={LabelAndInput} readOnly={this.props.readOnly}
                                 label='Descrição' cols='12 6' placeholder='Descreva o perfil' error={this.props.errors} />
                         </Row>
-                        <PermissionList profileId={this.props.id} />
+                        {this.props.parentId && <PermissionList profileId={this.props.id} /> }
                     </div>
                     <div className='card-footer'>
                         <button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>
@@ -41,7 +41,8 @@ const mapStateToProps = state => ({
     id: selector(state, 'id'),
     noun: selector(state, 'noun'),
     description: selector(state, 'description'),
-    errors: state.profile.errors
+    errors: state.profile.errors,
+    parentId: state.form.profileForm && state.form.profileForm.values ? state.form.profileForm.values.id : null,
 })
 const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Form)
