@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
+import LabelAndInput from '../form/LabelAndInput';
 import If from '../operator/If'
+import Row from './row'
 
 export default class Table extends Component {
 
     state = { width: 0, height: 0 };
 
     updateDimensions = () => {
-        this.setState({ width: window.innerWidth, height: window.innerHeight });
+        this.setState({ width: window.innerWidth, height: window.innerHeight, search: '' });
     };
     componentDidMount() {
         this.updateDimensions()
@@ -14,6 +16,11 @@ export default class Table extends Component {
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    handleChangeSearch = e => {
+        this.setState({ search: e.target.value})
+        this.props.generalSearch(e.target.value)
     }
 
     getBody(){
@@ -263,6 +270,12 @@ export default class Table extends Component {
                             <If test={this.props.headComponent}>
                                 {this.props.headComponent}
                             </If>
+
+                            { this.props.generalSearch && 
+                                <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
+                                    input={{ onChange: this.handleChangeSearch, value: this.state.search}} grid={{style:{paddingTop:'15px'}}} />
+                            }
+
                             <table className='table table-hover'>
                                 {this.renderHead()}
                                 {this.renderBody()}
