@@ -81,7 +81,7 @@ class LabelAndInput extends Component {
 
         return (
             <>
-            { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols}>
+            { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} {...this.props.grid}>
                 <div className='form-group'>
                     { this.props.label && <label htmlFor={this.props.name}>{this.props.label}</label> }
                     <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} 
