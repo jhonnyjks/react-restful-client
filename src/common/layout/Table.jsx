@@ -118,6 +118,15 @@ export default class Table extends Component {
                                             <i className='fa fa-trash'></i>
                                         </button>
                                     }
+
+                                    {Object.keys(this.props.actions).map((vv, ii) => {
+                                        if(vv != 'update' && vv != 'remove') {
+
+                                        return <button key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(ntr)}>
+                                            <i className={this.props.actions[vv].icon}></i>
+                                        </button>
+                                        }
+                                    })}
                                 </td>
                             }
                         </tr>
@@ -139,13 +148,15 @@ export default class Table extends Component {
                             if(val[this.props.labelMobile] && val[this.props.labelMobile].id) val = val[this.props.labelMobile]
                             
                             return <div className="card" key={index}>
+                                <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
+                                        
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
-                                        <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
                                             <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] }</strong>
-                                        </button>
+                                        
                                     </h5>
                                 </div>
+                                </button>
 
                                 <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
                                     <div className="card-body ml-4 mr-4">
@@ -178,12 +189,24 @@ export default class Table extends Component {
                                     <div className="card-footer text-center">
                                         {this.props.actions &&
                                             <div>
-                                                <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
+                                                {this.props.actions.update && <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
                                                     <i className='fa fa-edit'></i> Editar
                                                 </button>
-                                                <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
+                                                }
+                                                {this.props.actions.remove && <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
                                                     <i className='fa fa-trash'></i> Excluir
                                                 </button>
+                                                }
+
+                                                {Object.keys(this.props.actions).map((vv, ii) => {
+                                                    if(vv != 'update' && vv != 'remove') {
+
+                                                    return <button style={{marginTop:'10px'}} key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(val)}>
+                                                        <i className={this.props.actions[vv].icon}></i> {this.props.actions[vv].label}
+                                                    </button>
+                                                    }
+                                                })}
+                               
                                             </div>
                                         }
                                     </div>
