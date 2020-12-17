@@ -145,6 +145,7 @@ export default class Table extends Component {
                         bodyAccordion.map((ntr, index) => {
                             let body = Object.keys(ntr)
                             let val = ntr
+                            
                             if(val[this.props.labelMobile] && val[this.props.labelMobile].id) val = val[this.props.labelMobile]
                             
                             return <div className="card" key={index}>
@@ -162,26 +163,49 @@ export default class Table extends Component {
                                     <div className="card-body ml-4 mr-4">
                                         {
                                             body.map((key, index) => {
-                                                let n = val[key]
+                                                let n = val
+                                                let isObj = false
+
+                                                key.split('.').forEach((i) => {
+                                                    n = n[i]
+                                                })
+            
+                                                if (this.props.translate && this.props.translate[key] !== undefined) {
+                                                    let name_value = this.props.translate[key].filter(e => e.id === ntr[key])[0]
+                                                    n = name_value ? name_value.name : ntr[key]
+                                                }
 
                                                 // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
                                                 if(n && n.id) {
-                                                    n = n.name || n.title || Object.values(n)[1]
-                                                    if(n.length > 64) n = n.slice(0, 63) + '...' 
+                                                    isObj = true
+                                                    // Se houver callback no atributo, call back o callback
+                                                    if(this.props.attributes[key] && this.props.attributes[key].callback) {
+                                                        n = this.props.attributes[key].callback(n)
+                                                    } else {
+                                                        n = n.name || n.title || Object.keyues(n)[1]
+                                                        if(n.length > 32) n = n.slice(0, 31) + '...' 
+                                                    }
                                                 }
 
+                                                // Se 'attributes' estiver setado, e se o atributo atual estiver no array setado, exibe a coluna.
                                                 if (this.props.attributes) {
-                                                    return this.props.attributes[key] ? <div key={index}>
+                                                    // Se houver callback no atributo, call back o callback
+                                                    if(this.props.attributes[key]) {
+                                                        if(!isObj && this.props.attributes[key].callback) {
+                                                            return <div key={index}>
+                                                                    <div className="row" key={index}>
+                                                                        <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {this.props.attributes[key].callback(n)}
+                                                                    </div>
+                                                                </div>
+                                                        } 
+                                                        return <div key={index}>
                                                         <div className="row" key={index}>
                                                             <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {n}
                                                         </div>
-                                                    </div> : null
-                                                } else {
-                                                    return <div key={index}>
-                                                        <div className="row" key={index}>
-                                                            <strong>{key}</strong> : {n}
-                                                        </div>
                                                     </div>
+                                                    } else {
+                                                        return null;
+                                                    }
                                                 }
                                             })
                                         }
