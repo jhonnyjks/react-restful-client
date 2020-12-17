@@ -254,6 +254,10 @@ export default class Table extends Component {
         return (
             <React.Fragment>
                 <If test={this.state.width < 600}>
+                    { this.props.generalSearch && 
+                        <LabelAndInput forceToShow={true} type="text" cols='12 12' placeholder='PESQUISAR' readOnly={false}
+                            input={{ onChange: this.handleChangeSearch, value: this.state.search}} grid={{style:{paddingTop:'15px'}}} />
+                    }
                     <div id="accordion">
                         {this.renderBodyAccordion()}
                     </div>
