@@ -4,11 +4,12 @@ const INITIAL_STATE = JSON.parse(localStorage.getItem(sesionKey)) ? {
     user: JSON.parse(localStorage.getItem(sesionKey)).user,
     token: JSON.parse(localStorage.getItem(sesionKey)).token,
     profile: JSON.parse(localStorage.getItem(profileKey)),
+    custom: JSON.parse(localStorage.getItem(sesionKey)).custom,
     profiles: [],
     validToken: false,
     loading: false
 } : {
-        validToken: false, user: null, token: null, profile: null, profiles: [], loading: false
+        validToken: false, user: null, token: null, profile: null, profiles: [], loading: false, custom: null
     }
 
 export default (state = INITIAL_STATE, action) => {
@@ -37,7 +38,8 @@ export default (state = INITIAL_STATE, action) => {
                 }
             } else {
                 localStorage.removeItem(sesionKey)
-                return { ...state, validToken: false, user: null, token: null, profile: null, profiles: [] }
+                localStorage.removeItem(profileKey)
+                return { ...state, validToken: false, user: null, token: null, profile: null, profiles: [], custom: null }
             }
 
         case 'PROFILE_SELECTED':
@@ -58,6 +60,18 @@ export default (state = INITIAL_STATE, action) => {
         case 'AUTH_LOADINGG':
             localStorage.setItem(profileKey, JSON.stringify(action.payload))
             return { ...state, loading: action.payload }
+
+        case 'AUTH_EXTRA':
+            localStorage.setItem(sesionKey, JSON.stringify({
+                user: state.user,
+                token: state.token, 
+                custom: {...state.custom, ...action.payload}
+            }))
+
+            return {
+                ...state,
+                custom: {...state.custom, ...action.payload}
+                }
 
         default:
             return state
