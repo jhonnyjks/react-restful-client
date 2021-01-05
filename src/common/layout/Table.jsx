@@ -50,7 +50,7 @@ export default class Table extends Component {
                         })
                     )}
 
-                    {this.props.actions && <th>Ações</th>}
+                    {this.props.actions && <th></th>}
                 </tr>
             </thead>
         }
@@ -77,7 +77,7 @@ export default class Table extends Component {
                                     let isObj = false
 
                                     val.split('.').forEach((i) => {
-                                        n = n[i]
+                                        n = n[i] || ''
                                     })
 
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
@@ -189,7 +189,7 @@ export default class Table extends Component {
                                                     if(this.props.attributes[key] && this.props.attributes[key].callback) {
                                                         n = this.props.attributes[key].callback(n)
                                                     } else {
-                                                        n = n.name || n.title || Object.keyues(n)[1]
+                                                        n = n.name || n.title || Object.keys(n)[1]
                                                         if(n.length > 32) n = n.slice(0, 31) + '...' 
                                                     }
                                                 }

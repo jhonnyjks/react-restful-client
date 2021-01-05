@@ -75,8 +75,8 @@ class LabelAndSelect extends Component {
     }
 
     render() {
-
-        const scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
+        let scope = '' 
+        if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
 
         return (
