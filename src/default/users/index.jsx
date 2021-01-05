@@ -7,7 +7,9 @@ import Content from '../../common/template/Content'
 import If from '../../common/operator/If'
 import List from './List'
 import Form from './Form'
+import FormUserProfile from './FormUserProfile'
 import { getList, showContent, update, init, create } from './actions'
+import { create as createUserProfile } from './userProfile.duck'
 
 class User extends Component {
 
@@ -28,6 +30,8 @@ class User extends Component {
                     <If test={this.props.show === 'form'}>
                         <Form onSubmit={this.props.isEdit ? this.props.update : this.props.create}
                             submitLabel='Salvar' submitClass='primary' />
+                        <FormUserProfile submitLabel='Adicionar' submitClass='primary'
+                            onCreate={this.props.createUserProfile} />
                     </If>
                 </Content>
             </div>
@@ -41,6 +45,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getList, showContent, update, init, create
+    getList, showContent, update, init, create, createUserProfile
 }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(User)

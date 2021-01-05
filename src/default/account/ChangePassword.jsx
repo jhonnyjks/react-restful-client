@@ -3,9 +3,9 @@ import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { withRouter } from "react-router-dom";
 
-import ContentHeader from '../common/template/ContentHeader'
-import Content from '../common/template/Content'
-import LabelAndInput from '../common/form/LabelAndInput'
+import ContentHeader from '../../common/template/ContentHeader'
+import Content from '../../common/template/Content'
+import LabelAndInput from '../../common/form/LabelAndInput'
 
 class ChangePassword extends Component {
 

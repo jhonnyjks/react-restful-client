@@ -54,12 +54,12 @@ class Auth extends Component {
         const selectProfile = (
             <ul className='list-group custom-list-group'>
                 {this.props.profiles.map(profile => (
-                    <li key={profile.id} className='list-group-item col-xs-12'>
-                        <a href="#!" className=' text-center col-xs-12'
-                            onClick={() => this.props.selectProfile(profile, this.props.token)}>
+                    <a key={profile.id} href="#!" className=' text-center col-xs-12'
+                    onClick={() => this.props.selectProfile(profile, this.props.token)}>
+                        <li className='list-group-item col-xs-12'>
                             <b>{profile.noun}</b>
-                        </a>
-                    </li>
+                        </li>
+                    </a>
                 ))}
             </ul>
         )

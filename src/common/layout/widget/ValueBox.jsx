@@ -12,6 +12,7 @@ export default props => (
             <div className='icon'>
                 <i className={props.icon}></i>
             </div>
+            {props.children}
             <If test={props.link}>
                 <a className='small-box-footer' {...props.link}>
                 {props.link ? props.link.title : 'Mais informações' } <i className='fa fa-arrow-circle-right'></i>

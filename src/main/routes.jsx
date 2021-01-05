@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router'
 import { routes as defaultRoutes } from '../default'
 import { routes } from '../app/exports'
 
-const AppRoutes = [...defaultRoutes, ...routes]
+const AppRoutes = [...routes, ...defaultRoutes]
 
 export default props => (
     <div className='content-wrapper'>

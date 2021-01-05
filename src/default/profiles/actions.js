@@ -30,7 +30,7 @@ function submit(values, method) {
         let filteredValues = {...values}
         if(id) delete filteredValues.id
         
-        axios[method](`${process.env.REACT_APP_API_HOST}/profiles/${id}`, filteredValues)
+        axios[method](`${process.env.REACT_APP_API_HOST}/profiles${id ? '/'+id : ''}`, filteredValues)
         .then(resp => {
             toastr.success('Sucesso', 'Operação Realizada com sucesso.')
             dispatch(init())

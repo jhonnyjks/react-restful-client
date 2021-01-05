@@ -102,3 +102,17 @@ hr.dashed {
         margin-top: 0% !important
     }
 }
+
+.box > .box-header {
+    display: block;
+    padding: 5px 10px;
+}
+
+.box > .box-body {
+    float: left;
+    width: 100%;
+}
+
+.collapsed-box > .box-body {
+    display: none;
+}

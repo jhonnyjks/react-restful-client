@@ -75,8 +75,8 @@ class LabelAndSelect extends Component {
     }
 
     render() {
-
-        const scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
+        let scope = '' 
+        if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
 
         return (
@@ -90,7 +90,7 @@ class LabelAndSelect extends Component {
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => ((e && e.id) ? (<option key={e.id} value={e.id}>
-                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.title || e.description || e.id }
+                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
                                 </option>) : <></>)
                         )}
                     </select>

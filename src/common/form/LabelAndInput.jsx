@@ -18,7 +18,7 @@ class LabelAndInput extends Component {
 
     componentWillUpdate(nextProps) {
         if (this.state.error.flag === false) {
-            if (Object.keys(nextProps.error).length > 0 && nextProps.error[this.props.input.name]) {
+            if (nextProps.error && Object.keys(nextProps.error).length > 0 && this.props.input && nextProps.error[this.props.input.name]) {
                 this.setState({
                     error: {
                         message: nextProps.error[this.props.input.name][0],
@@ -27,7 +27,7 @@ class LabelAndInput extends Component {
                 })
             }
         } else {
-            if (Object.keys(nextProps.error).length === 0 || nextProps.error[this.props.input.name] === undefined) {
+            if (Object.keys(nextProps.error).length === 0 || (this.props.input && nextProps.error[this.props.input.name] === undefined)) {
                 this.setState({
                     error: {
                         message: null,
@@ -75,12 +75,13 @@ class LabelAndInput extends Component {
 
     render() {
         // const permission = this.props.scopes[this.props.meta.form];
-        const scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
+        let scope = '' 
+        if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
 
         return (
             <>
-            { (this.props.readOnly === false || this.hasPermission(permission, 'read')) && <Grid cols={this.props.cols}>
+            { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} {...this.props.grid}>
                 <div className='form-group'>
                     { this.props.label && <label htmlFor={this.props.name}>{this.props.label}</label> }
                     <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} 
@@ -88,7 +89,7 @@ class LabelAndInput extends Component {
                         placeholder={this.props.placeholder}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
                         type={this.props.type}
-                        maxlength={this.props.maxLength} />
+                        maxLength={this.props.maxLength} />
                     <div className="invalid-feedback">
                         {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
                     </div>

@@ -5,6 +5,7 @@ import AuthReducer from './auth/authReducer'
 import UserReducer from './users/reducer'
 import ProfileReducer from './profiles/reducer'
 import PermissionReducer from './profiles/permissions/reducer'
+import { userProfileReducer } from './users/userProfile.duck'
 
 // Reducers do projeto
 export const reducers = {
@@ -12,6 +13,7 @@ export const reducers = {
     user: UserReducer,
     profile: ProfileReducer,
     permission: PermissionReducer,
+    userProfile: userProfileReducer
 }
 
 // Rotas do projeto

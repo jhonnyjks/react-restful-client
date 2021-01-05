@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
+import LabelAndInput from '../form/LabelAndInput';
 import If from '../operator/If'
+import Row from './row'
 
 export default class Table extends Component {
 
     state = { width: 0, height: 0 };
 
     updateDimensions = () => {
-        this.setState({ width: window.innerWidth, height: window.innerHeight });
+        this.setState({ width: window.innerWidth, height: window.innerHeight, search: '' });
     };
     componentDidMount() {
         this.updateDimensions()
@@ -14,6 +16,11 @@ export default class Table extends Component {
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    handleChangeSearch = e => {
+        this.setState({ search: e.target.value})
+        this.props.generalSearch(e.target.value)
     }
 
     getBody(){
@@ -43,7 +50,7 @@ export default class Table extends Component {
                         })
                     )}
 
-                    {this.props.actions && <th>Ações</th>}
+                    {this.props.actions && <th></th>}
                 </tr>
             </thead>
         }
@@ -70,7 +77,7 @@ export default class Table extends Component {
                                     let isObj = false
 
                                     val.split('.').forEach((i) => {
-                                        n = n[i]
+                                        n = n[i] || ''
                                     })
 
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
@@ -118,6 +125,15 @@ export default class Table extends Component {
                                             <i className='fa fa-trash'></i>
                                         </button>
                                     }
+
+                                    {Object.keys(this.props.actions).map((vv, ii) => {
+                                        if(vv != 'update' && vv != 'remove') {
+
+                                        return <button key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(ntr)}>
+                                            <i className={this.props.actions[vv].icon}></i>
+                                        </button>
+                                        }
+                                    })}
                                 </td>
                             }
                         </tr>
@@ -136,41 +152,67 @@ export default class Table extends Component {
                         bodyAccordion.map((ntr, index) => {
                             let body = Object.keys(ntr)
                             let val = ntr
+                            
                             if(val[this.props.labelMobile] && val[this.props.labelMobile].id) val = val[this.props.labelMobile]
                             
                             return <div className="card" key={index}>
+                                <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
+                                        
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
-                                        <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
                                             <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] }</strong>
-                                        </button>
+                                        
                                     </h5>
                                 </div>
+                                </button>
 
                                 <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
                                     <div className="card-body ml-4 mr-4">
                                         {
                                             body.map((key, index) => {
-                                                let n = val[key]
+                                                let n = val
+                                                let isObj = false
+
+                                                key.split('.').forEach((i) => {
+                                                    n = n[i]
+                                                })
+            
+                                                if (this.props.translate && this.props.translate[key] !== undefined) {
+                                                    let name_value = this.props.translate[key].filter(e => e.id === ntr[key])[0]
+                                                    n = name_value ? name_value.name : ntr[key]
+                                                }
 
                                                 // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
                                                 if(n && n.id) {
-                                                    n = n.name || n.title || Object.values(n)[1]
-                                                    if(n.length > 64) n = n.slice(0, 63) + '...' 
+                                                    isObj = true
+                                                    // Se houver callback no atributo, call back o callback
+                                                    if(this.props.attributes[key] && this.props.attributes[key].callback) {
+                                                        n = this.props.attributes[key].callback(n)
+                                                    } else {
+                                                        n = n.name || n.title || Object.keys(n)[1]
+                                                        if(n.length > 32) n = n.slice(0, 31) + '...' 
+                                                    }
                                                 }
 
+                                                // Se 'attributes' estiver setado, e se o atributo atual estiver no array setado, exibe a coluna.
                                                 if (this.props.attributes) {
-                                                    return this.props.attributes[key] ? <div key={index}>
+                                                    // Se houver callback no atributo, call back o callback
+                                                    if(this.props.attributes[key]) {
+                                                        if(!isObj && this.props.attributes[key].callback) {
+                                                            return <div key={index}>
+                                                                    <div className="row" key={index}>
+                                                                        <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {this.props.attributes[key].callback(n)}
+                                                                    </div>
+                                                                </div>
+                                                        } 
+                                                        return <div key={index}>
                                                         <div className="row" key={index}>
                                                             <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {n}
                                                         </div>
-                                                    </div> : null
-                                                } else {
-                                                    return <div key={index}>
-                                                        <div className="row" key={index}>
-                                                            <strong>{key}</strong> : {n}
-                                                        </div>
                                                     </div>
+                                                    } else {
+                                                        return null;
+                                                    }
                                                 }
                                             })
                                         }
@@ -178,12 +220,24 @@ export default class Table extends Component {
                                     <div className="card-footer text-center">
                                         {this.props.actions &&
                                             <div>
-                                                <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
+                                                {this.props.actions.update && <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
                                                     <i className='fa fa-edit'></i> Editar
                                                 </button>
-                                                <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
+                                                }
+                                                {this.props.actions.remove && <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
                                                     <i className='fa fa-trash'></i> Excluir
                                                 </button>
+                                                }
+
+                                                {Object.keys(this.props.actions).map((vv, ii) => {
+                                                    if(vv != 'update' && vv != 'remove') {
+
+                                                    return <button style={{marginTop:'10px'}} key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(val)}>
+                                                        <i className={this.props.actions[vv].icon}></i> {this.props.actions[vv].label}
+                                                    </button>
+                                                    }
+                                                })}
+                               
                                             </div>
                                         }
                                     </div>
@@ -200,6 +254,10 @@ export default class Table extends Component {
         return (
             <React.Fragment>
                 <If test={this.state.width < 600}>
+                    { this.props.generalSearch && 
+                        <LabelAndInput forceToShow={true} type="text" cols='12 12' placeholder='PESQUISAR' readOnly={false}
+                            input={{ onChange: this.handleChangeSearch, value: this.state.search}} grid={{style:{paddingTop:'15px'}}} />
+                    }
                     <div id="accordion">
                         {this.renderBodyAccordion()}
                     </div>
@@ -216,6 +274,12 @@ export default class Table extends Component {
                             <If test={this.props.headComponent}>
                                 {this.props.headComponent}
                             </If>
+
+                            { this.props.generalSearch && 
+                                <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
+                                    input={{ onChange: this.handleChangeSearch, value: this.state.search}} grid={{style:{paddingTop:'15px'}}} />
+                            }
+
                             <table className='table table-hover'>
                                 {this.renderHead()}
                                 {this.renderBody()}
