@@ -92,7 +92,7 @@ export default class Table extends Component {
                                         if(this.props.attributes[val] && this.props.attributes[val].callback) {
                                             n = this.props.attributes[val].callback(n)
                                         } else {
-                                            n = n.name || n.title || Object.values(n)[1]
+                                            n = n.name || n.title || n.description || Object.values(n)[1]
                                             if(n.length > 32) n = n.slice(0, 31) + '...' 
                                         }
                                     }
@@ -160,7 +160,7 @@ export default class Table extends Component {
                                         
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
-                                            <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] }</strong>
+                                            <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] || val["description"] }</strong>
                                         
                                     </h5>
                                 </div>
@@ -189,7 +189,7 @@ export default class Table extends Component {
                                                     if(this.props.attributes[key] && this.props.attributes[key].callback) {
                                                         n = this.props.attributes[key].callback(n)
                                                     } else {
-                                                        n = n.name || n.title || Object.keys(n)[1]
+                                                        n = n.name || n.title|| n.description || Object.keys(n)[1]
                                                         if(n.length > 32) n = n.slice(0, 31) + '...' 
                                                     }
                                                 }
