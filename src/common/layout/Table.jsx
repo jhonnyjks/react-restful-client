@@ -129,9 +129,13 @@ export default class Table extends Component {
                                     {Object.keys(this.props.actions).map((vv, ii) => {
                                         if(vv != 'update' && vv != 'remove') {
 
-                                        return <button key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(ntr)}>
-                                            <i className={this.props.actions[vv].icon}></i>
-                                        </button>
+                                            if(this.props.actions[vv].className) {
+                                            return <button key={ii} className={this.props.actions[vv].className} onClick={(e) => this.props.actions[vv].onClick(ntr, e)}>
+                                                <i className={this.props.actions[vv].icon}></i>
+                                            </button>
+                                            } else {
+                                                    return this.props.actions[vv](ntr)
+                                            }
                                         }
                                     })}
                                 </td>
