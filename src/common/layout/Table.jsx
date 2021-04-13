@@ -90,7 +90,7 @@ export default class Table extends Component {
                                         isObj = true
                                         // Se houver callback no atributo, call back o callback
                                         if(this.props.attributes[val] && this.props.attributes[val].callback) {
-                                            n = this.props.attributes[val].callback(n)
+                                            n = this.props.attributes[val].callback(n, body[index])
                                         } else {
                                             n = n.name || n.title || n.description || Object.values(n)[1]
                                             if(n.length > 32) n = n.slice(0, 31) + '...' 
@@ -102,7 +102,7 @@ export default class Table extends Component {
                                         // Se houver callback no atributo, call back o callback
                                         if(this.props.attributes[val]) {
                                             if(!isObj && this.props.attributes[val].callback) {
-                                                return <td key={index}>{this.props.attributes[val].callback(n)}</td>
+                                                return <td key={index}>{this.props.attributes[val].callback(n, body[index])}</td>
                                             } 
                                             return <td key={index}>{n}</td>
                                         } else {
