@@ -61,7 +61,7 @@ export default class Table extends Component {
         if (body) {
             return <tbody>
                 {
-                    body.map((ntr, index) => {
+                    body.map((ntr, ii) => {
                         let tr = []
 
                         if (this.props.attributes) {
@@ -70,7 +70,7 @@ export default class Table extends Component {
                             tr = Object.keys(ntr)
                         }
 
-                        return <tr key={tr.id || index}>
+                        return <tr key={tr.id || ii}>
                             {
                                 tr.map((val, index) => {
                                     let n = ntr
@@ -90,7 +90,7 @@ export default class Table extends Component {
                                         isObj = true
                                         // Se houver callback no atributo, call back o callback
                                         if(this.props.attributes[val] && this.props.attributes[val].callback) {
-                                            n = this.props.attributes[val].callback(n, body[index])
+                                            n = this.props.attributes[val].callback(n, body[ii])
                                         } else {
                                             n = n.name || n.title || n.description || Object.values(n)[1]
                                             if(n.length > 32) n = n.slice(0, 31) + '...' 
@@ -102,7 +102,7 @@ export default class Table extends Component {
                                         // Se houver callback no atributo, call back o callback
                                         if(this.props.attributes[val]) {
                                             if(!isObj && this.props.attributes[val].callback) {
-                                                return <td key={index}>{this.props.attributes[val].callback(n, body[index])}</td>
+                                                return <td key={index}>{this.props.attributes[val].callback(n, body[ii])}</td>
                                             } 
                                             return <td key={index}>{n}</td>
                                         } else {
