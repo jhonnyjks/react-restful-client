@@ -78,13 +78,13 @@ class LabelAndInput extends Component {
         let scope = '' 
         if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.replace(/Form([^Form]*)$/, '$1') )])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
-
+        if(this.props.input.name == 'projection') console.log(this)
         return (
             <>
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} {...this.props.grid}>
                 <div className='form-group'>
                     { this.props.label && <label htmlFor={this.props.name}>{this.props.label}</label> }
-                    <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} 
+                    <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} value={this.props.val}
                         className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
