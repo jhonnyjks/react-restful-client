@@ -84,7 +84,7 @@ class LabelAndInput extends Component {
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} {...this.props.grid}>
                 <div className='form-group'>
                     { this.props.label && <label htmlFor={this.props.name}>{this.props.label}</label> }
-                    <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} value={this.props.val}
+                    <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} value={this.props.val || this.props.input.value}
                         className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
