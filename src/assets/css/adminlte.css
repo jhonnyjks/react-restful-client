@@ -28484,3 +28484,7 @@ hr.divider {
 	border-top: 2px dashed #8c8b8b;
 }
 /*# sourceMappingURL=adminlte.css.map */
+
+.container {
+  max-width: 100% !important;
+}
