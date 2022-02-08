@@ -33,6 +33,18 @@ class AuthOrApp extends Component {
         }
     }
 
+    /**
+     * 
+     * @param {String} rel :: uma das relações da query string
+     * @param {Array} scope :: o escopo de acesso da rota requisitada
+     * @returns 'true' se a relação é um atributo com permissão de acesso de pelo menos leitura
+     */
+    hasPermOnScope = (rel, scope) => {
+        const relation = _.snakeCase(rel) + '_id'
+        if(scope.actions[relation] && scope.actions[relation] > 0) return true
+        return false
+    }
+
     render() {
         const { token, validToken, profile, loading, profiles } = this.props.auth
 
@@ -59,9 +71,13 @@ class AuthOrApp extends Component {
 
         // Tratando as permissões das entidades relacionadas na queryString
         if(url.indexOf('with=') > -1) {
-            
+
             // Dividindo url e queryString
             url = url.split('?')
+
+            // Obtendo rota
+            const route = url[0].replace(process.env.REACT_APP_API_HOST, '').replaceAll('/', '')
+
             // Dividindo queries
             url[1] = url[1].split('&')
             // Dividindo evalidando entidades com permissões de escopos
@@ -81,8 +97,9 @@ class AuthOrApp extends Component {
 
                         // Verificando se a relação bate com uma rota ou entidade do escopo
                         const perm = _.findKey(scopes, ['entity', _.upperFirst(obj[0])])
+
                         // Se não existe escopo, remove da url
-                        if(scopes[obj[0]] || perm) {
+                        if(perm || this.hasPermOnScope(obj[0], scopes[route] || []) || scopes[obj[0]]) {
                             return objStr
                         } else {
                             // Removendo a relação da url
@@ -96,7 +113,7 @@ class AuthOrApp extends Component {
             }).join('&')
 
             // Junta url e remove caracteres indesejados
-            url = url.join('?').split('=;').join('=')
+            url = url.join('?').split('=;').join('=').replaceAll(';;', ';')
             if(url[url.length-1] == ';') url = url.substring(0, url.length-1)
         }
 
