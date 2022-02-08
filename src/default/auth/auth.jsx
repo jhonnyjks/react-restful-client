@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { toastr } from 'react-redux-toastr'
 
 import './auth.css'
 import { login, signup, selectProfile } from './authActions'
@@ -36,11 +37,19 @@ class Auth extends Component {
                     placeholder="Senha" icon='lock' />
                 <Field component={Input} type="password" name="confirm_password"
                     placeholder="Confirmar Senha" icon='lock' hide={loginMode} />
-                <Row>
-                    <div className="col-4">
-                        <button type="submit" className="btn btn-primary btn-block">Sign In</button>
-                    </div>
-                </Row>
+                
+                <a href='#' className='pull-right' 
+                onClick={e => {
+                    toastr.warning('Mudar a senha', 'Por favor, entre em contato com ' + process.env.REACT_APP_ORGANIZATION + ' para criar uma nova senha provisória!')
+                    return false
+                }}>
+                    Esqueci minha senha
+                </a>
+
+                <div className="col-4">
+                    <button type="submit" className="btn btn-primary btn-block">{loginMode ? 'Entrar' : 'Criar'}</button>
+                </div>
+
                 <div className="social-auth-links text-center mb-3">
                     <p>- OU -</p>
                     <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeMode()}>
@@ -75,7 +84,7 @@ class Auth extends Component {
                 }
                     <div className="card">
                         <div className="card-body login-card-body col-xs-12">
-                            <p className="login-box-msg">{this.props.profiles.length === 1 ? 'Bem vindo!' : 'Selecione um perfil'}</p>
+                            <p className="login-box-msg"> {this.props.profiles.length > 1 ? 'Selecione um perfil' : (this.state.loginMode ? 'Bem vindo!' : 'Crie sua conta')}</p>
                             {this.props.profiles.length > 1 ? selectProfile : loginForm}
                         </div>
                         <Messages />
