@@ -39,7 +39,7 @@ class AuthOrApp extends Component {
      * @param {Array} scope :: o escopo de acesso da rota requisitada
      * @returns 'true' se a relação é um atributo com permissão de acesso de pelo menos leitura
      */
-    hasPermOnScope = (rel, scope) => {
+    hasPermOnRouteScope = (rel, scope) => {
         const relation = _.snakeCase(rel) + '_id'
         if(scope.actions[relation] && scope.actions[relation] > 0) return true
         return false
@@ -96,10 +96,11 @@ class AuthOrApp extends Component {
                         obj[0] = obj[0][obj[0].length-1]
 
                         // Verificando se a relação bate com uma rota ou entidade do escopo
-                        const perm = _.findKey(scopes, ['entity', _.upperFirst(obj[0])])
+                        let perm = _.findKey(scopes, ['entity', _.upperFirst(obj[0])])
+                        if(!perm) perm = _.findKey(scopes, ['entity', _.upperFirst(obj[0])])
 
                         // Se não existe escopo, remove da url
-                        if(perm || this.hasPermOnScope(obj[0], scopes[route] || []) || scopes[obj[0]]) {
+                        if(perm || this.hasPermOnRouteScope(obj[0], scopes[route] || []) || scopes[obj[0]] || scopes[_.snakeCase(obj[0])]) {
                             return objStr
                         } else {
                             // Removendo a relação da url
