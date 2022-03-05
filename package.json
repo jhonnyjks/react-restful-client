@@ -13,7 +13,7 @@
     "@tinymce/tinymce-react": "^3.12.6",
     "@tmcw/togeojson": "^4.0.0",
     "admin-lte": "2.3.11",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootstrap": "^4.6.0",
     "classnames": "^2.2.6",
     "devexpress-richedit": "^21.2.5",
