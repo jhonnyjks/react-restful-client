@@ -46,7 +46,7 @@ export default class Table extends Component {
                 <tr>
                     {(
                         Object.getOwnPropertyNames(head).map((val, index) => {
-                            return <th key={index}>{head[val].title || head[val]}</th>
+                            return <th key={index} style={head[val].style || {}}>{head[val].title || head[val]}</th>
                         })
                     )}
 
@@ -267,7 +267,7 @@ export default class Table extends Component {
                     </div>
                 </If>
                 <If test={this.state.width > 600}>
-                    <div className='box material-item' style={{ paddingBottom: '3px' }}>
+                    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
                                 <h4 className='box-title' style={{paddingTop: '1rem', textAlign: 'center'}}>{this.props.title}</h4>
