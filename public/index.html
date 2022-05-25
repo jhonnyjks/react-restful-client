@@ -20,15 +20,17 @@
 
       Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
+      Learn how to configure a non-root public URL by localStorage.autoBlazeIsRunning `npm run build`.
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" rel="stylesheet">
     
+    <!-- <script src="https://releases.jquery.com/git/jquery-3.x-git.slim.min.js"></script> -->
+    <base href="%PUBLIC_URL%/">
     <title>%REACT_APP_NAME%</title>
   </head>
-  <body class="hold-transition sidebar-mini layout-fixed">
+  <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="app" class='wrapper'></div>
     <!--

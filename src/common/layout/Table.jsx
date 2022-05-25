@@ -46,7 +46,7 @@ export default class Table extends Component {
                 <tr>
                     {(
                         Object.getOwnPropertyNames(head).map((val, index) => {
-                            return <th key={index}>{head[val].title || head[val]}</th>
+                            return <th key={index} style={head[val].style || {}}>{head[val].title || head[val]}</th>
                         })
                     )}
 
@@ -191,7 +191,7 @@ export default class Table extends Component {
                                                     isObj = true
                                                     // Se houver callback no atributo, call back o callback
                                                     if(this.props.attributes[key] && this.props.attributes[key].callback) {
-                                                        n = this.props.attributes[key].callback(n)
+                                                        n = this.props.attributes[key].callback(n, bodyAccordion[index])
                                                     } else {
                                                         n = n.name || n.title|| n.description || Object.keys(n)[1]
                                                         if(n.length > 32) n = n.slice(0, 31) + '...' 
@@ -205,7 +205,7 @@ export default class Table extends Component {
                                                         if(!isObj && this.props.attributes[key].callback) {
                                                             return <div key={index}>
                                                                     <div className="row" key={index}>
-                                                                        <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {this.props.attributes[key].callback(n)}
+                                                                        <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {this.props.attributes[key].callback(n, bodyAccordion[index])}
                                                                     </div>
                                                                 </div>
                                                         } 
@@ -267,7 +267,7 @@ export default class Table extends Component {
                     </div>
                 </If>
                 <If test={this.state.width > 600}>
-                    <div className='box material-item' style={{ paddingBottom: '3px' }}>
+                    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
                                 <h4 className='box-title' style={{paddingTop: '1rem', textAlign: 'center'}}>{this.props.title}</h4>
