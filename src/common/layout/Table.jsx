@@ -89,7 +89,7 @@ export default class Table extends Component {
                                     if(n && n.id) {
                                         isObj = true
                                         // Se houver callback no atributo, call back o callback
-                                        if(this.props.attributes[val] && this.props.attributes[val].callback) {
+                                        if(this.props.attributes && this.props.attributes[val] && this.props.attributes[val].callback) {
                                             n = this.props.attributes[val].callback(n, body[ii])
                                         } else {
                                             n = n.name || n.title || n.description || Object.values(n)[1]
@@ -190,7 +190,7 @@ export default class Table extends Component {
                                                 if(n && n.id) {
                                                     isObj = true
                                                     // Se houver callback no atributo, call back o callback
-                                                    if(this.props.attributes[key] && this.props.attributes[key].callback) {
+                                                    if(this.props.attributes && this.props.attributes[key] && this.props.attributes[key].callback) {
                                                         n = this.props.attributes[key].callback(n, bodyAccordion[index])
                                                     } else {
                                                         n = n.name || n.title|| n.description || Object.keys(n)[1]
@@ -270,8 +270,8 @@ export default class Table extends Component {
                     <div className='box material-item' style={{ paddingBottom: '3px', width: '100%' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
-                                <h4 className='box-title' style={{paddingTop: '1rem', textAlign: 'center'}}>{this.props.title}</h4>
-                                <hr/>
+                                <h4 className='box-title' style={{paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center'}}>{this.props.title}</h4>
+                                {this.props.renderHead && <hr/>}
                             </div>
                         </If>
                         <div className='box-body no-padding'>
