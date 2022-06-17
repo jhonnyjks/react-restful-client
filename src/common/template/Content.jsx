@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default props => (
-    <section className='content' style={{paddingBottom: '40px'}}>
+    <section {...props} className={'content ' + (props.className || '') } style={{paddingBottom: '40px', float: 'left', width: '100%'}}>
         <div className="container-fluid">
             {props.children}
         </div>
