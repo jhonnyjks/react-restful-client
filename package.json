@@ -6,6 +6,7 @@
     "@devexpress/dx-react-chart": "^1.11.2",
     "@devexpress/dx-react-chart-material-ui": "^1.11.2",
     "@devexpress/dx-react-core": "^1.11.2",
+    "@flowjs/flow.js": "^2.14.1",
     "@material-ui/core": "^3.9.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

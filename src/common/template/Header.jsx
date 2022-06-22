@@ -8,7 +8,7 @@ import { openCloseSideBar, openCloseMiniSideBar } from './templateActions'
 class Header extends Component {
   render() {
     return (
-      <nav className="main-header navbar navbar-expand navbar-green navbar-dark">
+      <nav className={"main-header navbar navbar-" + (process.env.REACT_APP_THEME || 'green') + " navbar-dark"}>
         <ul className="navbar-nav">
           <li className="nav-item">
             <a href="#!" className="nav-link nav-link--bg" onClick={(e) => this.props.openCloseSideBar(e)} data-widget="pushmenu">

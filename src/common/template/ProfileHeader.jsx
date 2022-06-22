@@ -51,7 +51,7 @@ class ProfileHeader extends Component {
             <React.Fragment>
                 <div className="user-panel mt-3 pb-3 mb-1 d-flex">
                     <div className="image">
-                        <img src="http://lorempixel.com/160/160/people" className="img-circle elevation-2" alt="User" />
+                        <img src="https://placeimg.com/160/160/people" className="img-circle elevation-2" alt="User" />
                     </div>
                     <div className="info">
                         <a href="#!" className="d-block">{name}</a>
