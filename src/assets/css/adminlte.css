@@ -11517,6 +11517,7 @@ body,
   height: 100vh;
   overflow-y: hidden;
   z-index: 1038;
+  padding-bottom: 4em;
 }
 
 .sidebar {
