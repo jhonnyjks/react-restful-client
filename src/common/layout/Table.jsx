@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
+import Select from "react-select";
+
 import LabelAndInput from '../form/LabelAndInput';
 import If from '../operator/If'
 import Row from './row'
 
 export default class Table extends Component {
-
-    state = { width: 0, height: 0 };
+    constructor(props) {
+        super(props);
+        this.state = { 
+            width: 0,
+            height: 0,
+            queryStrSearch: []
+        };
+      }
 
     updateDimensions = () => {
         this.setState({ width: window.innerWidth, height: window.innerHeight, search: '' });
@@ -23,6 +31,14 @@ export default class Table extends Component {
         this.props.generalSearch(e.target.value)
     }
 
+    doSearch = (e, search) => {
+        let queryStrSearch = this.state.queryStrSearch
+        queryStrSearch[search.field] = search.field + ':' + e.value
+
+        this.props.attributesSearch(Object.values(queryStrSearch).join(';'))
+        this.setState({queryStrSearch})
+    }
+
     getBody(){
         return this.props.paginate ? this.props.body.data : this.props.body
     }
@@ -32,28 +48,46 @@ export default class Table extends Component {
         if(this.props.renderHead === false) return null
         
         let b = this.getBody()
-        if (b !== undefined && b.length > 0) {
-            let head = {}
+        let head = {}
 
-            if (this.props.attributes) {
-                head = this.props.attributes
-            } else {
-                const bodyAttrs = Object.getOwnPropertyNames(b[0])
-                bodyAttrs.forEach((val, index) => head[val] = val )
-            }
+        if (this.props.attributes) {
+            head = this.props.attributes
+        } else if(b.length > 0) {
+            const bodyAttrs = Object.getOwnPropertyNames(b[0])
+            bodyAttrs.forEach((val, index) => head[val] = val )
+        } else {
+            return null
+        }
 
-            return <thead>
-                <tr>
+        return <thead>
+            <tr>
+                {(
+                    Object.getOwnPropertyNames(head).map((val, index) => {
+                        return <th key={index} style={head[val].style || {}}>{head[val].title || head[val]}</th>
+                    })
+                )}
+
+                {this.props.actions && <th></th>}
+            </tr>
+
+            {this.props.attributes && this.renderSearch(head) }
+        </thead>
+    }
+
+    renderSearch = (head) => {
+        return  <tr>
                     {(
                         Object.getOwnPropertyNames(head).map((val, index) => {
-                            return <th key={index} style={head[val].style || {}}>{head[val].title || head[val]}</th>
+                            return <th key={index} style={head[val].style || {}}>
+                                    {typeof head[val].search == 'object' &&
+                                        <Select onChange={e => this.doSearch(e, head[val].search)} options={head[val].search.list || [] } />
+                                    }
+                            </th>
                         })
                     )}
 
                     {this.props.actions && <th></th>}
                 </tr>
-            </thead>
-        }
     }
 
     renderBody = () => {
