@@ -1,6 +1,9 @@
 import React from 'react'
 import If from '../operator/If'
 
+import { createBrowserHistory } from 'history'
+const history = createBrowserHistory();
+
 export default props => (
     <section className='content-header'>
         <div className="container-fluid">
@@ -10,6 +13,9 @@ export default props => (
             </div>
             <div className="col-sm-6">
                 <h1 className='pull-right'>
+                <If test={!props.createMethod}>
+                    <button type='button' className='btn btn-default' onClick={function(){ history.go()}}>Voltar</button>
+                </If>
                     <If test={props.createMethod}>
                         <button className="btn btn-primary pull-right" onClick={props.createMethod}>Adicionar</button>
                     </If>
