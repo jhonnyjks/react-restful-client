@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Select from "react-select";
 
+import "./react-select-custom.css"
 import LabelAndInput from '../form/LabelAndInput';
 import If from '../operator/If'
 import Row from './row'
@@ -77,10 +78,15 @@ export default class Table extends Component {
     renderSearch = (head) => {
         return  <tr>
                     {(
+                        
                         Object.getOwnPropertyNames(head).map((val, index) => {
                             return <th key={index} style={head[val].style || {}}>
                                     {typeof head[val].search == 'object' &&
-                                        <Select onChange={e => this.doSearch(e, head[val].search)} options={head[val].search.list || [] } />
+                                        <Select
+                                            
+                                            className="search-select-container"
+                                            classNamePrefix="search-select"
+                                            onChange={e => this.doSearch(e, head[val].search)} options={head[val].search.list || [] } />
                                     }
                             </th>
                         })
