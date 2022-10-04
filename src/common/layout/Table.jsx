@@ -33,8 +33,20 @@ export default class Table extends Component {
     }
 
     doSearch = (e, search) => {
-        let queryStrSearch = this.state.queryStrSearch
-        queryStrSearch[search.field] = search.field + ':' + e.value
+        
+
+        let queryStrSearch = this.state.queryStrSearch;
+        if (e && e.value)
+            queryStrSearch[search.field] = search.field + ':' + e.value
+        else {
+            // se não tiver valor definido na busca
+            // mas a variavel estiver preenchida por uma
+            // operação passada ela é removida
+            queryStrSearch.hasOwnProperty(search.field);
+            delete queryStrSearch[search.field];
+        }
+
+        console.log(queryStrSearch);
 
         this.props.attributesSearch(Object.values(queryStrSearch).join(';'))
         this.setState({queryStrSearch})
@@ -83,7 +95,7 @@ export default class Table extends Component {
                             return <th key={index} style={head[val].style || {}}>
                                     {typeof head[val].search == 'object' &&
                                         <Select
-                                            
+                                            isClearable
                                             className="search-select-container"
                                             classNamePrefix="search-select"
                                             onChange={e => this.doSearch(e, head[val].search)} options={head[val].search.list || [] } />
