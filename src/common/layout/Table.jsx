@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Select from "react-select";
 
 import "./react-select-custom.css"
+import "./table.css"
 import LabelAndInput from '../form/LabelAndInput';
 import If from '../operator/If'
 import Row from './row'
@@ -336,7 +337,7 @@ export default class Table extends Component {
                                     input={{ onChange: this.handleChangeSearch, value: this.state.search}} grid={{style:{paddingTop:'15px'}}} />
                             }
 
-                            <table className='table table-hover'>
+                            <table className={`table table-hover ${this.props.fixed}`}>
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}
