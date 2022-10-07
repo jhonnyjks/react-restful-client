@@ -337,7 +337,7 @@ export default class Table extends Component {
                                     input={{ onChange: this.handleChangeSearch, value: this.state.search}} grid={{style:{paddingTop:'15px'}}} />
                             }
 
-                            <table className={`table table-hover ${this.props.fixed}`}>
+                            <table className={`table table-hover fixed`}>
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}
