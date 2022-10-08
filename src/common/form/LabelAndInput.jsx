@@ -89,6 +89,7 @@ class LabelAndInput extends Component {
                         placeholder={this.props.placeholder}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
                         type={this.props.type}
+                        style={this.props.type=='checkbox'?{width: '40px'}:{}}
                         maxLength={this.props.maxLength} />
                     <div className="invalid-feedback">
                         {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
