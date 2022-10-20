@@ -61,8 +61,6 @@ export default class Table extends Component {
             searchFieldsValues[search.field] = ''
         }
 
-        console.log(queryStrSearch, searchFields);
-
         const queryStr = Object.values(queryStrSearch).join(';') + '&searchFields=' + Object.values(searchFields).join(';')
 
         this.props.attributesSearch(queryStr)
