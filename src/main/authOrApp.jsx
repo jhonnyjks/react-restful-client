@@ -114,8 +114,55 @@ class AuthOrApp extends Component {
             }).join('&')
 
             // Junta url e remove caracteres indesejados
-            url = url.join('?').split('=;').join('=').replaceAll(';;', ';')
-            if(url[url.length-1] == ';') url = url.substring(0, url.length-1)
+            const urll = url.shift()
+            url = url[0].split('&')
+
+            let withh = ''
+            let search = ''
+            let searchFields = ''
+            let limit = ''
+            let remaining = ''
+
+
+            while(url.length > 0) {
+                let e = url.shift()
+
+                switch (e.substring(0, e.indexOf('='))) {
+                    case 'with':
+                        withh = e.substring(e.indexOf('=')+1)
+                        break;
+
+                    case 'search':
+                        search = e.substring(e.indexOf('=')+1)
+                        break;
+
+                    case 'searchFields':
+                        searchFields = e.substring(e.indexOf('=')+1)
+                        break;
+                    
+                    case 'limit':
+                        limit = e.substring(e.indexOf('=')+1)
+                        break;
+
+                    // Joga aqui tudo que não for desconhecido pelo bloco de código
+                    default:
+                        remaining += e
+                        break;
+                }
+            }
+
+            if(search[search.length-1] == ';') search = search.substring(0, search.length-1)
+            if(withh[withh.length-1] == ';') withh = withh.substring(0, withh.length-1)
+
+            
+            if(search.length > 0) url.push('search=' + search)
+            if(searchFields.length > 0) url.push('searchFields=' + searchFields)
+            if(withh.length > 0) url.push('with=' + withh)
+            if(limit.length > 0) url.push('limit=' + limit)
+            if(remaining.length > 0) url.push(remaining)
+
+            url = urll + '?' + url.join('&')
+
         }
 
         // Tratando as permissões dos atributos enviados na requisição

@@ -13,7 +13,9 @@ export default class Table extends Component {
         this.state = { 
             width: 0,
             height: 0,
-            queryStrSearch: []
+            queryStrSearch: {},
+            searchFields: {},
+            searchFieldsValues: {}
         };
       }
 
@@ -35,22 +37,36 @@ export default class Table extends Component {
 
     doSearch = (e, search) => {
         
-
         let queryStrSearch = this.state.queryStrSearch;
-        if (e && e.value)
+        let searchFields = this.state.searchFields
+        let searchFieldsValues = this.state.searchFieldsValues
+
+        if(search.type == 'text' && e.target && e.target.value) {
+            queryStrSearch[search.field] = search.field + ':' + e.target.value
+            searchFieldsValues[search.field] = e.target.value
+            searchFields[search.field] = search.field + ':like'
+        } else if (e && e.value) {
             queryStrSearch[search.field] = search.field + ':' + e.value
-        else {
+            searchFieldsValues[search.field] = e.value
+            searchFields[search.field] = search.field + ':='
+            
+        } else {
             // se não tiver valor definido na busca
             // mas a variavel estiver preenchida por uma
             // operação passada ela é removida
             queryStrSearch.hasOwnProperty(search.field);
             delete queryStrSearch[search.field];
+            searchFields.hasOwnProperty(search.field);
+            delete searchFields[search.field];
+            searchFieldsValues[search.field] = ''
         }
 
-        console.log(queryStrSearch);
+        console.log(queryStrSearch, searchFields);
 
-        this.props.attributesSearch(Object.values(queryStrSearch).join(';'))
-        this.setState({queryStrSearch})
+        const queryStr = Object.values(queryStrSearch).join(';') + '&searchFields=' + Object.values(searchFields).join(';')
+
+        this.props.attributesSearch(queryStr)
+        this.setState({queryStrSearch, searchFields, searchFieldsValues})
     }
 
     getBody(){
@@ -93,15 +109,29 @@ export default class Table extends Component {
                     {(
                         
                         Object.getOwnPropertyNames(head).map((val, index) => {
-                            return <th key={index} style={head[val].style || {}}>
-                                    {typeof head[val].search == 'object' &&
+                            if(typeof head[val].search == 'object') {
+                                const search = head[val].search
+                                switch(search.type || '') {
+                                    case 'text':
+                                        return <th key={index} style={head[val].style || {}}>
+                                            <LabelAndInput input={{ type: 'text', onChange: e => this.doSearch(e, search), value:this.state.searchFieldsValues[search.field]}}
+                                            forceToShow={true} readOnly={false} style={{marginBottom: '0px'}} grid={{style:{marginBottom: '0px'}}} />
+                                        </th>
+                                        break;
+
+                                    default:
+                                        return <th key={index} style={head[val].style || {}}> 
                                         <Select
                                             isClearable
                                             className="search-select-container"
                                             classNamePrefix="search-select"
-                                            onChange={e => this.doSearch(e, head[val].search)} options={head[val].search.list || [] } />
-                                    }
-                            </th>
+                                            onChange={e => this.doSearch(e, search)} options={search.list || [] } />
+                                                
+                                        </th>
+                                }
+                                
+                            }
+                            
                         })
                     )}
 
