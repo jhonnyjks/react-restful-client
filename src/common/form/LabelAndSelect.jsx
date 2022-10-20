@@ -81,7 +81,7 @@ class LabelAndSelect extends Component {
 
         return (
             <>
-            { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} {...this.props}>
+            { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
                 <div className='form-group'>
                     <label htmlFor={this.props.name}>{this.props.label}</label>
                     <select name={this.props.name} {...this.props.input}
