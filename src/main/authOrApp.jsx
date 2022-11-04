@@ -146,18 +146,18 @@ class AuthOrApp extends Component {
 
                     // Joga aqui tudo que não for desconhecido pelo bloco de código
                     default:
-                        remaining += e
+                        remaining += (e.length > 0 ? (remaining.length > 0 ? '&' : '') + e : '')
                         break;
                 }
             }
-
+            console.log(search)
             if(search[search.length-1] == ';') search = search.substring(0, search.length-1)
             if(withh[withh.length-1] == ';') withh = withh.substring(0, withh.length-1)
 
             
             if(search.length > 0) url.push('search=' + search)
             if(searchFields.length > 0) url.push('searchFields=' + searchFields)
-            if(withh.length > 0) url.push('with=' + withh)
+            if(withh.length > 0) url.push('with=' + withh.replace(';;', ';').replace(':;', ';'))
             if(limit.length > 0) url.push('limit=' + limit)
             if(remaining.length > 0) url.push(remaining)
 
