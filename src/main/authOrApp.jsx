@@ -150,11 +150,10 @@ class AuthOrApp extends Component {
                         break;
                 }
             }
-            console.log(search)
+
             if(search[search.length-1] == ';') search = search.substring(0, search.length-1)
             if(withh[withh.length-1] == ';') withh = withh.substring(0, withh.length-1)
 
-            
             if(search.length > 0) url.push('search=' + search)
             if(searchFields.length > 0) url.push('searchFields=' + searchFields)
             if(withh.length > 0) url.push('with=' + withh.replace(';;', ';').replace(':;', ';'))
@@ -162,7 +161,6 @@ class AuthOrApp extends Component {
             if(remaining.length > 0) url.push(remaining)
 
             url = urll + '?' + url.join('&')
-
         }
 
         // Tratando as permissões dos atributos enviados na requisição
