@@ -103,7 +103,11 @@ export default class Table extends Component {
     }
 
     renderSearch = (head) => {
-        return  <tr>
+        let hasSearch = false
+        Object.getOwnPropertyNames(head).map((val, index) => {
+            if(head[val].search) hasSearch = true
+        })
+        return hasSearch && <tr>
                     {(
                         
                         Object.getOwnPropertyNames(head).map((val, index) => {
