@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Select from "react-select";
+import { Link, withRouter } from "react-router-dom";
 
 import "./react-select-custom.css"
 import "./table.css"
 import LabelAndInput from '../form/LabelAndInput';
 import If from '../operator/If'
 import Row from './row'
-
-export default class Table extends Component {
+class Table extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -22,10 +22,12 @@ export default class Table extends Component {
     updateDimensions = () => {
         this.setState({ width: window.innerWidth, height: window.innerHeight, search: '' });
     };
+
     componentDidMount() {
         this.updateDimensions()
         window.addEventListener('resize', this.updateDimensions);
     }
+
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
     }
@@ -138,7 +140,9 @@ export default class Table extends Component {
     }
 
     renderBody = () => {
-        let body = this.getBody()
+        const body = this.getBody()
+        const actionsPath = this.props.path || this.props.location.pathname
+
         if (body) {
             return <tbody>
                 {
@@ -197,12 +201,15 @@ export default class Table extends Component {
                             {this.props.actions &&
                                 <td>
                                     {this.props.actions.update && 
-                                        <button type='button' className='btn btn-warning' onClick={() => this.props.actions.update(ntr)}>
+                                        <Link to={actionsPath + '/' + ntr.id}
+                                        style={{border: '0px', background: 'none', fontSize: '1.2em', color: '#333'}} >
                                             <i className='fa fa-edit'></i>
-                                        </button>
+                                        </Link>
                                     }
+
                                     {this.props.actions.remove && 
-                                        <button type='button' className='btn btn-danger' onClick={() => this.props.actions.remove(ntr)}>
+                                        <button type='button' onClick={() => this.props.actions.remove(ntr)}
+                                        style={{border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px'}} >
                                             <i className='fa fa-trash'></i>
                                         </button>
                                     }
@@ -229,7 +236,9 @@ export default class Table extends Component {
     }
 
     renderBodyAccordion = () => {
-        let bodyAccordion = this.getBody()
+        const bodyAccordion = this.getBody()
+        const actionsPath = this.props.path || this.props.location.pathname
+
         if (bodyAccordion) {
             return (
                 <React.Fragment>
@@ -305,9 +314,9 @@ export default class Table extends Component {
                                     <div className="card-footer text-center">
                                         {this.props.actions &&
                                             <div>
-                                                {this.props.actions.update && <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
+                                                {this.props.actions.update && <Link to={actionsPath + '/' + val.id} className='btn btn-primary col-5' >
                                                     <i className='fa fa-edit'></i> Editar
-                                                </button>
+                                                </Link>
                                                 }
                                                 {this.props.actions.remove && <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
                                                     <i className='fa fa-trash'></i> Excluir
@@ -335,7 +344,7 @@ export default class Table extends Component {
         }
     }
 
-    render() {
+    render() {       
         return (
             <React.Fragment>
                 <If test={this.state.width < 600}>
@@ -377,3 +386,5 @@ export default class Table extends Component {
         )
     }
 }
+
+export default withRouter(props => <Table {...props}/>)

@@ -14,6 +14,11 @@ export default props => (
                 <Route key={route.path} exact={route.exact || false} path={route.path} component={route.component} />
             ))}
 
+            {/* Mapeando rotas do projeto filho que tem crud */}
+            {AppRoutes.map(route => (
+                route.isCrud !== false ? <Route key={route.path + '/:id'} exact={route.exact || false} path={route.path + '/:id'} component={route.component} /> : null
+            ))}
+
             <Redirect from='*' to='/' />
         </Switch>
     </div>
