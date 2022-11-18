@@ -7,6 +7,8 @@ import Row from '../../common/layout/row'
 import LabelAndInput from '../../common/form/LabelAndInput'
 import PermissionList from './permissions/List'
 import { init } from './actions'
+import BackButton from '../../common/form/BackButton'
+import SubmitButton from '../../common/form/SubmitButton'
 
 class Form extends Component {
     render() {
@@ -26,8 +28,8 @@ class Form extends Component {
                         {this.props.parentId && <PermissionList profileId={this.props.id} /> }
                     </div>
                     <div className='card-footer'>
-                        <button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>
-                        <button type='button' className='btn btn-default' onClick={this.props.init}>Cancelar</button>
+                        <SubmitButton label='Salvar' />
+                        <BackButton label='Cancelar' />
                     </div>
                 </div>
             </form>

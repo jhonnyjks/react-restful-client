@@ -9,6 +9,8 @@ import Row from '../../common/layout/row'
 import LabelAndInput from '../../common/form/LabelAndInput'
 import LabelAndSelect from '../../common/form/LabelAndSelect'
 import { init } from './actions'
+import BackButton from '../../common/form/BackButton'
+import SubmitButton from '../../common/form/SubmitButton'
 
 class Form extends Component {
     constructor(props) {
@@ -62,8 +64,8 @@ class Form extends Component {
                         </Row>
                     </div>
                     <div className='card-footer'>
-                        <button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>
-                        <button type='button' className='btn btn-default' onClick={this.props.init}>Cancelar</button>
+                        <SubmitButton label='Salvar' />
+                        <BackButton label='Cancelar' />
                     </div>
                 </div>
             </form>
