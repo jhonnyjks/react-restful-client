@@ -204,11 +204,18 @@ class Table extends Component {
                             }
                             {this.props.actions &&
                                 <td>
-                                    {this.props.actions.update && 
+                                    {this.props.actions.update === true && 
                                         <Link to={actionsPath + '/' + ntr.id}
                                         style={{border: '0px', background: 'none', fontSize: '1.2em', color: '#333'}} >
                                             <i className='fa fa-edit'></i>
                                         </Link>
+                                    }
+
+                                    {((typeof this.props.actions.update) === 'function') && 
+                                       <button type='button' onClick={() => this.props.actions.update(ntr)}
+                                       style={{border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px'}} >
+                                           <i className='fa fa-edit'></i>
+                                       </button>
                                     }
 
                                     {this.props.actions.remove && 
