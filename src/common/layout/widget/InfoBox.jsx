@@ -13,7 +13,7 @@ export default props => (
             </span>
 
             <div className='info-box-content'>
-                <span className='info-box-text' style={{ fontWeight: 'bold' }}>{props.title}</span>
+                <span className='info-box-text' style={{ fontWeight: 'bold', fontSize: props.text ? '1rem' : '2rem' }}>{props.title}</span>
 
                 <If test={props.text}>
                     <span className='info-box-number'>{props.text}</span>

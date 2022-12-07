@@ -28489,3 +28489,7 @@ hr.divider {
 .container {
   max-width: 100% !important;
 }
+
+.hover-pointer:hover {
+  cursor: pointer;
+}
