@@ -33,6 +33,15 @@ class AuthOrApp extends Component {
         }
     }
 
+    componentDidMount() {
+        // Por padrão, remove o elemento de loading sempre que o React é carregado
+        const initialLoadingSpinner = document.getElementById('initialLoadingSpinner')
+
+        if(initialLoadingSpinner && typeof initialLoadingSpinner.remove == 'function') {
+            initialLoadingSpinner.remove()
+        }
+    }
+
     /**
      * 
      * @param {String} rel :: uma das relações da query string
@@ -54,14 +63,15 @@ class AuthOrApp extends Component {
             return Promise.reject(error)
         })
 
-        if (loading || (validToken && profile === null && profiles.length < 2)) {
-            return <Loading />
-        } else if (token && validToken && profile) {
+        if (token && validToken && profile) {
             axios.defaults.headers.common['authorization'] = token.type + ' ' + token.token
-            return <App>{this.props.children}</App>
-        } else {
-            return <Auth />
         }
+
+        return <>
+            { loading && <Loading /> }
+            { (token && validToken && profile) && <App>{this.props.children}</App> }
+            { !(token && validToken && profile) && <Auth /> }
+        </>
     }
 
     interceptRequest = (conf) => {

@@ -12,7 +12,9 @@ export function signup(values) {
 
 function submit(values, url) {
     return dispatch => {
+        
         dispatch({ type: 'AUTH_LOADING', payload: true })
+
         axios.post(url, values)
             .then(resp => {
                 toastr.success('Sucesso', resp.data.message)
@@ -24,14 +26,17 @@ function submit(values, url) {
                             resp.data.data.token
                         )
                     ])
+                } else {
+                    dispatch({ type: 'AUTH_LOADING', payload: false })
                 }
 
                 dispatch({ type: 'USER_FETCHED', payload: resp.data })
-                dispatch({ type: 'AUTH_LOADING', payload: false })
 
             })
             .catch(e => {
+
                 dispatch({ type: 'AUTH_LOADING', payload: false })
+
                 if (!e.response) {
                     toastr.error('Erro', 'Desconhecido :-/')
                     console.log(e)
@@ -53,7 +58,9 @@ export function logout() {
 
 export function validateToken(token, profile) {
     return dispatch => {
+
         dispatch({ type: 'AUTH_LOADING', payload: true })
+
         // Obtendo sessão salva para evitar requisição em ambiente dev
         if (process.env.NODE_ENV === 'developmentt') {
             let devSession = JSON.parse(localStorage.getItem('devSession'))
@@ -77,6 +84,7 @@ export function validateToken(token, profile) {
 
                 const profiles = resp.data.data.profiles
 
+                
                 if (profiles.length === 1 && profile === null) {
                     dispatch(selectProfile(profiles[0], token))
                 } else if (_.findIndex(profiles, { id: profile.id }) > -1) {
@@ -84,7 +92,6 @@ export function validateToken(token, profile) {
                 }
 
                 dispatch({ type: 'USER_FETCHED', payload: resp.data })
-                dispatch({ type: 'AUTH_LOADING', payload: false })
             })
                 .catch(e => {
                     dispatch({ type: 'USER_FETCHED', payload: false })
@@ -99,14 +106,19 @@ export function validateToken(token, profile) {
 
 export function selectProfile(profile, token) {
     return dispatch => {
+
+        dispatch({ type: 'AUTH_LOADING', payload: true })
+
         if (profile) {
             axios.get(`${process.env.REACT_APP_API_HOST}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
                 dispatch({ type: 'PROFILE_SELECTED', payload: { ...profile, scopes: resp.data.scopes } })
+                dispatch({ type: 'AUTH_LOADING', payload: false })
             })
         } else {
             dispatch({ type: 'PROFILE_SELECTED', payload: null })
+            dispatch({ type: 'AUTH_LOADING', payload: false })
         }
     }
 }

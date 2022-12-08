@@ -11,7 +11,7 @@ import AuthOrApp from "./main/authOrApp";
 import reducers from "./main/reducers";
 
 const devTools =
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({ trace: true, traceLimit: 25 });
 const store = applyMiddleware(multi, thunk, promisse)(createStore)(
   reducers,
   devTools
