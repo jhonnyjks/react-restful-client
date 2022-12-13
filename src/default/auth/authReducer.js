@@ -58,7 +58,7 @@ export default (state = INITIAL_STATE, action) => {
                 }
         
         case 'AUTH_LOADING':
-            return { ...state, loading: action.payload }
+            return { ...state, loading: action.payload !== null ? action.payload : !state.loading }
 
         case 'AUTH_EXTRA':
             localStorage.setItem(sesionKey, JSON.stringify({

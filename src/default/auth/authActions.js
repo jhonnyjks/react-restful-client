@@ -122,3 +122,7 @@ export function selectProfile(profile, token) {
         }
     }
 }
+
+export function loading(status = null) {
+    return { type: 'AUTH_LOADING', payload: status }
+}
