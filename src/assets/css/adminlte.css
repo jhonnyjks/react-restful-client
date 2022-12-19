@@ -11323,7 +11323,9 @@ body,
 }
 
 .main-header .navbar-nav .nav-item {
-  margin: 0;
+  margin: -0.5rem;
+  padding: 0.5rem;
+  background: #343a40;
 }
 
 .main-header .navbar-nav[class*='-right'] .dropdown-menu {
