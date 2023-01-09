@@ -47,11 +47,13 @@ class ProfileHeader extends Component {
     render() {
         const { name, /*email*/ } = this.props.user
         const { RenderSidebarMenu } = this
+
+        console.log(this.props.user)
         return (
             <React.Fragment>
                 <div className="user-panel mt-3 pb-3 mb-1 d-flex">
                     <div className="image">
-                        <img src="https://placeimg.com/160/160/people" className="img-circle elevation-2" alt="User" />
+                        <img src={this.props.user && this.props.user.id == 4 ? process.env.REACT_APP_API_HOST+'/../img/foto_gov.jfif' : "https://placeimg.com/160/160/people"} className="img-circle elevation-2" alt="User" />
                     </div>
                     <div className="info">
                         <a href="#!" className="d-block">{name}</a>
