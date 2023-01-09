@@ -30,7 +30,7 @@ class Menu extends Component {
                             const item = MainMenu[path]
                             
                             if (!(item.excludeFromProfiles && item.excludeFromProfiles.indexOf(this.props.profile.id) > -1) && 
-                                (item.fixed || scopes[path] || scopes[path.replace('/', '')])) {
+                                (item.fixed || scopes[path] || scopes[path.replace('/', '')] || path === ('/' || ''))) {
 
                                 if (item.children) {
                                     return <MenuTree
@@ -45,9 +45,6 @@ class Menu extends Component {
                                 } else {
                                     return this.renderDinamicMenu(path, item)
                                 }
-
-                            } else if (path === ('/' || '')) {
-                                return this.renderDinamicMenu(path, item)
                             }
 
                             return false

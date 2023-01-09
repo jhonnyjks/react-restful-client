@@ -48,7 +48,6 @@ class ProfileHeader extends Component {
         const { name, /*email*/ } = this.props.user
         const { RenderSidebarMenu } = this
 
-        console.log(this.props.user)
         return (
             <React.Fragment>
                 <div className="user-panel mt-3 pb-3 mb-1 d-flex">
