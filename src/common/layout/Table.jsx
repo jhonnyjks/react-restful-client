@@ -206,7 +206,7 @@ export default class Table extends Component {
                                         </button>
                                     }
                                     {this.props.actions.remove && 
-                                        <button type='button' className='btn btn-danger' onClick={() => this.props.actions.remove(ntr)}>
+                                        <button type='button' className='btn btn-danger' onClick={() => window.confirm('Você confirma a exclusão do item?') ? this.props.actions.remove(ntr) : null}>
                                             <i className='fa fa-trash'></i>
                                         </button>
                                     }
