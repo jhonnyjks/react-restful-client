@@ -41,7 +41,7 @@ class AuthOrApp extends Component {
      */
     hasPermOnRouteScope = (rel, scope) => {
         const relation = _.snakeCase(rel) + '_id'
-        if(scope.actions[relation] && scope.actions[relation] > 0) return true
+        if(scope.actions && scope.actions[relation] && scope.actions[relation] > 0) return true
         return false
     }
 

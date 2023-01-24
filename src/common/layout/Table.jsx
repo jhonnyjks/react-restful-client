@@ -200,6 +200,11 @@ export default class Table extends Component {
                             }
                             {this.props.actions &&
                                 <td>
+                                    {this.props.actions.view && 
+                                        <button type='button' className='btn btn-primary' onClick={() => this.props.actions.view(ntr.id)}>
+                                            <i className='fa fa-eye'></i>
+                                        </button>
+                                    }
                                     {this.props.actions.update && 
                                         <button type='button' className='btn btn-warning' onClick={() => this.props.actions.update(ntr)}>
                                             <i className='fa fa-edit'></i>
@@ -212,7 +217,7 @@ export default class Table extends Component {
                                     }
 
                                     {Object.keys(this.props.actions).map((vv, ii) => {
-                                        if(vv != 'update' && vv != 'remove') {
+                                        if(['view', 'update', 'remove'].indexOf(vv) === -1) {
 
                                             if(this.props.actions[vv].className) {
                                             return <button key={ii} className={this.props.actions[vv].className} onClick={(e) => this.props.actions[vv].onClick(ntr, e)}>
@@ -309,17 +314,22 @@ export default class Table extends Component {
                                     <div className="card-footer text-center">
                                         {this.props.actions &&
                                             <div>
-                                                {this.props.actions.update && <button className='btn btn-warning col-5' onClick={() => this.props.actions.update(val)}>
-                                                    <i className='fa fa-edit'></i> Editar
+                                                {this.props.actions.view && 
+                                                    <button type='button' className='btn btn-primary col-3' onClick={() => this.props.actions.view(val)}>
+                                                        <i className='fa fa-eye'></i>
+                                                    </button>
+                                                }
+                                                {this.props.actions.update && <button className='btn btn-warning col-3' onClick={() => this.props.actions.update(val)}>
+                                                    <i className='fa fa-edit'></i>
                                                 </button>
                                                 }
-                                                {this.props.actions.remove && <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
-                                                    <i className='fa fa-trash'></i> Excluir
+                                                {this.props.actions.remove && <button className='btn btn-danger col-3' onClick={() => window.confirm('Você confirma a exclusão do item?') ? this.props.actions.remove(val.id) : null}>
+                                                    <i className='fa fa-trash'></i>
                                                 </button>
                                                 }
 
                                                 {Object.keys(this.props.actions).map((vv, ii) => {
-                                                    if(vv != 'update' && vv != 'remove') {
+                                                    if(['view', 'update', 'remove'].indexOf(vv) === -1) {
 
                                                     return <button style={{marginTop:'10px'}} key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(val)}>
                                                         <i className={this.props.actions[vv].icon}></i> {this.props.actions[vv].label}

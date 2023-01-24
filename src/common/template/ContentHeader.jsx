@@ -13,6 +13,9 @@ export default props => (
             </div>
             <div className="col-sm-6">
                 <h1 className='pull-right'>
+                <button type='button' className='btn' title='Baixar imagem do conteúdo'>
+                    <i className='fa fa-download'></i>
+                </button>
                 <If test={!props.createMethod}>
                     <button type='button' className='btn btn-default' onClick={function(){ history.go()}}>Voltar</button>
                 </If>
