@@ -90,7 +90,7 @@ class LabelAndSelect extends Component {
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => ((e && e.id > -1) ? (<option key={e.id} value={e.id} selected={this.props.input.defaultValue && this.props.input.defaultValue==e.id}>
-                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
+                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.number || e.description || e.id }
                                 </option>) : <></>)
                         )}
                     </select>

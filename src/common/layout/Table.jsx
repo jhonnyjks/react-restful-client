@@ -177,7 +177,7 @@ export default class Table extends Component {
                                         if(this.props.attributes && this.props.attributes[val] && this.props.attributes[val].callback) {
                                             n = this.props.attributes[val].callback(n, body[ii])
                                         } else {
-                                            n = n.name || n.title || n.description || Object.values(n)[1]
+                                            n = n.name || n.title || n.number || n.description || Object.values(n)[1]
                                             if(n.length > 32) n = n.slice(0, 31) + '...' 
                                         }
                                     }
@@ -254,7 +254,7 @@ export default class Table extends Component {
                                         
                                 <div className="card-header" id={`heading${index}`}>
                                     <h5 className="mb-0">
-                                            <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] || val["description"] }</strong>
+                                            <strong>{val[this.props.labelMobile] || val["name"] || val["title"] ||  val["number"] || val["description"] || val["id"] }</strong>
                                         
                                     </h5>
                                 </div>
@@ -283,7 +283,7 @@ export default class Table extends Component {
                                                     if(this.props.attributes && this.props.attributes[key] && this.props.attributes[key].callback) {
                                                         n = this.props.attributes[key].callback(n, bodyAccordion[index])
                                                     } else {
-                                                        n = n.name || n.title|| n.description || Object.keys(n)[1]
+                                                        n = n.name || n.title || n.number || n.description || Object.keys(n)[1]
                                                         if(n.length > 32) n = n.slice(0, 31) + '...' 
                                                     }
                                                 }
