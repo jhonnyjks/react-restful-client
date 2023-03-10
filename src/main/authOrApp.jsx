@@ -97,20 +97,26 @@ class AuthOrApp extends Component {
                     query[1] = query[1].split(';').map((objStr) => {
                         // Dividindo entidade de atributos
                         let obj = objStr.split(':')
-
-                        //TODO: validar atributos
-                        // if(obj[1]) obj[1] = obj[1].split(',')
                        
                         // Dividindo entidades relacionadas
                         obj[0] = obj[0].split('.')
-                        obj[0] = obj[0][obj[0].length-1]
+                        
+                        // Buscando a rota que precisa ser validada, percorrendo as relações requisitadas
+                        let relRoute = route
+                        for (let i = 0; i < obj[0].length; i++) { 
+                            if(scopes[relRoute].relationships && scopes[relRoute].relationships[obj[0][i]]) {
+                                relRoute = _.findKey(scopes, ['entity', scopes[relRoute].relationships[obj[0][i]].entity])
+                            } else {
+                                console.warn('Se a rota não existe no escopo, não deveria chegar até aqui. Possível bug.')
+                            }
+                        }
 
-                        // Verificando se a relação bate com uma rota ou entidade do escopo
-                        let perm = _.findKey(scopes, ['entity', _.upperFirst(obj[0])])
-                        if(!perm) perm = _.findKey(scopes, ['entity', _.upperFirst(obj[0])])
+                        //TODO: validar atributos das relações solicitadas na requisição. Atualmente valida apenas se o escopo existe.
+                        // hasPermOnRouteScope() deve entrar em obsolescencia.
+                        // if(obj[1]) obj[1] = obj[1].split(',')
 
-                        // Se não existe escopo, remove da url
-                        if(perm || this.hasPermOnRouteScope(obj[0], scopes[route] || []) || scopes[obj[0]] || scopes[_.snakeCase(obj[0])]) {
+                        // Se não existe escopo, remove da url.
+                        if(relRoute || this.hasPermOnRouteScope(obj[0], scopes[route] || []) ) {
                             return objStr
                         } else {
                             // Removendo a relação da url
