@@ -104,10 +104,10 @@ class AuthOrApp extends Component {
                         // Buscando a rota que precisa ser validada, percorrendo as relações requisitadas
                         let relRoute = route
                         for (let i = 0; i < obj[0].length; i++) { 
-                            if(scopes[relRoute].relationships && scopes[relRoute].relationships[obj[0][i]]) {
+                            if(scopes && scopes[relRoute] && scopes[relRoute].relationships && scopes[relRoute].relationships[obj[0][i]]) {
                                 relRoute = _.findKey(scopes, ['entity', scopes[relRoute].relationships[obj[0][i]].entity])
                             } else {
-                                console.warn('Se a rota não existe no escopo, não deveria chegar até aqui. Possível bug.')
+                                console.warn('Se a rota não existe no escopo, não deveria chegar até aqui. Possível bug.', scopes, relRoute)
                             }
                         }
 

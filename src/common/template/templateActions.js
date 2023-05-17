@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export function openCloseSideBar(e) {
     e.preventDefault()
     if (document.body.getAttribute('class').indexOf('sidebar-collapse') > -1) {
@@ -32,5 +34,14 @@ export function setSideBar(status) {
     return {
         type: 'SIDE_BAR_STATUS',
         payload: status
+    }
+}
+
+export function getNotifications() {
+    const request = axios.get(`${process.env.REACT_APP_API_HOST}/notifications`)
+
+    return {
+        type: 'NOTIFICATIONS_FETCHED',
+        payload: request
     }
 }
