@@ -34,7 +34,7 @@ class Header extends Component {
           { notify.items.slice(0, 10).map((item, j) => {
 
             let itemLink = item.link || notify.linkToItem
-            itemLink =  itemLink + (itemLink[itemLink.length-1] != '/' ? '/' : '') + item.id
+            itemLink =  process.env.PUBLIC_URL + itemLink + (itemLink[itemLink.length-1] != '/' ? '/' : '') + item.id
             
             let itemTime = ((new Date()) - (new Date(item.date))) / 60000
             if(itemTime < 1) {
