@@ -72,7 +72,6 @@ class Header extends Component {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
         this.props.getNotifications()
-        console.log('process.env.PUBLIC_URL', process.env.PUBLIC_URL)
       }, 10000)})
     }
 
