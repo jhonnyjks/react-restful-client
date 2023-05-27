@@ -73,11 +73,34 @@ class LabelAndInput extends Component {
         }
     }
 
+    getValidation = (scope) => {
+        let rules = []
+        if(this.props.scopes[scope] && this.props.scopes[scope].rules 
+            && this.props.scopes[scope].rules[this.props.input.name]) {
+            const splitRules = this.props.scopes[scope].rules[this.props.input.name].split('|')
+
+            splitRules.forEach(rule => {
+
+                if(rule.indexOf(':') > -1) {
+                    const ruleValue = rule.split(':')
+                    rules[ruleValue[0]] = ruleValue[1]
+                } else {
+                    rules[rule] = true
+                }
+            })
+        }
+
+        return rules
+            
+    }
+
     render() {
         // const permission = this.props.scopes[this.props.meta.form];
         let scope = '' 
         if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.replace(/Form([^Form]*)$/, '$1') )])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
+
+        const rules = this.getValidation(scope)
 
         return (
             <>
@@ -88,9 +111,10 @@ class LabelAndInput extends Component {
                         className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
-                        maxLength={this.props.maxLength} ></textarea>
+                        maxLength={this.props.maxLength}
+                        required={rules['required'] || false} ></textarea>
                     <div className="invalid-feedback">
-                        {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
+                        {this.state.error.flag === true ? this.state.error.message : "Valor inválido informado"}
                     </div>
                 </div>
             </Grid>}

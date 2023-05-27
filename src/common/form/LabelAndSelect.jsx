@@ -74,10 +74,33 @@ class LabelAndSelect extends Component {
         }
     }
 
+    getValidation = (scope) => {
+        let rules = []
+        if(this.props.scopes[scope] && this.props.scopes[scope].rules 
+            && this.props.scopes[scope].rules[this.props.input.name]) {
+            const splitRules = this.props.scopes[scope].rules[this.props.input.name].split('|')
+
+            splitRules.forEach(rule => {
+
+                if(rule.indexOf(':') > -1) {
+                    const ruleValue = rule.split(':')
+                    rules[ruleValue[0]] = ruleValue[1]
+                } else {
+                    rules[rule] = true
+                }
+            })
+        }
+
+        return rules
+            
+    }
+
     render() {
         let scope = '' 
         if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
         const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
+
+        const rules = this.getValidation(scope)
 
         return (
             <>
@@ -86,7 +109,8 @@ class LabelAndSelect extends Component {
                     <label htmlFor={this.props.name}>{this.props.label}</label>
                     <select name={this.props.name} {...this.props.input}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
-                        className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}>
+                        className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
+                        required={rules['required'] || false} >
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => ((e && e.id > -1) ? (<option key={e.id} value={e.id}>
@@ -95,7 +119,7 @@ class LabelAndSelect extends Component {
                         )}
                     </select>
                     <div className="invalid-feedback">
-                        {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
+                        {this.state.error.flag === true ? this.state.error.message : "Valor inválido informado"}
                     </div>
                 </div>
             </Grid>}
