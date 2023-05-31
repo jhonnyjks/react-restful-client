@@ -96,11 +96,18 @@ class LabelAndSelect extends Component {
     }
 
     render() {
-        let scope = '' 
-        if(this.props.meta) scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(this.props.meta.form.split('Form')[0])])
-        const permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
+        const formName = this.props.meta ? this.props.meta.form : null
+        let scope = ''
+        let permission = 0
+        let rules = []
+        let action = null
 
-        const rules = this.getValidation(scope)
+        if(formName) {
+            scope = _.findKey(this.props.scopes, ['entity', _.upperFirst(formName.split('Form')[0])])
+            permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
+            rules = this.getValidation(scope)
+            action = this.props.forms[formName] && this.props.forms[formName].values && this.props.forms[formName].values.id ? 'update' : 'insert'
+        }
 
         return (
             <>
@@ -108,7 +115,7 @@ class LabelAndSelect extends Component {
                 <div className='form-group'>
                     <label htmlFor={this.props.name}>{this.props.label}</label>
                     <select name={this.props.name} {...this.props.input}
-                        disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, ['insert', 'update']) : false}
+                        disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
                         className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         required={rules['required'] || false} >
                         <option value="">{this.props.placeholder}</option>
@@ -128,5 +135,8 @@ class LabelAndSelect extends Component {
     }
 }
 
-const mapStateToProps = state => ({ scopes: state.auth.profile.scopes })
+const mapStateToProps = state => ({ 
+    scopes: state.auth.profile.scopes,
+    forms: state.form
+ })
 export default connect(mapStateToProps, null)(LabelAndSelect)
