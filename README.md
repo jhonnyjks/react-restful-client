@@ -13,8 +13,12 @@ Projeto base para desenvolvimento de Apps React. Esse projeto já vem com gerenc
         # use o comando para instalar dependências do react
         cd client
         npm i
-
-- **4** executar o comando `npm start` para rodar o projeto
+        
+- **4** Copiar arquivo de ambiente de desenvolvimento.
+         
+        cp .env.development.example .env.development
+        
+- **5** executar o comando `npm start` para rodar o projeto
        
         # use o comando para rodar o projeto
         npm start
