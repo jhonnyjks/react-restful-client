@@ -9,6 +9,8 @@
 .pnp.js
 /public/fonts/
 /public/fonts
+/.vscode/
+/.vscode
 
 # testing
 /coverage
