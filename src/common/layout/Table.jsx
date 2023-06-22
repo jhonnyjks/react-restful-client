@@ -107,7 +107,7 @@ class Table extends Component {
     renderSearch = (head) => {
         let hasSearch = false
         Object.getOwnPropertyNames(head).map((val, index) => {
-            if (typeof head[val] == 'Object' && head[val].search) hasSearch = true
+            if (typeof head[val] == 'object' && head[val].search) hasSearch = true
         })
         return hasSearch && <tr>
             {(
@@ -134,6 +134,8 @@ class Table extends Component {
                                 </th>
                         }
 
+                    } else {
+                        return <th key={index} style={head[val].style || {}}></th>
                     }
 
                 })
