@@ -47,15 +47,15 @@ class Header extends Component {
               itemTime = Number.parseInt(itemTime) + ' minuto' + (Number.parseInt(itemTime) > 1 ? 's' : '')
             }
 
-            return <>
-              <div key={item.id} className="dropdown-divider"></div>
+            return <div key={item.id}>
+              <div className="dropdown-divider"></div>
                 <a href={ itemLink } className="dropdown-item">
                 <i className={ "fas fa-" + (item.icon || notify.icon) + " mr-2" }></i>{ item.label || item.id }
                 <span className="float-right text-muted text-sm" title={(new Date(item.date)).toLocaleString()}>
                   { itemTime }
                 </span>
               </a>
-            </>
+            </div>
           })
 
           }
