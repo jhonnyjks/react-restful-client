@@ -43,7 +43,7 @@ class Table extends Component {
         let searchFields = this.state.searchFields
         let searchFieldsValues = this.state.searchFieldsValues
 
-        if (search.type == 'text' && e.target && e.target.value) {
+        if (['text', 'date'].indexOf(search.type) > -1 && e.target && e.target.value) {
             queryStrSearch[search.field] = search.field + ':' + e.target.value
             searchFieldsValues[search.field] = e.target.value
             searchFields[search.field] = search.field + ':like'
@@ -117,8 +117,9 @@ class Table extends Component {
                         const search = head[val].search
                         switch (search.type || '') {
                             case 'text':
+                            case 'date':
                                 return <th key={index} style={head[val].style || {}}>
-                                    <LabelAndInput input={{ type: 'text', onChange: e => this.doSearch(e, search), value: this.state.searchFieldsValues[search.field] }}
+                                    <LabelAndInput type={search.type} input={{ onChange: e => this.doSearch(e, search), value: this.state.searchFieldsValues[search.field] }}
                                         forceToShow={true} readOnly={false} style={{ marginBottom: '0px' }} grid={{ style: { marginBottom: '0px' } }} />
                                 </th>
                                 break;
