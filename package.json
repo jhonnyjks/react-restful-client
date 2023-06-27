@@ -59,6 +59,7 @@
     "redux-thunk": "2.3.0",
     "save": "^2.4.0",
     "shpjs": "^3.4.3",
+    "sweetalert2": "^11.7.12",
     "threads": "^1.0.0-beta.8",
     "url-loader": "^4.1.1",
     "web-vitals": "^1.0.1",
