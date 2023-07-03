@@ -1,0 +1,18 @@
+{
+	"image": "node:14.3",
+  "name": "clientsigep2",
+	"forwardPorts": [6666],
+	"customizations": {
+	  // Configure properties specific to VS Code.
+	  "vscode": {
+		// Add the IDs of extensions you want installed when the container is created.
+		"extensions": ["humao.rest-client", "ms-azuretools.vscode-docker", "mhutchie.git-graph"]
+	  }
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "os-provided"
+		}
+	}
+}
