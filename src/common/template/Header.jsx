@@ -21,8 +21,10 @@ class Header extends Component {
   }
 
   renderNotifications = (notifications) => 
-    notifications.map((notify, i) =>
-      <li key={i} className="nav-item dropdown">
+    notifications.map((notify, i) => {
+      const linkToList =  process.env.PUBLIC_URL + notify.linkToList
+            
+      return <li key={i} className="nav-item dropdown">
         <a className="nav-link" data-toggle="dropdown" href="#" aria-expanded="true" title={notify.title}>
           <i className={ "fas fa-" + notify.icon}></i>
           <span className={"badge badge-" + notify.type + " navbar-badge"}>
@@ -60,10 +62,10 @@ class Header extends Component {
 
           }
           <div className="dropdown-divider"></div>
-          { notify.linkToList && <a href={ notify.linkToList } className="dropdown-item dropdown-footer">Ver Todos</a> }
+          { notify.linkToList && <a href={ linkToList } className="dropdown-item dropdown-footer">Ver Todos</a> }
         </div>
       </li>
-    )
+    })
   
 
   render() {
