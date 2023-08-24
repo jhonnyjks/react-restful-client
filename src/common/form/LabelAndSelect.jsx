@@ -109,6 +109,22 @@ class LabelAndSelect extends Component {
             action = this.props.forms[formName] && this.props.forms[formName].values && this.props.forms[formName].values.id ? 'update' : 'insert'
         }
 
+        // console.log(this.props.input.name, this.props.label);
+
+        // if (this.state.error.flag === true) {
+        //     console.log(this.state.error.message.replace(this.props.input.name, this.props.label));
+
+        console.log(this.state.error.message);
+
+        //     console.log(this.state.error.message.replace(
+        //         new RegExp(this.props.input.name.replace(/_/g, ' '), 'i'),
+        //         this.props.label
+        //     ));
+            
+        // }
+
+        
+
         return (
             <>
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
@@ -126,7 +142,15 @@ class LabelAndSelect extends Component {
                         )}
                     </select>
                     <div className="invalid-feedback">
-                        {this.state.error.flag === true ? this.state.error.message : "Valor inválido informado"}
+                        {
+                            this.state.error.flag === true ?
+                            (
+                                this.props.input.name.includes('_') ?
+                                this.state.error.message.replace(new RegExp(this.props.input.name.replace(/_/g, ' '), 'i'), this.props.label) :
+                                this.state.error.message.replace(this.props.input.name, this.props.label)
+                            ) :
+                            "Valor inválido informado"
+                        }
                     </div>
                 </div>
             </Grid>}

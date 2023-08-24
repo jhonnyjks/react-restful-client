@@ -122,7 +122,15 @@ class LabelAndInput extends Component {
                         maxLength={this.props.maxLength}
                         required={rules['required'] || false} />
                     <div className="invalid-feedback">
-                        {this.state.error.flag === true ? this.state.error.message : "Valor inválido informado"}
+                        {
+                            this.state.error.flag === true ?
+                            (
+                                this.props.input.name.includes('_') ?
+                                this.state.error.message.replace(new RegExp(this.props.input.name.replace(/_/g, ' '), 'i'), this.props.label) :
+                                this.state.error.message.replace(this.props.input.name, this.props.label)
+                            ) :
+                            "Valor inválido informado"
+                        }
                     </div>
                 </div>
             </Grid>}
