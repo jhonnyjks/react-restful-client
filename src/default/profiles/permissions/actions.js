@@ -18,18 +18,22 @@ export function getList(profileId) {
                     .then(resp2 => {
 
                         // Para cada permissão, verifica de ela já está no array 'permissions', e trata como deve
-                        resp2.data.data.forEach(el => {
-                            const cpath = el.route.replace('api/', '')
+                        resp2.data.data.forEach(permission => {
+                            const cpath = permission.route.replace('api/', '')
                             let i = _.findIndex(permissions, { cpath })
 
                             // Se achou a permissão, verifica os atributos
                             if (i > -1) {
                                 // Invertendo para que os atributos virem as chaves do elemento
-                                let attributes = _.invert(el.attributes)
+                                let attributes = _.invert(permission.attributes)
+                                let scopes = _.invert(permission.scopes)
 
                                 // Removendo do array de atributos os atributos que já estão no array de permissões
                                 permissions[i].actions.forEach(attr => {
                                     delete attributes[attr.noun]
+                                })
+                                permissions[i].scopes.forEach(scope => {
+                                    delete scopes[scope.noun]
                                 })
 
                                 // Completando o array de permissões com os atributos que esse perfil não tem acesso ainda
@@ -37,6 +41,16 @@ export function getList(profileId) {
                                 for (var key in attributes) {
                                     if (attributes.hasOwnProperty(key)) {
                                         permissions[i].actions.push({
+                                            id: null,
+                                            permission_id: permissions[i].id,
+                                            noun: key,
+                                            code: 0
+                                        })
+                                    }
+                                }
+                                for (var key in scopes) {
+                                    if (scopes.hasOwnProperty(key)) {
+                                        permissions[i].scopes.push({
                                             id: null,
                                             permission_id: permissions[i].id,
                                             noun: key,
@@ -53,10 +67,16 @@ export function getList(profileId) {
                                     permission_id: null,
                                     priority: 1,
                                     cpath,
-                                    actions: el.attributes.map(attr => ({
+                                    actions: permission.attributes.map(attr => ({
                                         id: null,
                                         permission_id: null,
                                         noun: attr,
+                                        code: 0
+                                    })),
+                                    scopes: permission.scopes.map(scope => ({
+                                        id: null,
+                                        permission_id: null,
+                                        noun: scope,
                                         code: 0
                                     }))
                                 })
@@ -72,7 +92,7 @@ export function getList(profileId) {
             .catch(e => {
                 if (!e.response) {
                     toastr.error('Erro', 'Desconhecido :-/')
-                    console.log(e)
+                    console.error(e)
                 } else if (!e.response.data) {
                     toastr.error('Erro', e.response.message)
                 } else if (e.response.data.errors) {
@@ -113,7 +133,6 @@ function submit(values, method, callback = null, params = {}) {
 
         axios[method](`${process.env.REACT_APP_API_HOST}/permissions${id ? '/'+id : ''}`, filteredValues)
             .then(resp => {
-                console.log(callback)
                 if (callback !== null) {
                     dispatch(callback({ ...params, permission_id: resp.data.data.id }))
                 }
@@ -121,7 +140,7 @@ function submit(values, method, callback = null, params = {}) {
             .catch(e => {
                 if (!e.response) {
                     toastr.error('Erro', 'Desconhecido :-/')
-                    console.log(e)
+                    console.error(e)
                 } else if (!e.response.data) {
                     toastr.error('Erro', e.response.message)
                 } else if (e.response.data.errors) {
@@ -163,7 +182,7 @@ export function selectPermission(e, index) {
     }
 }
 
-function actionSubmit(values, method) {
+function actionSubmit(values, method, permission_type) {
     return dispatch => {
         //'id' vai para a url se for positivo e não vazio e se o metodo não for 'post'
         const id = values.id > 0 && method !== 'post' ? +values.id : ''
@@ -171,18 +190,19 @@ function actionSubmit(values, method) {
         // 'id' não pode ir como parâmetro
         delete filteredValues.id
 
-        axios[method](`${process.env.REACT_APP_API_HOST}/actions${id ? '/'+id : ''}`, filteredValues)
+        if(permission_type === 'atributo') {
+            axios[method](`${process.env.REACT_APP_API_HOST}/actions${id ? '/'+id : ''}`, filteredValues)
             .then(resp => {
                 toastr.success('Sucesso', 'Operação Realizada com sucesso.')
                 dispatch({
                     type: 'PERMISSION_CHANGED',
-                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null }
+                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null, permission_type }
                 })
             })
             .catch(e => {
                 if (!e.response) {
                     toastr.error('Erro', 'Desconhecido :-/')
-                    console.log(e)
+                    console.error(e)
                 } else if (!e.response.data) {
                     toastr.error('Erro', e.response.message)
                 } else if (e.response.data.errors) {
@@ -192,30 +212,53 @@ function actionSubmit(values, method) {
                     toastr.error('Erro', e.response.data.message)
                 }
             })
+        } else if(permission_type === 'scope') {
+            axios[method](`${process.env.REACT_APP_API_HOST}/scopes${id ? '/'+id : ''}?noun=${values.noun}&permission_id=${values.permission_id}&code=${values.code}`)
+            .then(resp => {
+                toastr.success('Sucesso', 'Scope alterado com sucesso.')
+                dispatch({
+                    type: 'PERMISSION_CHANGED',
+                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null, permission_type }
+                })
+            })
+            .catch(e => {
+                if (!e.response) {
+                    toastr.error('Erro', 'Desconhecido :-/')
+                    console.error(e)
+                } else if (!e.response.data) {
+                    toastr.error('Erro', e.response.message)
+                } else if (e.response.data.errors) {
+                    Object.entries(e.response.data.errors).forEach(
+                        ([key, error]) => toastr.error(key, error[0]))
+                } else if (e.response.data) {
+                    toastr.error('Erro', e.response.data.message)
+                }
+            })
+        }
     }
 }
 
-export function createAction(values) {
-    return actionSubmit(values, 'post')
+export function createAction(values, permission_type) {
+    return actionSubmit(values, 'post', permission_type)
 }
 
-export function updateAction(values) {
-    return actionSubmit(values, 'put')
+export function updateAction(values, permission_type) {
+    return actionSubmit(values, 'put', permission_type)
 }
 
-export function removeAction(values) {
-    return actionSubmit(values, 'delete')
+export function removeAction(values, permission_type) {
+    return actionSubmit(values, 'delete', permission_type)
 }
 
-export function changeAttribute(event, action, permission) {
+export function changeAttribute(event, action, permission, permission_type) {
     const code = action.code + (event.target.checked ? +event.target.value : -event.target.value)
 
     // Se tem ID, altera ou deleta
     if (action.id > 0) {
         if (code > 0) {
-            return updateAction({ ...action, code })
+            return updateAction({ ...action, code }, permission_type)
         } else {
-            return removeAction({ ...action, code })
+            return removeAction({ ...action, code }, permission_type)
         }
         // Se não tem ID, mas tem código válido, insere a permissão ao atributo
     } else if (code > 0) {
@@ -223,7 +266,7 @@ export function changeAttribute(event, action, permission) {
         // Se a rota já existe em permissions, insera a action. Senão, cria a rota em permissions
         // e depois insere a action
         if (action.permission_id > 0 || permission.id > 0) {
-            return createAction({ ...action, permission_id: permission.id , code })
+            return createAction({ ...action, permission_id: permission.id , code }, permission_type)
         } else {
             return createPermission({
                 profile_id: permission.profile_id,
@@ -235,6 +278,6 @@ export function changeAttribute(event, action, permission) {
 
     return {
         type: 'PERMISSION_CHANGED',
-        payload: { ...action, code }
+        payload: { ...action, code, permission_type }
     }
 }
