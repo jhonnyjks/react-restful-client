@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 import { getList, showUpdate, selectPermission, changeAttribute } from './actions'
 import If from '../../../common/operator/If'
 import CheckBox from '../../../common/form/CheckBox'
@@ -27,20 +29,70 @@ class List extends Component {
                     {item.noun}
                 </Grid>
                 <Grid cols='2 2 2'>
-                    <CheckBox value="1" checked={codesPerOpetarion[1].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
+                    <CheckBox
+                        value="1"
+                        checked={codesPerOpetarion[1].indexOf(item.code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected], 'atributo')}
+                    />
                 </Grid>
                 <Grid cols='2 2 2'>
-                    <CheckBox value="2" checked={codesPerOpetarion[2].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
+                    <CheckBox
+                        value="2"
+                        checked={codesPerOpetarion[2].indexOf(item.code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected], 'atributo')}
+                    />
                 </Grid>
                 <Grid cols='2 2 2'>
-                    <CheckBox value="4" checked={codesPerOpetarion[4].indexOf(item.code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected])} />
+                    <CheckBox
+                        value="4"
+                        checked={codesPerOpetarion[4].indexOf(item.code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, item, this.props.list[this.props.selected], 'atributo')}
+                    />
                 </Grid>
                 <Grid cols='2 2 2'>
-                    <CheckBox value="8" checked={codesPerOpetarion[8].indexOf(list[0].code) > -1} 
-                        handleChange={event => this.props.changeAttribute(event, list[0], this.props.list[this.props.selected])} />
+                    <CheckBox
+                        value="8"
+                        checked={codesPerOpetarion[8].indexOf(list[0].code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, list[0], this.props.list[this.props.selected], 'atributo')}
+                    />
+                </Grid>
+            </div>
+        ))
+    }
+
+    renderScopes(scopes = []) {
+        return scopes.map(scope => (
+            <div key={scope.noun} className='row col-xs-12 col-md-12'>
+                <Grid cols='4 4 4'>
+                    {scope.noun}
+                </Grid>
+                <Grid cols='2 2 2'>
+                    <CheckBox
+                        value="1"
+                        checked={codesPerOpetarion[1].indexOf(scope.code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, scope, this.props.list[this.props.selected], 'scope')}
+                    />
+                </Grid>
+                <Grid cols='2 2 2'>
+                    <CheckBox
+                        value="2"
+                        checked={codesPerOpetarion[2].indexOf(scope.code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, scope, this.props.list[this.props.selected], 'scope')}
+                    />
+                </Grid>
+                <Grid cols='2 2 2'>
+                    <CheckBox
+                        value="4"
+                        checked={codesPerOpetarion[4].indexOf(scope.code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, scope, this.props.list[this.props.selected], 'scope')} 
+                    />
+                </Grid>
+                <Grid cols='2 2 2'>
+                    <CheckBox
+                        value="8"
+                        checked={codesPerOpetarion[8].indexOf(scopes[0].code) > -1}
+                        handleChange={event => this.props.changeAttribute(event, scopes[0], this.props.list[this.props.selected], 'scope')}
+                    />
                 </Grid>
             </div>
         ))
@@ -55,14 +107,31 @@ class List extends Component {
                     <b>{item.cpath}</b>
                 </a>
                 <If test={index === this.props.selected}>
-                    <div className='row col-xs-12 col-md-12'>
-                        <b className='tex-center col-xs-4 col-md-4'>Atributo</b>
-                        <b className='tex-center col-xs-2 col-md-2'>Visualizar</b>
-                        <b className='tex-center col-xs-2 col-md-2'>Adicionar</b>
-                        <b className='tex-center col-xs-2 col-md-2'>Editar</b>
-                        <b className='tex-center col-xs-2 col-md-2'>Remover</b>
-                    </div>
-                    {this.renderAttributes(item.actions)}
+                    <Tabs
+                        defaultActiveKey="atributo"
+                        id="permissoes-atributos-scopes"
+                    >
+                        <Tab eventKey="atributo" title="Atributo" className='bg-white'>
+                            <div className='row col-xs-12 col-md-12'>
+                                <b className='tex-center col-xs-4 col-md-4'></b>
+                                <b className='tex-center col-xs-2 col-md-2'>Visualizar</b>
+                                <b className='tex-center col-xs-2 col-md-2'>Adicionar</b>
+                                <b className='tex-center col-xs-2 col-md-2'>Editar</b>
+                                <b className='tex-center col-xs-2 col-md-2'>Remover</b>
+                            </div>
+                            {this.renderAttributes(item.actions)}
+                        </Tab>
+                        <Tab eventKey="scopes" title="Scopes" className='bg-white'>
+                            <div className='row col-xs-12 col-md-12'>
+                                <b className='tex-center col-xs-4 col-md-4'></b>
+                                <b className='tex-center col-xs-2 col-md-2'>Visualizar</b>
+                                <b className='tex-center col-xs-2 col-md-2'>Adicionar</b>
+                                <b className='tex-center col-xs-2 col-md-2'>Editar</b>
+                                <b className='tex-center col-xs-2 col-md-2'>Remover</b>
+                            </div>
+                            {this.renderScopes(item.scopes)}
+                        </Tab>
+                    </Tabs>
                 </If>
             </li>
         ))
