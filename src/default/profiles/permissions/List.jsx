@@ -110,9 +110,8 @@ class List extends Component {
                     <Tabs
                         defaultActiveKey="atributo"
                         id="permissoes-atributos-scopes"
-                        className="mb-3"
                     >
-                        <Tab eventKey="atributo" title="Atributo">
+                        <Tab eventKey="atributo" title="Atributo" className='bg-white'>
                             <div className='row col-xs-12 col-md-12'>
                                 <b className='tex-center col-xs-4 col-md-4'></b>
                                 <b className='tex-center col-xs-2 col-md-2'>Visualizar</b>
@@ -122,7 +121,7 @@ class List extends Component {
                             </div>
                             {this.renderAttributes(item.actions)}
                         </Tab>
-                        <Tab eventKey="scopes" title="Scopes">
+                        <Tab eventKey="scopes" title="Scopes" className='bg-white'>
                             <div className='row col-xs-12 col-md-12'>
                                 <b className='tex-center col-xs-4 col-md-4'></b>
                                 <b className='tex-center col-xs-2 col-md-2'>Visualizar</b>
