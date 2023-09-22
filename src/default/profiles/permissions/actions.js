@@ -218,7 +218,7 @@ function actionSubmit(values, method, permission_type) {
                 toastr.success('Sucesso', 'Scope alterado com sucesso.')
                 dispatch({
                     type: 'PERMISSION_CHANGED',
-                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null, permission_type }
+                    payload: { ...values, id: resp.data.data?.id ? resp.data.data.id : null, permission_type }
                 })
             })
             .catch(e => {
