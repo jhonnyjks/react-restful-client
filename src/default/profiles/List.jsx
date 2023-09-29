@@ -12,8 +12,12 @@ class List extends Component {
 
     render() {
         return (
-            <Table body={this.props.list} actions={{update:this.props.showUpdate, remove:this.props.remove}}
-            attributes={{noun: 'Nome', description: 'Descrição'}} />
+            <Table
+                body={this.props.list}
+                // actions={{update:this.props.showUpdate, remove:this.props.remove}}
+                actions={{update: true, remove:this.props.remove}}
+                attributes={{noun: 'Nome', description: 'Descrição'}}
+            />
         )
     }
 }
