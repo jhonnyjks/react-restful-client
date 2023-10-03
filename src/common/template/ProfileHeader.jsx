@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { Link } from 'react-router-dom'
 
 import { logout } from '../../default/auth/authActions'
 
@@ -55,10 +56,19 @@ class ProfileHeader extends Component {
                     </div>
                     <div className="info">
                         <a href="#!" className="d-block">{name}</a>
-                        <a href="#!" className="d-block mt-2 btn btn-secondary btn-sm" onClick={(e) => this.changeOpen(e)}>
-                            <i className="nav-icon fas fa-power-off"></i>
-                            <span> Sair</span>
-                        </a>
+                        <a href="#!" className="d-block">Perfil: {this.props.profile.noun}</a>
+                        <div style={{ display: 'flex', flexDirection: 'column' }} >
+                            <a href="#!" className="d-block mt-2 btn btn-secondary btn-sm" onClick={(e) => this.changeOpen(e)}>
+                                <i className="nav-icon fas fa-power-off"></i>
+                                <span> Sair</span>
+                            </a>
+                            {
+                                this.props.profiles.length > 1 && <Link to="/trocar-perfil" className="d-block mt-2 btn btn-secondary btn-sm">
+                                    <i className="nav-icon fas fa-random"></i>
+                                    <span>Trocar Perfil</span>
+                                </Link>
+                            }
+                        </div>
                     </div>
                 </div>
                 {this.state.open && (<RenderSidebarMenu />)}
@@ -66,6 +76,6 @@ class ProfileHeader extends Component {
         )
     }
 }
-const mapStateToProps = state => ({ user: state.auth.user, profile: state.auth.profile })
+const mapStateToProps = state => ({ user: state.auth.user, profile: state.auth.profile, profiles: state.auth.profiles })
 const mapDispatchToProps = dispatch => bindActionCreators({ logout }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileHeader)
