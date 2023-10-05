@@ -29,12 +29,22 @@ export function getList(profileId) {
                                 let scopes = _.invert(permission.scopes)
 
                                 // Removendo do array de atributos os atributos que já estão no array de permissões
-                                permissions[i].actions.forEach(attr => {
-                                    delete attributes[attr.noun]
-                                })
-                                permissions[i].scopes.forEach(scope => {
-                                    delete scopes[scope.noun]
-                                })
+                                
+                                if (permissions[i].actions) {
+                                    permissions[i].actions.forEach(attr => {
+                                        delete attributes[attr.noun]
+                                    })
+                                } else {
+                                    permissions[i].actions = [];
+                                }
+
+                                if (permissions[i].scopes) {
+                                    permissions[i].scopes.forEach(scope => {
+                                        delete scopes[scope.noun]
+                                    })
+                                } else {
+                                    permissions[i].scopes = [];
+                                }
 
                                 // Completando o array de permissões com os atributos que esse perfil não tem acesso ainda
                                 // Sempre com 'code: 0', já que o perfil não tem permissão de acesso a estes.
