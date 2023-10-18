@@ -8,6 +8,7 @@ import '../common/template/dependences'
 import App from './app'
 import Auth from '../default/auth/auth'
 import { validateToken } from '../default/auth/authActions'
+import { can } from '../common/helpers/index'
 
 const Loading = () => {
     return (
@@ -23,6 +24,9 @@ class AuthOrApp extends Component {
 
     constructor(props) {
         super(props)
+
+        //GLOBALS
+        window.can = can
 
         this.interceptRequest.bind(this)
     }
