@@ -39,10 +39,7 @@ class Profile extends Component {
         }
 
         return (
-            <div>
-                {"this.context.router.route.location.pathname"}
-                {this.context.router.route.location.pathname}
-                
+            <div>               
                 <If test={this.context.router.route.location.pathname == "/profiles"}>
                     <ContentHeader title='Perfis' small='Gerenciar perfis de usuário'
                         createMethod={() => this.props.showContent('form')} />
