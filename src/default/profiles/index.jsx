@@ -9,23 +9,13 @@ import If from '../../common/operator/If'
 import List from './List'
 import Form from './Form'
 import { getList, showContent, update, init, create, showUpdate } from './actions'
-import Auth from '../auth/auth'
 
 class Profile extends Component {
-
-     //Necessário para gerar o contexto em this.context
-     static contextTypes = {
-        router: () => null, // replace with PropTypes.object if you use them
-    }
-    
 
     componentWillMount() {
         this.props.init()
         this.props.getList()
     }
-
-
-    //
 
     render() {
         if(this.props.match.params.id) {
@@ -39,25 +29,18 @@ class Profile extends Component {
         }
 
         return (
-            <div>               
-                <If test={this.context.router.route.location.pathname == "/profiles"}>
-                    <ContentHeader title='Perfis' small='Gerenciar perfis de usuário'
-                        createMethod={() => this.props.showContent('form')} />
-                    <Content>
-                        <If test={this.props.show === 'list'}>
-                            <List />
-                        </If>
-                        <If test={this.props.show === 'form'}>
-                            <Form onSubmit={this.props.isEdit ? this.props.update : this.props.create}
-                                submitLabel='Salvar' submitClass='primary' />
-                        </If>
-                    </Content>
-                </If>
-                <If test={this.context.router.route.location.pathname == "/trocar-perfil"}>
-                        <Auth></Auth>                
-                </If>               
-
-               
+            <div>
+                <ContentHeader title='Perfis' small='Gerenciar perfis de usuário'
+                    createMethod={() => this.props.showContent('form')} />
+                <Content>
+                    <If test={this.props.show === 'list'}>
+                        <List />
+                    </If>
+                    <If test={this.props.show === 'form'}>
+                        <Form onSubmit={this.props.isEdit ? this.props.update : this.props.create}
+                            submitLabel='Salvar' submitClass='primary' />
+                    </If>
+                </Content>
             </div>
         )
     }

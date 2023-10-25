@@ -48,7 +48,7 @@ class FormUserProfile extends Component {
     getProfiles = () => {
         axios.get(`${process.env.REACT_APP_API_HOST}/profiles`)
         .then(resp => {
-            this.setState({ profiles: resp.data.data })
+            this.setState({ profiles: resp.data.data })           
         })
         .catch(e => {
             if (!e.response) {

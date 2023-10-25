@@ -5,7 +5,7 @@ import { initialize } from 'redux-form'
 const INITIAL_VALUES = { noun: '', description: '' }
 
 export function getList() {
-    const request = axios.get(`${process.env.REACT_APP_API_HOST}/profiles`)
+    const request = axios.get(`${process.env.REACT_APP_API_HOST}/profiles`)   
     return {
         type: 'PROFILES_FETCHED',
         payload: request
@@ -29,12 +29,15 @@ function submit(values, method) {
         const id = values.id ? values.id+0 : ''
         let filteredValues = {...values}
         if(id) delete filteredValues.id
+
+        console.log("teste profile")
         
         axios[method](`${process.env.REACT_APP_API_HOST}/profiles${id ? '/'+id : ''}`, filteredValues)
         .then(resp => {
             toastr.success('Sucesso', 'Operação Realizada com sucesso.')
             dispatch(init())
             dispatch(getList())
+            {console.log("teste 4")}
         })
         .catch(e => {
             if (!e.response) {
@@ -60,9 +63,11 @@ export function showContent(flag) {
 }
 
 export function showUpdate(values) {
+    
     return [
-        showContent('form'),
-        initialize('profileForm', values)
+       
+        initialize('profileForm', values),
+        showContent('form')
     ]
 }
 

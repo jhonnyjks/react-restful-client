@@ -61,7 +61,7 @@ class Header extends Component {
           })
 
           }
-          <div className="dropdown-divider"></div>
+          <div className="dropdown-divider"></div>      
           { notify.linkToList && <a href={ linkToList } className="dropdown-item dropdown-footer">Ver Todos</a> }
         </div>
       </li>

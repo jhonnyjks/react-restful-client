@@ -81,7 +81,7 @@ class AuthOrApp extends Component {
     interceptRequest = (conf) => {
 
         const scopes = this.props.auth.profile ? this.props.auth.profile.scopes : {}
-        let url = conf.url
+        let url = conf.url       
 
         // Tratando as permissões das entidades relacionadas na queryString
         if(url.indexOf('with=') > -1) {
