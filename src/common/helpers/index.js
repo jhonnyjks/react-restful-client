@@ -9,19 +9,18 @@ const codesPerOperation = {
     8: [8, 9, 10, 11, 12, 13, 14, 15] // 8-Delete
 }
 
-function camelToSnake(text) {
-    return text.replace(/([A-Z])/g, '_$1').replace(/^_/, '').toLowerCase();
-}
-
 export function can(reduxState, entity, scope, operation, id) {
 
-    let entityName = camelToSnake(entity);
+    let entityName = entity.charAt(0).toLowerCase() + entity.slice(1);
 
     const scopes = reduxState.auth.profile.scopes
 
-    const list = reduxState[entityName].list && reduxState[entityName].list.length > 0
-        ? reduxState[entityName].list
-        : reduxState[entityName].list_update;
+    const list =
+        reduxState[entityName] &&
+        reduxState[entityName].list &&
+        reduxState[entityName].list.length > 0
+            ? reduxState[entityName].list
+            : reduxState[entityName]?.list_update || false;
 
     // Percorra os objetos de escopo
     for (const key in scopes) {
