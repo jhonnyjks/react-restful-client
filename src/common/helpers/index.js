@@ -9,11 +9,8 @@ const codesPerOperation = {
     8: [8, 9, 10, 11, 12, 13, 14, 15] // 8-Delete
 }
 
-export function can(reduxState, entity, scope, operation, id) {
-
+function checkItemPermissions(reduxState, entity, scope, operation, id, codesPerOperation) {
     let entityName = entity.charAt(0).toLowerCase() + entity.slice(1);
-
-    const scopes = reduxState.auth.profile.scopes
 
     const list =
         reduxState[entityName] &&
@@ -22,51 +19,53 @@ export function can(reduxState, entity, scope, operation, id) {
             ? reduxState[entityName].list
             : reduxState[entityName]?.list_update || false;
 
-    // Percorra os objetos de escopo
-    for (const key in scopes) {
-        const scopesObject = scopes[key].scopes;
+    for (const key in list) {
+        const itemObject = list[key];
+        const itemId = list[key].id;
 
-        // Verifique se o 'entity' corresponde ao valor passado como argumento
-        if (scopes[key].entity === entity) {
+        if (itemId === id) {
+            let permissions = itemObject.process_permissions;
 
-            // Verifique se o escopo desejado existe no item
-            if (scopesObject.hasOwnProperty(scope)) {
-                const permissionCode = scopesObject[scope];
+            console.log(permissions);
 
-                // Verifique se o código de operação está presente no array de códigos de operação
-                if (codesPerOperation[operation].indexOf(permissionCode) > -1) {
-                    return true; // Código de operação válido, retorne true
+            for (const permission of permissions) {
+                if (permission.scope === scope) {
+                    const permissionCode = permission.code;
+
+                    if (codesPerOperation[operation].indexOf(permissionCode) > -1) {
+                        return true;
+                    }
                 }
             }
         }
     }
 
-    // Percorra os objetos de list
-    for (const key in list) {
+    return false;
+}
 
-        const itemObject = list[key]
-        const itemId = list[key].id
+function checkScopePermission(scopes, entity, scope, operation, codesPerOperation) {
+    for (const key in scopes) {
+        const scopesObject = scopes[key].scopes;
 
-        // Verifique se itemId é igual a id
-        if (itemId === id) {
-            
-            let permissions = itemObject.process_permissions;
+        if (scopes[key].entity === entity) {
+            if (scopesObject.hasOwnProperty(scope)) {
+                const permissionCode = scopesObject[scope];
 
-            // Percorra os objetos de permissions
-            permissions.forEach(permission => {
-
-                // Verifique se o escopo desejado existe no item
-                if (permission.scope === scope) {
-                    const permissionCode = permission.code;
-
-                    // Verifique se o código de operação está presente no array de códigos de operação
-                    if (codesPerOperation[operation].indexOf(permissionCode) > -1) {
-                        return true; // Código de operação válido, retorne true
-                    }
+                if (codesPerOperation[operation].indexOf(permissionCode) > -1) {
+                    return true;
                 }
-            });
+            }
         }
     }
-    
+
     return false;
+}
+
+export function can(reduxState, entity, scope, operation, id = null) {
+    if (!id) {
+        const scopes = reduxState.auth.profile.scopes;
+        return checkScopePermission(scopes, entity, scope, operation, codesPerOperation);
+    } else {
+        return checkItemPermissions(reduxState, entity, scope, operation, id, codesPerOperation);
+    }
 }
