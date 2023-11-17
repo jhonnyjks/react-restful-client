@@ -4,8 +4,8 @@ import { initialize } from 'redux-form'
 
 const INITIAL_VALUES = { noun: '', description: '' }
 
-export function getList() {
-    const request = axios.get(`${process.env.REACT_APP_API_HOST}/profiles`)   
+export function getList(search = '') {
+    const request = axios.get(`${process.env.REACT_APP_API_HOST}/profiles${search.length > 0 ? search : ''}`)   
     return {
         type: 'PROFILES_FETCHED',
         payload: request

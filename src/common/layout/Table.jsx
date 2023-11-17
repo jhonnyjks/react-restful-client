@@ -15,7 +15,7 @@ class Table extends Component {
             height: 0,
             queryStrSearch: {},
             searchFields: {},
-            searchFieldsValues: {}
+            searchFieldsValues: {},
         };
     }
 
@@ -37,13 +37,17 @@ class Table extends Component {
         this.props.generalSearch(e.target.value)
     }
 
-    doSearch = (e, search) => {
+    doSearch = (e, search, page = null) => {
+
+        console.log('doSearch search: ', search);
 
         let queryStrSearch = this.state.queryStrSearch;
         let searchFields = this.state.searchFields
         let searchFieldsValues = this.state.searchFieldsValues
 
-        if (['text', 'date'].indexOf(search.type) > -1 && e.target && e.target.value) {
+        console.log('page: ', page);
+
+        if (['text', 'date'].indexOf(search?.type) > -1 && e.target && e.target.value) {
             queryStrSearch[search.field] = search.field + ':' + e.target.value
             searchFieldsValues[search.field] = e.target.value
             searchFields[search.field] = search.field + ':like'
@@ -51,21 +55,25 @@ class Table extends Component {
             queryStrSearch[search.field] = search.field + ':' + e.value
             searchFieldsValues[search.field] = e.value
             searchFields[search.field] = search.field + ':='
-
         } else {
             // se não tiver valor definido na busca
-            // mas a variavel estiver preenchida por uma
+            // mas a variável estiver preenchida por uma
             // operação passada ela é removida
-            queryStrSearch.hasOwnProperty(search.field);
-            delete queryStrSearch[search.field];
-            searchFields.hasOwnProperty(search.field);
-            delete searchFields[search.field];
-            searchFieldsValues[search.field] = ''
+            if (search && search.field) {
+                queryStrSearch.hasOwnProperty(search.field);
+                delete queryStrSearch[search.field];
+                searchFields.hasOwnProperty(search.field);
+                delete searchFields[search.field];
+                searchFieldsValues[search.field] = '';
+            }
         }
 
         const queryStr = Object.values(queryStrSearch).join(';') + '&searchFields=' + Object.values(searchFields).join(';')
 
-        this.props.attributesSearch(queryStr + '&searchJoin=and')
+        // Adiciona ?page=1 quando uma pesquisa é realizada
+        const pageQueryParam = page !== null ? `?page=${page}` : '?page=1&'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
+
+        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and');
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })
     }
 
@@ -370,7 +378,91 @@ class Table extends Component {
             )
         }
     }
-
+    
+    renderPagination() {
+        const { pagination } = this.props;
+      
+        if (!pagination || pagination.total === undefined || pagination.total === 1) {
+          return null;
+        }
+      
+        const pages = [];
+        const totalPages = pagination.last_page;
+        const currentPage = pagination.current_page;
+        const displayPages = 20; // Exibir 20 páginas por padrão
+      
+        let startPage = Math.max(1, currentPage - Math.floor(displayPages / 2));
+        let endPage = Math.min(totalPages, startPage + displayPages - 1);
+      
+        // Ajusta o intervalo de páginas se estiver perto do final
+        if (endPage === totalPages && startPage > 1) {
+          startPage = Math.max(1, endPage - displayPages + 1);
+        }
+      
+        // Adiciona páginas ao redor da página atual
+        for (let i = startPage; i <= endPage; i++) {
+          pages.push(
+            <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+              {i === currentPage ? (
+                <span className="page-link">{i}</span>
+              ) : (
+                <a className="page-link" onClick={() => this.doSearch(null, null, i)}>
+                  {i}
+                </a>
+              )}
+            </li>
+          );
+        }
+      
+        // Adiciona "três pontinhos" e a última página
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            pages.push(
+              <li key="endEllipsis" className="page-item disabled">
+                <span className="page-link">...</span>
+              </li>
+            );
+          }
+          pages.push(
+            <li key={totalPages} className={`page-item ${totalPages === currentPage ? 'active' : ''}`}>
+              {totalPages === currentPage ? (
+                <span className="page-link">{totalPages}</span>
+              ) : (
+                <a className="page-link" onClick={() => this.doSearch(null, null, totalPages)}>
+                  {totalPages}
+                </a>
+              )}
+            </li>
+          );
+        }
+      
+        return (
+          <div className="card-footer clearfix">
+            <ul className="pagination pagination-sm m-0 float-right mt-3">
+              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <a
+                  className="page-link"
+                  onClick={() => this.doSearch(null, null, currentPage - 1)}
+                  aria-label="Previous"
+                >
+                  «
+                </a>
+              </li>
+              {pages}
+              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <a
+                  className="page-link"
+                  onClick={() => this.doSearch(null, null, currentPage + 1)}
+                  aria-label="Next"
+                >
+                  »
+                </a>
+              </li>
+            </ul>
+          </div>
+        );
+    }
+    
     render() {
         return (
             <React.Fragment>
@@ -384,7 +476,7 @@ class Table extends Component {
                     </div>
                 </If>
                 <If test={this.state.width > 600}>
-                    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%' }}>
+                    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
                                 <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
@@ -406,6 +498,9 @@ class Table extends Component {
                                 {this.renderBody()}
                                 {this.props.children}
                             </table>
+                        </div>
+                        <div className="box-footer">
+                            {this.renderPagination()}
                         </div>
                     </div>
                 </If>

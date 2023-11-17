@@ -14,15 +14,19 @@ class List extends Component {
         return (
             <Table
                 body={this.props.list}
-                // actions={{update:this.props.showUpdate, remove:this.props.remove}}
                 actions={{update: true, remove:this.props.remove}}
+                pagination={this.props.pagination}
+                attributesSearch={this.props.getList}
                 attributes={{noun: 'Nome', description: 'Descrição'}}
             />
         )
     }
 }
 
-const mapStateToProps = state => ({ list: state.profile.list })
+const mapStateToProps = state => ({ 
+    list: state.profile.list,
+    pagination: state.profile.pagination
+})
 const mapDispatchToProps = dispatch => bindActionCreators({ getList, showUpdate, remove }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)
