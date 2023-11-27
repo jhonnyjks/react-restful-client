@@ -193,6 +193,7 @@ export function selectPermission(e, index) {
 }
 
 function actionSubmit(values, method, permission_type) {
+
     return dispatch => {
         //'id' vai para a url se for positivo e não vazio e se o metodo não for 'post'
         const id = values.id > 0 && method !== 'post' ? +values.id : ''
@@ -200,13 +201,14 @@ function actionSubmit(values, method, permission_type) {
         // 'id' não pode ir como parâmetro
         delete filteredValues.id
 
-        if(permission_type === 'atributo') {
+        if(permission_type === 'atributo' || values.permission_type === 'atributo') {
+
             axios[method](`${process.env.REACT_APP_API_HOST}/actions${id ? '/'+id : ''}`, filteredValues)
             .then(resp => {
                 toastr.success('Sucesso', 'Operação Realizada com sucesso.')
                 dispatch({
                     type: 'PERMISSION_CHANGED',
-                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null, permission_type }
+                    payload: { ...values, id: resp.data.data.id ? resp.data.data.id : null, permission_type: permission_type ? permission_type : values.permission_type }
                 })
             })
             .catch(e => {
@@ -222,13 +224,13 @@ function actionSubmit(values, method, permission_type) {
                     toastr.error('Erro', e.response.data.message)
                 }
             })
-        } else if(permission_type === 'scope') {
+        } else if(permission_type === 'scope' || values.permission_type === 'scope') {
             axios[method](`${process.env.REACT_APP_API_HOST}/scopes${id ? '/'+id : ''}?noun=${values.noun}&permission_id=${values.permission_id}&code=${values.code}`)
             .then(resp => {
                 toastr.success('Sucesso', 'Scope alterado com sucesso.')
                 dispatch({
                     type: 'PERMISSION_CHANGED',
-                    payload: { ...values, id: resp.data.data?.id ? resp.data.data.id : null, permission_type }
+                    payload: { ...values, id: resp.data.data?.id ? resp.data.data.id : null, permission_type: permission_type ? permission_type : values.permission_type }
                 })
             })
             .catch(e => {
@@ -282,7 +284,7 @@ export function changeAttribute(event, action, permission, permission_type) {
                 profile_id: permission.profile_id,
                 cpath: permission.cpath,
                 priority: permission.priority
-            }, createAction, { ...action, code })
+            }, createAction, { ...action, code, permission_type })
         }
     }
 

@@ -24,7 +24,7 @@ class List extends Component {
 
     renderAttributes(list = []) {
         return list.map(item => (
-            <div key={item.noun} className='row col-xs-12 col-md-12'>
+            <div key={`${item.noun}-${item.code}`} className='row col-xs-12 col-md-12'>
                 <Grid cols='4 4 4'>
                     {item.noun}
                 </Grid>
@@ -62,7 +62,7 @@ class List extends Component {
 
     renderScopes(scopes = []) {
         return scopes.map(scope => (
-            <div key={scope.noun} className='row col-xs-12 col-md-12'>
+            <div key={`${scope.noun}-${scope.code}`} className='row col-xs-12 col-md-12'>
                 <Grid cols='4 4 4'>
                     {scope.noun}
                 </Grid>
@@ -102,7 +102,7 @@ class List extends Component {
         const list = this.props.list || []
 
         return list.map((item, index) => (
-            <li key={item.cpath} className='list-group-item col-xs-12'>
+            <li key={`${item.cpath}-${index}`} className='list-group-item col-xs-12'>
                 <a href="#!" className='row col-xs-12' onClick={(e) => this.props.selectPermission(e, index)}>
                     <b>{item.cpath}</b>
                 </a>
