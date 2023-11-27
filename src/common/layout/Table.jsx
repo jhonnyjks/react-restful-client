@@ -39,13 +39,9 @@ class Table extends Component {
 
     doSearch = (e, search, page = null) => {
 
-        console.log('doSearch search: ', search);
-
         let queryStrSearch = this.state.queryStrSearch;
         let searchFields = this.state.searchFields
         let searchFieldsValues = this.state.searchFieldsValues
-
-        console.log('page: ', page);
 
         if (['text', 'date'].indexOf(search?.type) > -1 && e.target && e.target.value) {
             queryStrSearch[search.field] = search.field + ':' + e.target.value
