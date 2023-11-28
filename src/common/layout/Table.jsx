@@ -213,7 +213,7 @@ class Table extends Component {
                                 <td>
                                     {this.props.actions.update === true &&
                                         <Link to={actionsPath + '/' + ntr.id}
-                                            style={{ border: '0px', background: 'none', fontSize: '1.2em', color: '#333' }} >
+                                            style={{ border: '0px', background: 'none', fontSize: '1.2em', color: '#333', ...(this.props.marginLeft && { marginLeft: `${this.props.marginLeft}%` }) }} >
                                             <i className='fa fa-edit'></i>
                                         </Link>
                                     }
