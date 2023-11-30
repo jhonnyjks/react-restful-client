@@ -378,7 +378,7 @@ class Table extends Component {
     renderPagination() {
         const { pagination } = this.props;
       
-        if (!pagination || pagination.total === undefined || pagination.total === 1) {
+        if (!pagination || pagination.total === undefined) {
           return null;
         }
       
