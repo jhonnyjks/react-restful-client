@@ -10,6 +10,7 @@ import 'ionicons/dist/css/ionicons.css'
 import "bootstrap";
 import "../../assets/css/adminlte.css";
 import '../../assets/css/fontawesome-free/css/all.min.css'
+import '../../assets/css/style.css'
 
 //import '../../adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css'
 //import '../../adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css'
