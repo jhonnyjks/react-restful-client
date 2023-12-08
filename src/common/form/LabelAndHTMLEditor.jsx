@@ -55,7 +55,7 @@ class LabelAndHTMLEditor extends Component {
                     </div>
                     <Editor
                         disabled={this.props.readOnly}
-                        initialValue= { this.props.input.value }
+                        value= { this.props.input.value }
                         init={{
                         height: 500,
                         menubar: true,
