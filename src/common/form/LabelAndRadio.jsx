@@ -141,14 +141,14 @@ class LabelAndRadio extends Component {
         return (
             <>
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
-                <div className='form-group'>
-                    <label htmlFor={this.props.name}>{this.props.label}</label>
-                        
+                <div className='form-group'> 
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => (
                                 e && e.id > -1 ? (
                                     <div key={e.id} style={{ marginBottom: '-10px' }}>
-                                        <label style={{ fontWeight: 'normal'}} className='radio'>
+                                      
+                                        <label  htmlFor={this.props.name} style={{ fontWeight: 'normal'}} className='radio'>
+                                            {this.props.label}
                                             <input
                                                 type="radio"
                                                 value={e.id}
@@ -163,24 +163,28 @@ class LabelAndRadio extends Component {
                             )
                         )}
                         
-                        {/* for test and validation */}
-                        {/* <div key={1} style={{ marginBottom: '-10px' }}>                                      
-                                <label style={{ fontWeight: 'normal'}} className='radio'>
-                                    <input
+                        {/* for test and validation */}                       
+                        {/* <div key={1} style={{ marginBottom: '-10px' }}> 
+                                <label   style={{ fontWeight: 'normal'}} className='radio'>{"   seleciona aqui 1   "}                                    <input
                                         type="radio"
                                         value={"teste"}
                                         checked={this.state.selectedOption === "teste"}
                                         onChange={this.onValueChange}
                                         style={{ marginRight: '5px' }}
                                     /> 
-                                    <input
+                                  
+                                </label>
+
+                                <label   style={{ fontWeight: 'normal'}} className='radio'>{"   seleciona aqui 2   "} 
+                                <input
                                         type="radio"
                                         value={"teste2"}
                                         checked={this.state.selectedOption === "teste2"}
                                         onChange={this.onValueChange}
                                         style={{ marginRight: '5px' }}
                                     /> 
-                                    </label>
+                                  
+                                </label>
                         </div> */}
 
                     <div className="invalid-feedback">
