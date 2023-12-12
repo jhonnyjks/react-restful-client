@@ -16,12 +16,7 @@ class LabelAndRadio extends Component {
         }
 
         this.onValueChange = this.onValueChange.bind(this);
-    }
-
-    onChangeValue(event) {        
-        console.log(event.target.value);
-    }
-    
+    }    
 
     hasPermission = (permission, method) => {
         // Mapeando as permissões aos métodos
@@ -129,7 +124,7 @@ class LabelAndRadio extends Component {
         // if (this.state.error.flag === true) {
         //     console.log(this.state.error.message.replace(this.props.input.name, this.props.label));
 
-        console.log(this.state.error.message);
+        // console.log(this.state.error.message);
 
         //     console.log(this.state.error.message.replace(
         //         new RegExp(this.props.input.name.replace(/_/g, ' '), 'i'),

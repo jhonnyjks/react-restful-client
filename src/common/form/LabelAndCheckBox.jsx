@@ -114,7 +114,7 @@ class LabelAndCheckBox extends Component {
         // if (this.state.error.flag === true) {
         //     console.log(this.state.error.message.replace(this.props.input.name, this.props.label));
 
-        console.log(this.state.error.message);
+        // console.log(this.state.error.message);
 
         //     console.log(this.state.error.message.replace(
         //         new RegExp(this.props.input.name.replace(/_/g, ' '), 'i'),
