@@ -20,23 +20,26 @@ class LabelAndHTMLEditor extends Component {
     }
 
     componentWillUpdate(nextProps) {
-        if (this.state.error.flag === false) {
-            if (Object.keys(nextProps.error).length > 0 && nextProps.error[this.props.input.name]) {
+        const { error } = this.state;
+        const nextError = nextProps.error || {}; // Garante que nextError seja um objeto
+    
+        if (error.flag === false) {
+            if (Object.keys(nextError).length > 0 && nextError[this.props.input.name]) {
                 this.setState({
                     error: {
-                        message: nextProps.error[this.props.input.name][0],
+                        message: nextError[this.props.input.name][0],
                         flag: true
                     }
-                })
+                });
             }
         } else {
-            if (Object.keys(nextProps.error).length === 0 || nextProps.error[this.props.input.name] === undefined) {
+            if (Object.keys(nextError).length === 0 || nextError[this.props.input.name] === undefined) {
                 this.setState({
                     error: {
                         message: null,
                         flag: false
                     }
-                })
+                });
             }
         }
     }
