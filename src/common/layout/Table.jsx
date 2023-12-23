@@ -221,9 +221,9 @@ class Table extends Component {
                                         // Se houver callback no atributo, call back o callback
                                         if (this.props.attributes[val]) {
                                             if (!isObj && this.props.attributes[val].callback) {
-                                                return <td key={index}>{this.props.attributes[val].callback(n, body[ii])}</td>
+                                                return <td style={this.props.attributes[val].style} key={index}>{this.props.attributes[val].callback(n, body[ii])}</td>
                                             }
-                                            return <td key={index} title={n}>{n}</td>
+                                            return <td style={this.props.attributes[val].style} key={index} title={n}>{n}</td>
                                         } else {
                                             return null;
                                         }
