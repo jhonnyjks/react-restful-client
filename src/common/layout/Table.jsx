@@ -97,10 +97,18 @@ class Table extends Component {
         }
 
         return <thead>
+
+           
             <tr>
+            { console.log("head ------------")}
+                
                 {(
                     Object.getOwnPropertyNames(head).map((val, index) => {
-                        return <th key={index} style={head[val].style || {}}>{head[val].title || head[val]}</th>
+
+                       { console.log(head[val].notColor)}
+                       return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>{head[val].title || head[val]}</th>
+                      
+                       
                     })
                 )}
                 
@@ -108,6 +116,8 @@ class Table extends Component {
                                                 title="Incluir itens excluídos"
                                                 onListTrashed={this.props.actionsHeader.listTrashed}                                               
                                                 ></ButtonListTrashed></th> }
+
+
                 {this.props.actions && <th></th>}
             </tr>
 
@@ -182,18 +192,23 @@ class Table extends Component {
                 {
                     body.map((ntr, ii) => {
                         let tr = []
-
+                        
+                       // console.log("this.props.attributes") 
+                      //  console.log(this.props.attributes) 
                         if (this.props.attributes) {
                             tr = Object.keys(this.props.attributes)
                         } else {
                             tr = Object.keys(ntr)
                         }
 
-                        return <tr key={tr.id || ii}>
+                        return <tr key={tr.id || ii} >
                             {
                                 tr.map((val, index) => {
                                     let n = ntr
-                                    let isObj = false
+                                    let isObj = false                                    
+
+                                    console.log(ntr.title)
+                                    console.log(!ntr.deleted_at)
 
                                     val.split('.').forEach((i) => {
                                         n = n[i] || ''
@@ -202,14 +217,22 @@ class Table extends Component {
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
                                         let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
                                         n = name_value ? name_value.name : ntr[val]
+
+                                      //  console.log(n)
                                     }
 
                                     // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
                                     if (n && n.id) {
+                                        //console.log(n)
                                         isObj = true
                                         // Se houver callback no atributo, call back o callback
                                         if (this.props.attributes && this.props.attributes[val] && this.props.attributes[val].callback) {
                                             n = this.props.attributes[val].callback(n, body[ii])
+                                            
+                                             console.log("Vamos ver que atributo é esse ok ---")
+                                             console.log(n)
+                                             //console.log(n)
+
                                         } else {
                                             n = n.name || n.title || n.description || Object.values(n)[1]
                                             if (n.length > 32) n = n.slice(0, 31) + '...'
@@ -229,7 +252,7 @@ class Table extends Component {
                                         }
                                     }
 
-                                    return <th key={index}>{n}</th>
+                                   // return <th key={index}>{n}</th>
                                 })
                             }
                             {this.props.actions &&
@@ -250,7 +273,7 @@ class Table extends Component {
 
                                     {this.props.actions.remove &&
                                         <button type='button' onClick={() => this.props.actions.remove(ntr)}
-                                            style={{ border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px' }} >
+                                            style={ !ntr.deleted_at ? { border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px' } : {visibility: 'hidden'}} >
                                             <i className='fa fa-trash'></i>
                                         </button>
                                     }
