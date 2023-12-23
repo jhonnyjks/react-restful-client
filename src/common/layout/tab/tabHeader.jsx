@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import { selectTab } from './tabActions'
-import If from '../operator/if'
+import If from '../../operator/If'
 
 class TabHeader extends Component {
     render() {

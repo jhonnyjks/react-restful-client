@@ -5,8 +5,10 @@ import { Link, withRouter } from "react-router-dom";
 import "./react-select-custom.css"
 import "./table.css"
 import LabelAndInput from '../form/LabelAndInput';
+import ButtonListTrashed from '../form/ButtonListTrashed';
 import If from '../operator/If'
 import Row from './row'
+import { Button } from 'react-bootstrap';
 class Table extends Component {
     constructor(props) {
         super(props);
@@ -16,6 +18,7 @@ class Table extends Component {
             queryStrSearch: {},
             searchFields: {},
             searchFieldsValues: {},
+            withTrashed: false
         };
     }
 
@@ -100,11 +103,15 @@ class Table extends Component {
                         return <th key={index} style={head[val].style || {}}>{head[val].title || head[val]}</th>
                     })
                 )}
-
+                
+                {this.props.withTrashed && <th><ButtonListTrashed 
+                                                title="Incluir itens excluídos"
+                                                onListTrashed={this.props.actionsHeader.listTrashed}                                               
+                                                ></ButtonListTrashed></th> }
                 {this.props.actions && <th></th>}
             </tr>
 
-            {this.props.attributes && this.renderSearch(head)}
+            {this.props.attributes && this.renderSearch(head)}          
         </thead>
     }
 
@@ -113,6 +120,13 @@ class Table extends Component {
         Object.getOwnPropertyNames(head).map((val, index) => {
             if (typeof head[val] == 'object' && head[val].search) hasSearch = true
         })
+
+        let withTrashedActive = false
+            Object.getOwnPropertyNames(head).map((val, index) => {
+                if (head.withTrashed) withTrashedActive = true
+        })  
+
+
         return hasSearch && <tr>
             {(
 
@@ -127,6 +141,12 @@ class Table extends Component {
                                         forceToShow={true} readOnly={false} style={{ marginBottom: '0px' }} grid={{ style: { marginBottom: '0px' } }} />
                                 </th>
                                 break;
+                            case 'trashed':
+                                return <th key={index} style={head[val].style || {}}>
+                                <ButtonListTrashed title="Incluir itens excluídos"></ButtonListTrashed> 
+                                </th>
+                            break;
+
 
                             default:
                                 return <th key={index} style={head[val].style || {}}>
@@ -146,6 +166,9 @@ class Table extends Component {
                 })
             )}
 
+                    
+
+            {/* {withTrashedActive && <ButtonListTrashed  title="Incluir itens excluídos"></ButtonListTrashed> } */}
             {this.props.actions && <th></th>}
         </tr>
     }
