@@ -136,7 +136,7 @@ class LabelAndSelect extends Component {
                         required={rules['required'] || false} >
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
-                            e => (((e && e.id > -1) || e.value) ? (<option key={e.id || e.value} value={e.id || e.value}>
+                            e => (((e && e.id > -1) || (e && e.value)) ? (<option key={e.id || e.value} value={e.id || e.value}>
                                     { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
                                 </option>) : <></>)
                         )}
