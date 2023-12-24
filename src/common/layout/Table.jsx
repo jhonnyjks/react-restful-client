@@ -100,21 +100,17 @@ class Table extends Component {
 
            
             <tr>
-            { console.log("head ------------")}
-                
                 {(
-                    Object.getOwnPropertyNames(head).map((val, index) => {
-
-                       { console.log(head[val].notColor)}
+                    Object.getOwnPropertyNames(head).map((val, index) => {                      
                        return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>{head[val].title || head[val]}</th>
-                      
-                       
+                                             
                     })
                 )}
                 
                 {this.props.withTrashed && <th><ButtonListTrashed 
                                                 title="Incluir itens excluídos"
-                                                onListTrashed={this.props.actionsHeader.listTrashed}                                               
+                                                onListTrashed={this.props.actionsHeader.listTrashed}
+                                                onColorResolve={this.props.iconColorResolve.onColorResolve}                                               
                                                 ></ButtonListTrashed></th> }
 
 
@@ -153,7 +149,11 @@ class Table extends Component {
                                 break;
                             case 'trashed':
                                 return <th key={index} style={head[val].style || {}}>
-                                <ButtonListTrashed title="Incluir itens excluídos"></ButtonListTrashed> 
+                                            {/* caso resolvam usar icon trashed de forma mais organizada */}
+                                            {/* <ButtonListTrashed 
+                                                title="Incluir itens excluídos"
+                                                onListTrashed={this.props.actionsHeader.listTrashed}                                               
+                                            ></ButtonListTrashed> */}
                                 </th>
                             break;
 
@@ -191,10 +191,8 @@ class Table extends Component {
             return <tbody>
                 {
                     body.map((ntr, ii) => {
-                        let tr = []
-                        
-                       // console.log("this.props.attributes") 
-                      //  console.log(this.props.attributes) 
+                        let tr = []                        
+                 
                         if (this.props.attributes) {
                             tr = Object.keys(this.props.attributes)
                         } else {
@@ -205,10 +203,7 @@ class Table extends Component {
                             {
                                 tr.map((val, index) => {
                                     let n = ntr
-                                    let isObj = false                                    
-
-                                    console.log(ntr.title)
-                                    console.log(!ntr.deleted_at)
+                                    let isObj = false 
 
                                     val.split('.').forEach((i) => {
                                         n = n[i] || ''
@@ -217,8 +212,7 @@ class Table extends Component {
                                     if (this.props.translate && this.props.translate[val] !== undefined) {
                                         let name_value = this.props.translate[val].filter(e => e.id === ntr[val])[0]
                                         n = name_value ? name_value.name : ntr[val]
-
-                                      //  console.log(n)
+                              
                                     }
 
                                     // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
@@ -227,11 +221,7 @@ class Table extends Component {
                                         isObj = true
                                         // Se houver callback no atributo, call back o callback
                                         if (this.props.attributes && this.props.attributes[val] && this.props.attributes[val].callback) {
-                                            n = this.props.attributes[val].callback(n, body[ii])
-                                            
-                                             console.log("Vamos ver que atributo é esse ok ---")
-                                             console.log(n)
-                                             //console.log(n)
+                                            n = this.props.attributes[val].callback(n, body[ii])  
 
                                         } else {
                                             n = n.name || n.title || n.description || Object.values(n)[1]

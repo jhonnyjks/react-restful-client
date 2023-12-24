@@ -9,32 +9,18 @@ export default class ButtonListTrashed extends Component {
             isHovered: false, 
             isClicked: false,
             estiloBase: {
-              //  padding: '10px 20px',
-               // backgroundColor: 'blue',
                 color: 'darkgrey ',
                 border: 'none',
                 cursor: 'pointer'
 
             }, 
-            estiloHover: {
-                //backgroundColor: 'darkblue'
+            estiloHover: {              
                  color: 'gold',
             },
+            onColor: false
 
         };
-    }    
-  
-
-    click(){
-        if(this.state.isClicked){
-            this.setState({ isClicked: false })
-        }else{
-            this.setState({ isClicked: true })
-            
-        }
-    }
-
-
+    } 
   
     render() {
 
@@ -44,10 +30,10 @@ export default class ButtonListTrashed extends Component {
             {this.props.label}
             <i 
                className='fas fa-trash-restore'
-               style={this.state.isHovered ? {...this.state.estiloBase, ...this.state.estiloHover} : this.state.estiloBase}
+               style={!this.props.onColorResolve && !this.state.isHovered ?  this.state.estiloBase : {...this.state.estiloBase, ...this.state.estiloHover}}
                onMouseEnter={() => this.setState({ isHovered: true }) }
-               onMouseLeave={!this.state.isClicked ? () => this.setState({ isHovered: false }) : () => this.setState({ isHovered: true })   }
-               onMouseDown={() => this.click()}
+               onMouseLeave={!this.props.onColorResolve ? () => this.setState({ isHovered: false }) : () => this.setState({ isHovered: true })   }
+                           
                >
             </i>
         </button>
