@@ -120,6 +120,9 @@ class LabelAndInput extends Component {
                         type={this.props.type}
                         style={this.props.type=='checkbox'?{width: '40px'}:{}}
                         maxLength={this.props.maxLength}
+                        min={ this.props.type == 'number' ? this.props.min  : {} }
+                        max={ this.props.type == 'number' ? this.props.max  : {} }
+                        onInput={ this.props.onInput }
                         required={rules['required'] || false} />
                     <div className="invalid-feedback">
                         {
