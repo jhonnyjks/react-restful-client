@@ -123,7 +123,8 @@ class LabelAndInput extends Component {
                         min={ this.props.type == 'number' ? this.props.min  : {} }
                         max={ this.props.type == 'number' ? this.props.max  : {} }
                         onInput={ this.props.onInput }
-                        required={rules['required'] || false} />
+                        required={rules['required'] || false} 
+                        id={this.props.id}/>
                     <div className="invalid-feedback">
                         {
                             this.state.error.flag === true ?
