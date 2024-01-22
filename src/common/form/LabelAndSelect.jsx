@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Select from 'react-select';
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
@@ -50,6 +51,12 @@ class LabelAndSelect extends Component {
         }
     }
 
+    handleSelectChange = (selectedOptions) => {
+        // Supondo que `input.onChange` espera um array de valores
+        const values = selectedOptions.map(option => option.value);
+        this.props.input.onChange(values);
+    }
+
     componentWillUpdate(nextProps) {
         if (nextProps.error) {      
             if (this.state.error.flag === false) {
@@ -97,6 +104,7 @@ class LabelAndSelect extends Component {
 
     render() {
         const formName = this.props.meta ? this.props.meta.form : null
+        const isMulti = this.props.isMulti || false;
         let scope = ''
         let permission = 0
         let rules = []
@@ -123,6 +131,15 @@ class LabelAndSelect extends Component {
             
         // }
 
+        const { input, options } = this.props;
+        const selectedValues = Array.isArray(input.value) ? input.value : [input.value];
+        const selectedOptions = options.filter(option =>
+            selectedValues.includes(option.id || option.value)
+        ).map(option => ({
+            value: option.id || option.value,
+            label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
+        }));
+
         
 
         return (
@@ -130,17 +147,33 @@ class LabelAndSelect extends Component {
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
                 <div className='form-group'>
                     <label htmlFor={this.props.name}>{this.props.label}</label>
-                    <select name={this.props.name} {...this.props.input}
-                        disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
-                        className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
-                        required={rules['required'] || false} >
-                        <option value="">{this.props.placeholder}</option>
-                        {this.props.options && this.props.options[0] && this.props.options.map(
-                            e => (((e && e.id > -1) || (e && e.value)) ? (<option key={e.id || e.value} value={e.id || e.value}>
-                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
-                                </option>) : <></>)
-                        )}
-                    </select>
+
+                    {isMulti ? (
+                        <Select
+                            isMulti
+                            name={this.props.name}
+                            options={this.props.options.map(option => ({
+                                value: option.id || option.value,
+                                label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
+                            }))}
+                            className={`basic-multi-select ${this.state.error.flag === true ? `is-invalid` : ``}`}
+                            classNamePrefix="select"
+                            onChange={this.handleSelectChange}
+                            value={selectedOptions}
+                        />
+                    ) : (
+                        <select name={this.props.name} {...this.props.input}
+                            disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
+                            className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
+                            required={rules['required'] || false} >
+                            <option value="">{this.props.placeholder}</option>
+                            {this.props.options && this.props.options[0] && this.props.options.map(
+                                e => (((e && e.id > -1) || (e && e.value)) ? (<option key={e.id || e.value} value={e.id || e.value}>
+                                        { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
+                                    </option>) : <></>)
+                            )}
+                        </select>
+                    )}
                     <div className="invalid-feedback">
                         {
                             this.state.error.flag === true ?
