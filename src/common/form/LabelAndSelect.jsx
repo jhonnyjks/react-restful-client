@@ -152,12 +152,14 @@ class LabelAndSelect extends Component {
                         <Select
                             isMulti
                             name={this.props.name}
+
                             options={this.props.options.map(option => ({
                                 value: option.id || option.value,
                                 label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
                             }))}
                             className={`basic-multi-select ${this.state.error.flag === true ? `is-invalid` : ``}`}
                             classNamePrefix="select"
+                            required={rules['required'] || false}
                             onChange={this.handleSelectChange}
                             value={selectedOptions}
                         />
