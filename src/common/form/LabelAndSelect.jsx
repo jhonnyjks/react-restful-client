@@ -51,59 +51,21 @@ class LabelAndSelect extends Component {
         }
     }
 
-    // handleSelectChange = (selectedOptions) => {
-    //     // Supondo que `input.onChange` espera um array de valores
-    //     const values = selectedOptions.map(option => option.value);
-    //     this.props.input.onChange(values);
-    // }
-    // handleSelectChange = (selectedOptions) => {
-
-    //     // if (Array.isArray(selectedOptions)) {
-    //     //     // Para múltiplas seleções, extrai os valores dos objetos selecionados
-    //     //     const values = selectedOptions.map(option => option.value);
-    //     //     this.props.input.onChange(values);
-    //     // } else if (selectedOptions) {
-    //     //     // Para uma única seleção, extrai o valor do objeto selecionado
-    //     //     this.props.input.onChange(selectedOptions.value);
-    //     // } else {
-    //     //     // Caso nenhuma opção seja selecionada
-    //     //     this.props.input.onChange(null);
-    //     // }
-    //     const fakeEvent = {
-    //         target: {
-    //             value: selectedOptions ? selectedOptions.value : null,
-    //             name: this.props.input.name
-    //         }
-    //     };
-    
-    //     if (Array.isArray(selectedOptions)) {
-    //         // Extrai os valores para seleções múltiplas
-    //         const values = selectedOptions.map(option => option.value);
-    //         this.props.input.onChange(values);
-    //     } else {
-    //         // Para uma única seleção, envia o evento falso
-    //         this.props.input.onChange(fakeEvent);
-    //     }
-
-    // }
     handleSelectChange = (selectedOptions) => {
-        // Para manter a consistência, sempre envia um array, mesmo para seleções únicas
-        let values;
-    
+
         if (Array.isArray(selectedOptions)) {
             // Para múltiplas seleções, extrai os valores dos objetos selecionados
-            values = selectedOptions.map(option => option.value);
+            const values = selectedOptions.map(option => option.value);
+            this.props.input.onChange(values);
         } else if (selectedOptions) {
-            // Para uma única seleção, cria um array com um único valor
-            values = [selectedOptions.value];
+            // Para uma única seleção, extrai o valor do objeto selecionado
+            this.props.input.onChange(selectedOptions.value);
         } else {
             // Caso nenhuma opção seja selecionada
-            values = [];
+            this.props.input.onChange(null);
         }
-    
-        this.props.input.onChange(values);
+
     }
-    
 
     componentWillUpdate(nextProps) {
         if (nextProps.error) {      
