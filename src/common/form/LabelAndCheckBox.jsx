@@ -95,6 +95,12 @@ class LabelAndCheckBox extends Component {
             
     }
 
+    handleChange = (e) => {
+        // Atualizar o valor para 1 se estiver marcado, ou 0 se não estiver
+        this.props.input.onChange(e.target.checked ? 1 : 0);
+    };
+
+
     render() {
         const formName = this.props.meta ? this.props.meta.form : null
         let scope = ''
@@ -109,7 +115,7 @@ class LabelAndCheckBox extends Component {
             action = this.props.forms[formName] && this.props.forms[formName].values && this.props.forms[formName].values.id ? 'update' : 'insert'
         }
 
-        // console.log(this.props.input.name, this.props.label);
+        
 
         // if (this.state.error.flag === true) {
         //     console.log(this.state.error.message.replace(this.props.input.name, this.props.label));
@@ -121,11 +127,13 @@ class LabelAndCheckBox extends Component {
         //         this.props.label
         //     ));
             
-        // }
+        // }      
+       
 
-        return (
-            <>
+        return (           
+            <>            
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
+              
                 <div className='form-group'>
                     <label htmlFor={this.props.name}>{this.props.label}</label>
                         
@@ -136,7 +144,8 @@ class LabelAndCheckBox extends Component {
                                         <label style={{ fontWeight: 'normal'}} className='checkbox'>
                                             <input
                                                 type="checkbox"
-                                                value={e.id}
+                                                checked={this.props.input.value === 1}
+                                                onChange={this.handleChange}                                                
                                                 style={{ marginRight: '5px' }}
                                             /> 
                                             { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
