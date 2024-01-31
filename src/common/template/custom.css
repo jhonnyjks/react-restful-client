@@ -116,3 +116,7 @@ hr.dashed {
 .collapsed-box > .box-body {
     display: none;
 }
+
+.search-select__menu {
+    z-index: 10;
+}
