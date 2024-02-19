@@ -28495,3 +28495,7 @@ hr.divider {
 .hover-pointer:hover {
   cursor: pointer;
 }
+
+.search-select-container {
+  z-index: 10;
+}
