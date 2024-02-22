@@ -70,7 +70,7 @@ class Table extends Component {
         const queryStr = Object.values(queryStrSearch).join(';') + '&searchFields=' + Object.values(searchFields).join(';')
 
         // Adiciona ?page=1 quando uma pesquisa é realizada
-        const pageQueryParam = page !== null ? `?page=${page}` : '?page=1&'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
+        const pageQueryParam = page !== null ? `?page=${page}` : '?page=1'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
 
         this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and');
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })

@@ -166,6 +166,7 @@ class LabelAndSelect extends Component {
                             required={rules['required'] || false}
                             onChange={this.handleSelectChange}
                             value={isMulti ? selectedOptions : selectedOptions[0]} // Ajuste aqui para suportar seleção única
+                            {...this.props.input}
                         />
 
                         <div className="invalid-feedback">
