@@ -116,7 +116,7 @@ class LabelAndInput extends Component {
                     <InputMask mask={this.props.mask} name={this.props.name} {...this.props.input} value={this.props.val || (this.props.input ? this.props.input.value : '')}
                         className={`form-control ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         placeholder={this.props.placeholder}
-                        disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
+                        readOnly={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
                         type={this.props.type}
                         style={this.props.type=='checkbox'?{width: '40px'}:{}}
                         maxLength={this.props.maxLength}
