@@ -52,17 +52,20 @@ class LabelAndSelect extends Component {
     }
 
     handleSelectChange = (selectedOptions) => {
+        const change = this.props.input.onChange|| this.props.onChange
 
-        if (Array.isArray(selectedOptions)) {
-            // Para múltiplas seleções, extrai os valores dos objetos selecionados
-            const values = selectedOptions.map(option => option.value);
-            this.props.input.onChange(values);
-        } else if (selectedOptions) {
-            // Para uma única seleção, extrai o valor do objeto selecionado
-            this.props.input.onChange(selectedOptions.value);
-        } else {
-            // Caso nenhuma opção seja selecionada
-            this.props.input.onChange(null);
+        if(change) {
+            if (Array.isArray(selectedOptions)) {
+                // Para múltiplas seleções, extrai os valores dos objetos selecionados
+                const values = selectedOptions.map(option => option.value);
+                change(values);
+            } else if (selectedOptions) {
+                // Para uma única seleção, extrai o valor do objeto selecionado
+                change(selectedOptions.value);
+            } else {
+                // Caso nenhuma opção seja selecionada
+                change(null);
+            }
         }
 
     }
@@ -155,7 +158,7 @@ class LabelAndSelect extends Component {
 
                         <Select
                             isMulti={isMulti}
-                            name={this.props.input.name}
+                            name={this.props.name || this.props.input.name}
                             options={this.props.options.map(option => ({
                                 value: option.id || option.value,
                                 label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
@@ -163,9 +166,10 @@ class LabelAndSelect extends Component {
                             className={selectClassName}
                             classNamePrefix="select"
                             styles={selectStyles}
-                            required={rules['required'] || false}
+                            required={rules['required'] || this.props.required || false}
                             onChange={this.handleSelectChange}
                             value={isMulti ? selectedOptions : selectedOptions[0]} // Ajuste aqui para suportar seleção única
+                            readOnly={this.props.input.readOnly || this.props.readOnly || false}
                             {...this.props.input}
                         />
 
