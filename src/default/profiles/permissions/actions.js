@@ -8,7 +8,7 @@ const INITIAL_VALUES = { route: '', attributes: {} }
 export function getList(profileId) {
 
     return dispatch => {
-        axios.get(`${process.env.REACT_APP_API_HOST}/permissions?search=profile_id:${profileId}&with=actions;scopes`)
+        axios.get(`${process.env.REACT_APP_API_HOST}/permissions?search=profile_id:${profileId}&with=actions`)
             .then(resp => {
                 // Declarando em um array para manipulável
                 let permissions = resp.data.data

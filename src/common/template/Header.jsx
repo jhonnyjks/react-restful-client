@@ -70,12 +70,12 @@ class Header extends Component {
 
   render() {
 
-    if(!this.state.intervalId) {
+/*     if(!this.state.intervalId) {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
         this.props.getNotifications()
       }, 10000)})
-    }
+    } */
 
     return (
       <nav className={"main-header navbar navbar-expand navbar-" + (process.env.REACT_APP_THEME || 'green') + " navbar-dark"}>
