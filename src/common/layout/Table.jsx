@@ -525,7 +525,7 @@ class Table extends Component {
                                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
                             }
 
-                            <table className={`table table-hover fixed`}>
+                            <table className={`table table-hover fixed`} id={this.props.id || ''}>
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}
