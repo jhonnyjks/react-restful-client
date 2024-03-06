@@ -107,23 +107,7 @@ class LabelAndSelect extends Component {
             permission = this.props.scopes[scope] ? this.props.scopes[scope].actions[this.props.input.name] || 0 : 0
             rules = this.getValidation(scope)
             action = this.props.forms[formName] && this.props.forms[formName].values && this.props.forms[formName].values.id ? 'update' : 'insert'
-        }
-
-        // console.log(this.props.input.name, this.props.label);
-
-        // if (this.state.error.flag === true) {
-        //     console.log(this.state.error.message.replace(this.props.input.name, this.props.label));
-
-        console.log(this.state.error.message);
-
-        //     console.log(this.state.error.message.replace(
-        //         new RegExp(this.props.input.name.replace(/_/g, ' '), 'i'),
-        //         this.props.label
-        //     ));
-            
-        // }
-
-        
+        }      
 
         return (
             <>
@@ -131,7 +115,7 @@ class LabelAndSelect extends Component {
                 <div className='form-group'>
                     <label htmlFor={this.props.name}>{this.props.label}</label>
                     <select name={this.props.name} {...this.props.input}
-                        readOnly={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
+                        disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
                         className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         required={rules['required'] || false} >
                         <option value="">{this.props.placeholder}</option>
