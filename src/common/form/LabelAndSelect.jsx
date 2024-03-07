@@ -52,7 +52,7 @@ class LabelAndSelect extends Component {
     }
 
     handleSelectChange = (selectedOptions) => {
-        const change = this.props.input.onChange|| this.props.onChange
+        const change = this.props.input.onChange || this.props.onChange
 
         if(change) {
             if (Array.isArray(selectedOptions)) {
@@ -67,7 +67,6 @@ class LabelAndSelect extends Component {
                 change(null);
             }
         }
-
     }
 
     componentWillUpdate(nextProps) {
@@ -132,12 +131,6 @@ class LabelAndSelect extends Component {
 
         const selectedValues = Array.isArray(this.props.input.value) ? this.props.input.value : [this.props.input.value];
        
-        // const selectedOptions = this.props.options.filter(option =>
-        //     selectedValues.includes(option.id || option.value)
-        // ).map(option => ({
-        //     value: option.id || option.value,
-        //     label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
-        // }));
         const selectedOptions = this.props.options.filter(option =>
             Array.isArray(this.props.input.value) 
                 ? this.props.input.value.includes(option.id || option.value)
@@ -158,7 +151,7 @@ class LabelAndSelect extends Component {
 
                         <Select
                             isMulti={isMulti}
-                            name={this.props.name || this.props.input.name}
+                            name={this.props.name || this.props.input.name || null}
                             options={this.props.options.map(option => ({
                                 value: option.id || option.value,
                                 label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
@@ -170,7 +163,12 @@ class LabelAndSelect extends Component {
                             onChange={this.handleSelectChange}
                             value={isMulti ? selectedOptions : selectedOptions[0]} // Ajuste aqui para suportar seleção única
                             readOnly={this.props.input.readOnly || this.props.readOnly || false}
-                            {...this.props.input}
+                            onBlur={ this.props.onBlur || null }
+                            // this.props.input.onBlur vem do reduxForm e é incompatível com o react-select dessa forma.
+                            // Ele buga o react-select e limpa o valor selecionado quando é acionado
+                            onDragStart={this.props.onDragStart || this.props.input.onDragStart || null}
+                            onDrop={this.props.onDrop || this.props.input.onDrop || null}
+                            onFocus={this.props.onFocus || this.props.input.onFocus || null}
                         />
 
                         <div className="invalid-feedback">
