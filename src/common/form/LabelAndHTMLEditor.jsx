@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-import { Editor } from '@tinymce/tinymce-react'
+//import { Editor } from '@tinymce/tinymce-react'
 import { change } from "redux-form"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import ReactQuill from 'react-quill';
+
+import 'react-quill/dist/quill.snow.css';
 
 import Grid from '../layout/grid'
 
@@ -56,26 +59,13 @@ class LabelAndHTMLEditor extends Component {
                     <div className="invalid-feedback">
                         {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
                     </div>
-                    <Editor
-                        apiKey='2h8jizuatsqlx4yajmviukjl31mujt0ddl9f1gwwxvflptre'
-                        disabled={this.props.readOnly}
-                        value= { this.props.input.value }
-                        init={{
-                        height: 500,
-                        menubar: true,
-                        plugins: [
-                            'advlist autolink lists advlist link image charmap print preview anchor',
-                            'searchreplace visualblocks code fullscreen',
-                            'insertdatetime media table paste code help wordcount'
-                        ],
-                        toolbar:
-                            'undo redo | formatselect | bold italic underine forecolor backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist advlist outdent indent | removeformat | fullscreen help'
-                        }}
-                        textareaName={this.props.input.name}
-                        onEditorChange={this.handleEditorChange}
-                        {...this.props.input}
+                    <ReactQuill
+                        theme="snow"
+                        value={this.props.input.value}
+                        onChange={this.handleEditorChange} 
+                        readOnly={this.props.readOnly}
+                        defaultValue={this.props.defaultValue}
+                        placeholder={this.props.placeholder}
                     />
                 </div>
             </Grid>
