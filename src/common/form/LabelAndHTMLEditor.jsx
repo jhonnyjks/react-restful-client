@@ -57,6 +57,7 @@ class LabelAndHTMLEditor extends Component {
                         {this.state.error.flag === true ? this.state.error.message : "Campo inválido"}
                     </div>
                     <Editor
+                        apiKey='2h8jizuatsqlx4yajmviukjl31mujt0ddl9f1gwwxvflptre'
                         disabled={this.props.readOnly}
                         value= { this.props.input.value }
                         init={{
