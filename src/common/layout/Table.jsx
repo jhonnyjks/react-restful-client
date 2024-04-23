@@ -508,7 +508,7 @@ class Table extends Component {
                     </div>
                 </If>
                 <If test={this.state.width > 600}>
-                    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
+                    <div className={'box ' + (this.props.isMaterial == undefined || (this.props.isMaterial != undefined && this.props.isMaterial) ? 'material-item ' : '') + 'pull-left'} style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
                                 <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
