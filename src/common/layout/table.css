@@ -2,3 +2,11 @@ table.fixed          { overflow: auto; height: 100px; }
 table.fixed thead { position: sticky; top: 0; z-index: 1; }
 table.fixed thead tr {background: #fff; }
 table.fixed thead {box-shadow: 0px 2px 1px rgba(0,0,0,0.1)}
+
+.table-carret {
+    color: #aaa;
+}
+.table-carret:hover {
+    color: unset;
+    cursor: pointer;
+}

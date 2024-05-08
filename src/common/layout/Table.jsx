@@ -7,8 +7,6 @@ import "./table.css"
 import LabelAndInput from '../form/LabelAndInput';
 import ButtonListTrashed from '../form/ButtonListTrashed';
 import If from '../operator/If'
-import Row from './row'
-import { Button } from 'react-bootstrap';
 class Table extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +16,7 @@ class Table extends Component {
             queryStrSearch: {},
             searchFields: {},
             searchFieldsValues: {},
+            searchFieldsOrder: {},
             withTrashed: false
         };
     }
@@ -40,7 +39,7 @@ class Table extends Component {
         this.props.generalSearch(e.target.value)
     }
 
-    doSearch = (e, search, page = null) => {
+    doSearch = (e = null, search = null, page = null) => {
 
         let queryStrSearch = this.state.queryStrSearch;
         let searchFields = this.state.searchFields
@@ -72,12 +71,34 @@ class Table extends Component {
         // Adiciona ?page=1 quando uma pesquisa é realizada
         const pageQueryParam = page !== null ? `?page=${page}` : '?page=1'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
 
-        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and');
+        const queryOrder = '&orderBy=' + Object.keys(this.state.searchFieldsOrder).join(';') + 
+            '&sortedBy=' + Object.values(this.state.searchFieldsOrder).join(';')
+
+        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and' + queryOrder);
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })
     }
 
     getBody() {
         return this.props.paginate ? this.props.body.data : this.props.body
+    }
+
+    onClickReorder = (e, val) => {
+        const btn = e.target
+        if(btn) {
+            if(btn.classList.contains('fa-caret-up')) {
+                this.setState(
+                {searchFieldsOrder: { [val]: 'desc', ...this.state.searchFieldsOrder }},
+                    () =>  this.doSearch()
+                )
+                btn.classList.replace('fa-caret-up', 'fa-caret-down')
+            } else {
+                this.setState(
+                    {searchFieldsOrder: { [val]: 'asc', ...this.state.searchFieldsOrder }},
+                    () =>  this.doSearch()
+                )
+                btn.classList.replace('fa-caret-down', 'fa-caret-up')
+            }
+        }
     }
 
     renderHead = () => {
@@ -102,7 +123,10 @@ class Table extends Component {
             <tr>
                 {(
                     Object.getOwnPropertyNames(head).map((val, index) => {                      
-                       return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>{head[val].title || head[val]}</th>
+                       return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
+                        {head[val].title || head[val]}
+                            <i className="fas fa-caret-up fa-fw table-carret" onClick={ e => this.onClickReorder(e, val)}></i>
+                        </th>
                                              
                     })
                 )}
