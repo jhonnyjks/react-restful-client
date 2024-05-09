@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Select from "react-select";
 import { Link, withRouter } from "react-router-dom";
+import _ from 'lodash'
 
 import "./react-select-custom.css"
 import "./table.css"
@@ -79,22 +80,48 @@ class Table extends Component {
     }
 
     getBody() {
-        return this.props.paginate ? this.props.body.data : this.props.body
+        let body = this.props.paginate ? this.props.body.data : this.props.body
+
+        //TODO: reordenar o body quando this.props.attributesSearch não é uma função
+        //Object.keys(this.state.searchFieldsOrder).reverse().forEach((field) =>  body.re)
+        //if(!_.isEqual(body, this.state.body)) {
+        //    this.setState({body})
+        //}
+
+        return body
     }
 
     onClickReorder = (e, val) => {
         const btn = e.target
         if(btn) {
             if(btn.classList.contains('fa-caret-up')) {
+                let sfo = {...this.state.searchFieldsOrder}
+                delete sfo[val]
+                
                 this.setState(
-                {searchFieldsOrder: { [val]: 'desc', ...this.state.searchFieldsOrder }},
-                    () =>  this.doSearch()
+                {searchFieldsOrder: { [val]: 'desc', ...sfo}},
+                    () => {
+                        if(this.props.attributesSearch) {
+                            this.doSearch()
+                        } else {
+                            
+                        }
+                    }
                 )
                 btn.classList.replace('fa-caret-up', 'fa-caret-down')
             } else {
+                let sfo = {...this.state.searchFieldsOrder}
+                delete sfo[val]
+
                 this.setState(
-                    {searchFieldsOrder: { [val]: 'asc', ...this.state.searchFieldsOrder }},
-                    () =>  this.doSearch()
+                    {searchFieldsOrder: { [val]: 'asc', ...sfo }},
+                    () => {
+                        if(this.props.attributesSearch) {
+                            this.doSearch()
+                        } else {
+                            
+                        }
+                    }
                 )
                 btn.classList.replace('fa-caret-down', 'fa-caret-up')
             }
@@ -124,8 +151,10 @@ class Table extends Component {
                 {(
                     Object.getOwnPropertyNames(head).map((val, index) => {                      
                        return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
-                        {head[val].title || head[val]}
-                            <i className="fas fa-caret-up fa-fw table-carret" onClick={ e => this.onClickReorder(e, val)}></i>
+                            { head[val].title || head[val] }
+                            { this.props.attributesSearch &&
+                                <i className="fas fa-caret-up fa-fw table-carret" onClick={ e => this.onClickReorder(e, val)}></i>
+                            }
                         </th>
                                              
                     })
