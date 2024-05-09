@@ -75,7 +75,7 @@ class Table extends Component {
         const queryOrder = '&orderBy=' + Object.keys(this.state.searchFieldsOrder).join(';') + 
             '&sortedBy=' + Object.values(this.state.searchFieldsOrder).join(';')
 
-        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and' + queryOrder);
+        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and' + (Object.keys(this.state.searchFieldsOrder).length > 0 ? queryOrder : ''));
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })
     }
 
