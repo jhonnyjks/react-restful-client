@@ -72,21 +72,32 @@ class Table extends Component {
         // Adiciona ?page=1 quando uma pesquisa é realizada
         const pageQueryParam = page !== null ? `?page=${page}` : '?page=1'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
 
-        const queryOrder = '&orderBy=' + Object.keys(this.state.searchFieldsOrder).join(';') + 
-            '&sortedBy=' + Object.values(this.state.searchFieldsOrder).join(';')
+        let orderBy = ''
+        let sortedBy = ''
 
-        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and' + (Object.keys(this.state.searchFieldsOrder).length > 0 ? queryOrder : ''));
+        // Adicionar na URL apenas colunas que não são relações, pois relações não funcionam para ordenar na API
+        Object.keys(this.state.searchFieldsOrder).forEach( orderField => {
+            if(orderField.indexOf('.') == -1) {
+                orderBy = (orderBy.length > 0 ? ';' : '') + orderField
+                sortedBy = (sortedBy.length > 0 ? ';' : '') + this.state.searchFieldsOrder[orderField]
+            }
+        })
+        
+        this.props.attributesSearch(
+            pageQueryParam + '&search=' + queryStr + '&searchJoin=and' +
+            (orderBy.length > 0 ? '&orderBy=' + orderBy : '') + 
+            (sortedBy.length > 0 ? '&sortedBy=' + sortedBy : ''));
+
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })
     }
 
     getBody() {
         let body = this.props.paginate ? this.props.body.data : this.props.body
+        const orderFields = Object.keys(this.state.searchFieldsOrder)
 
-        //TODO: reordenar o body quando this.props.attributesSearch não é uma função
-        //Object.keys(this.state.searchFieldsOrder).reverse().forEach((field) =>  body.re)
-        //if(!_.isEqual(body, this.state.body)) {
-        //    this.setState({body})
-        //}
+        if(orderFields.length > 0 && ( orderFields.toString().indexOf('.') > -1 || !this.props.attributesSearch )) {
+            body = _.orderBy(body, orderFields, Object.values(this.state.searchFieldsOrder));
+        }
 
         return body
     }
@@ -101,10 +112,9 @@ class Table extends Component {
                 this.setState(
                 {searchFieldsOrder: { [val]: 'desc', ...sfo}},
                     () => {
-                        if(this.props.attributesSearch) {
+                        // Se attributesSearch foi setada e 'val' não tem ponto, ou seja, é uma coluna e não uma relação 
+                        if(this.props.attributesSearch && val.indexOf('.') == -1) {
                             this.doSearch()
-                        } else {
-                            
                         }
                     }
                 )
@@ -116,10 +126,9 @@ class Table extends Component {
                 this.setState(
                     {searchFieldsOrder: { [val]: 'asc', ...sfo }},
                     () => {
-                        if(this.props.attributesSearch) {
+                        // Se attributesSearch foi setada e 'val' não tem ponto, ou seja, é uma coluna e não uma relação
+                        if(this.props.attributesSearch && val.indexOf('.') == -1) {
                             this.doSearch()
-                        } else {
-                            
                         }
                     }
                 )
@@ -153,7 +162,13 @@ class Table extends Component {
                        return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
                             { head[val].title || head[val] }
                             { this.props.attributesSearch &&
-                                <i className="fas fa-caret-up fa-fw table-carret" onClick={ e => this.onClickReorder(e, val)}></i>
+                                <i
+                                className="fas fa-caret-up fa-fw table-carret"
+                                onClick={ e => this.onClickReorder(e, val)}
+                                title={val.indexOf('.') < 0 ? 'Ordenar todos os registros' : 'Ordenar registros dessa página'}
+                                data-toggle="tooltip"
+                                >
+                                </i>
                             }
                         </th>
                                              
@@ -192,14 +207,11 @@ class Table extends Component {
                 Object.getOwnPropertyNames(head).map((val, index) => {
                     if (typeof head[val].search == 'object') {
                         const search = head[val].search
+
+                        // Para manter compatibilidade pós-melhoria
+                        if(!search.type && search.list) search.type = 'select'
+
                         switch (search.type || '') {
-                            case 'text':
-                            case 'date':
-                                return <th key={index} style={head[val].style || {}}>
-                                    <LabelAndInput type={search.type} input={{ onChange: e => this.doSearch(e, search), value: this.state.searchFieldsValues[search.field] }}
-                                        forceToShow={true} readOnly={false} style={{ marginBottom: '0px' }} grid={{ style: { marginBottom: '0px' } }} />
-                                </th>
-                                break;
                             case 'trashed':
                                 return <th key={index} style={head[val].style || {}}>
                                             {/* caso resolvam usar icon trashed de forma mais organizada */}
@@ -208,10 +220,8 @@ class Table extends Component {
                                                 onListTrashed={this.props.actionsHeader.listTrashed}                                               
                                             ></ButtonListTrashed> */}
                                 </th>
-                            break;
 
-
-                            default:
+                            case 'select':
                                 return <th key={index} style={head[val].style || {}}>
                                     <Select
                                         isClearable
@@ -219,6 +229,14 @@ class Table extends Component {
                                         classNamePrefix="search-select"
                                         onChange={e => this.doSearch(e, search)} options={search.list || []} />
 
+                                </th>
+
+                            case 'text':
+                            case 'date':
+                            default:
+                                return <th key={index} style={head[val].style || {}}>
+                                    <LabelAndInput type={search.type} input={{ onChange: e => this.doSearch(e, search), value: this.state.searchFieldsValues[search.field] }}
+                                        forceToShow={true} readOnly={false} style={{ marginBottom: '0px' }} grid={{ style: { marginBottom: '0px' } }} />
                                 </th>
                         }
 
@@ -568,7 +586,7 @@ class Table extends Component {
                                 {this.props.renderHead && <hr />}
                             </div>
                         </If>
-                        <div className='box-body no-padding'>
+                        <div className='box-body no-padding' {...this.props.boxBody || {}}>
                             <If test={this.props.headComponent}>
                                 {this.props.headComponent}
                             </If>
@@ -578,7 +596,7 @@ class Table extends Component {
                                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
                             }
 
-                            <table className={`table table-hover fixed`} id={this.props.id || ''}>
+                            <table className={`table table-hover fixed`} id={this.props.id || ''} {...this.props.table || {}}>
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}
