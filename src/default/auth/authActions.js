@@ -10,8 +10,17 @@ export function signup(values) {
     return submit(values, `${process.env.REACT_APP_API_HOST}/auth/signup`)
 }
 
+export function reset(values) {
+    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/change-password`)
+}
+
 function submit(values, url) {
+
+    console.log('submit values: ', values, url);
+    
     return dispatch => {
+
+        console.log('entrou...');
         
         dispatch({ type: 'AUTH_LOADING', payload: true })
 

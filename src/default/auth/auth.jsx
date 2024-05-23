@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { toastr } from 'react-redux-toastr'
 
 import './auth.css'
-import { login, signup, selectProfile } from './authActions'
+import { login, signup, reset, selectProfile } from './authActions'
 import Row from '../../common/layout/row'
 // import Grid from '../../common/layout/grid'
 import Messages from '../../common/msg/Message'
@@ -14,40 +14,63 @@ import Input from '../../common/form/InputAuth'
 class Auth extends Component {
     constructor(props) {
         super(props)
-        this.state = { loginMode: true }
+        this.state = { 
+            loginMode: true, 
+            resetMode: false 
+        }
     }
+
     changeMode() {
-        this.setState({ loginMode: !this.state.loginMode })
+        this.setState({ loginMode: !this.state.loginMode, resetMode: false })
     }
+
+    resetPassword() {
+        this.setState({ resetMode: true })
+    }
+
     onSubmit(values) {
         const { login, signup } = this.props
-        this.state.loginMode ? login(values) : signup(values)
+        if (this.state.resetMode) {
+            reset(values)
+        } else {
+            this.state.loginMode ? login(values) : signup(values)
+        }
     }
+
     render() {
-        const { loginMode } = this.state
+        const { loginMode, resetMode } = this.state
         const { handleSubmit } = this.props
 
         const loginForm = (
             <form onSubmit={handleSubmit(v => this.onSubmit(v))}>
                 <Field component={Input} type="input" name="name"
-                    placeholder="Nome" icon='user' hide={loginMode} />
+                    placeholder="Nome" icon='user' hide={loginMode || resetMode} />
                 <Field component={Input} type="text" name="login"
-                    placeholder="Login" icon='envelope' />
+                    placeholder="Login" icon='envelope' hide={resetMode} />
                 <Field component={Input} type="password" name="password"
-                    placeholder="Senha" icon='lock' />
+                    placeholder="Senha" icon='lock' hide={resetMode} />
                 <Field component={Input} type="password" name="confirm_password"
-                    placeholder="Confirmar Senha" icon='lock' hide={loginMode} />
+                    placeholder="Confirmar Senha" icon='lock' hide={loginMode || resetMode} />
+
+                {resetMode && (
+                    <Field component={Input} type="text" name="login"
+                        placeholder="Informe Login ou email" icon='envelope' />
+                )}
                 
-                <a href='#' className='pull-right' 
-                onClick={e => {
-                    toastr.warning('Mudar a senha', 'Por favor, entre em contato com ' + process.env.REACT_APP_ORGANIZATION + ' para criar uma nova senha provisória!')
-                    return false
-                }}>
-                    Esqueci minha senha
-                </a>
+                {resetMode ? null : (
+                    <a href='#' className='pull-right' 
+                        onClick={e => {
+                            e.preventDefault();
+                            this.resetPassword();
+                        }}>
+                        Esqueci minha senha
+                    </a>
+                )}
 
                 <div className="col-4">
-                    <button type="submit" className="btn btn-primary btn-block">{loginMode ? 'Entrar' : 'Criar'}</button>
+                    <button type="submit" className="btn btn-primary btn-block">
+                        {resetMode ? 'Redefinir' : (loginMode ? 'Entrar' : 'Criar')}
+                    </button>
                 </div>
 
                 <div className="social-auth-links text-center mb-3">
@@ -64,7 +87,7 @@ class Auth extends Component {
             <ul className='list-group custom-list-group'>
                 {this.props.profiles.map(profile => (
                     <a key={profile.id} href="#!" className=' text-center col-xs-12'
-                    onClick={() => this.props.selectProfile(profile, this.props.token)}>
+                        onClick={() => this.props.selectProfile(profile, this.props.token)}>
                         <li className='list-group-item col-xs-12'>
                             <b>{profile.noun}</b>
                         </li>
@@ -84,8 +107,8 @@ class Auth extends Component {
                 }
                     <div className="card">
                         <div className="card-body login-card-body col-xs-12">
-                            <p className="login-box-msg"> {this.props.profiles.length > 1 ? 'Selecione um perfil' : (this.state.loginMode ? 'Bem vindo!' : 'Crie sua conta')}</p>
-                            {this.props.profiles.length > 1 ? selectProfile : loginForm}
+                            <p className="login-box-msg"> {this.props.profiles.length > 1 ? 'Selecione um perfil' : (resetMode ? 'Redefinir Senha' : (loginMode ? 'Bem vindo!' : 'Crie sua conta'))}</p>
+                            {resetMode ? loginForm : (this.props.profiles.length > 1 ? selectProfile : loginForm)}
                         </div>
                         <Messages />
                     </div>
@@ -94,11 +117,12 @@ class Auth extends Component {
         )
     }
 }
+
 Auth = reduxForm({ form: 'authForm' })(Auth)
 const mapStateToProps = state => ({
     profiles: state.auth.profiles,
     profile: state.auth.profile,
     token: state.auth.token
 })
-const mapDispatchToProps = dispatch => bindActionCreators({ login, signup, selectProfile }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ login, signup, reset, selectProfile }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Auth)
