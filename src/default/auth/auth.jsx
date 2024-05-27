@@ -16,29 +16,45 @@ class Auth extends Component {
         super(props)
         this.state = { 
             loginMode: true, 
-            resetMode: false 
+            signupMode: false,
+            resetMode: false,
+            resetHidenButton: false, 
         }
     }
 
-    changeMode() {
-        this.setState({ loginMode: !this.state.loginMode, resetMode: false })
+    changeLoginMode() {
+        this.setState({ loginMode: true, signupMode: false, resetMode: false })
     }
 
-    resetPassword() {
-        this.setState({ resetMode: true })
+    changeSignupMode() {
+        this.setState({ loginMode: false, signupMode: true, resetMode: false })
     }
 
+    changeResetMode() {
+        this.setState({ loginMode: false, signupMode: false, resetMode: true })
+    }
+ 
     onSubmit(values) {
         const { login, signup } = this.props
         if (this.state.resetMode) {
+
+            if (!values.login) {
+                toastr.warning("Atenção", 'Necessário preencher o campo de login.');
+                return;
+            }
+
+            this.setState({ resetHidenButton: true })
+
             reset(values)
+        } else if (this.state.loginMode) {
+            login(values)
         } else {
-            this.state.loginMode ? login(values) : signup(values)
+            signup(values)
         }
     }
 
     render() {
-        const { loginMode, resetMode } = this.state
+        const { loginMode, signupMode, resetMode, resetHidenButton } = this.state
         const { handleSubmit } = this.props
 
         const loginForm = (
@@ -61,24 +77,56 @@ class Auth extends Component {
                     <a href='#' className='pull-right' 
                         onClick={e => {
                             e.preventDefault();
-                            this.resetPassword();
+                            this.changeResetMode();
                         }}>
                         Esqueci minha senha
                     </a>
                 )}
 
-                <div className="col-4">
-                    <button type="submit" className="btn btn-primary btn-block">
-                        {resetMode ? 'Redefinir' : (loginMode ? 'Entrar' : 'Criar')}
-                    </button>
-                </div>
+                {loginMode && !signupMode && !resetMode && (
+                    <div className="col-4">
+                        <button type="submit" className="btn btn-primary btn-block">
+                            Entrar
+                        </button>
+                    </div>
+                )}
+
+                {signupMode && !loginMode && !resetMode && (
+                    <div className="col-4">
+                        <button type="submit" className="btn btn-primary btn-block">
+                            Criar
+                        </button>
+                    </div>
+                )}
+
+                {resetMode && !loginMode && !signupMode && !resetHidenButton && (
+                    <div className="col-4">
+                        <button type="submit" className="btn btn-primary btn-block">
+                            Redefinir
+                        </button>
+                    </div>
+                )}
 
                 <div className="social-auth-links text-center mb-3">
                     <p>- OU -</p>
-                    <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeMode()}>
-                        {loginMode ? 'Novo usuário? Registrar aqui!' :
-                            'Já é cadastrado? Entrar aqui!'}
-                    </a>
+
+                    {loginMode && !signupMode && !resetMode && (
+                        <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeSignupMode()}>
+                            Novo usuário? Registrar aqui!
+                        </a>
+                    )}
+
+                    {signupMode && !loginMode && !resetMode && (
+                        <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeLoginMode()}>
+                            Já é cadastrado? Entrar aqui!
+                        </a>
+                    )}
+
+                    {resetMode && !loginMode && !signupMode && (
+                        <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeLoginMode()}>
+                            Já é cadastrado? Entrar aqui!
+                        </a>
+                    )}
                 </div>
             </form>
         )
