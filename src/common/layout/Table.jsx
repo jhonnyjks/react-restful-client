@@ -103,7 +103,6 @@ class Table extends Component {
     }
 
     onClickReorder = (e, val) => {
-        console.log('onClickReorder ', e.target, val)
         const btn = e.target
         if(btn) {
             if(btn.classList.contains('fa-caret-up')) {
