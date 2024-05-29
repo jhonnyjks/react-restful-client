@@ -78,8 +78,8 @@ class Table extends Component {
         // Adicionar na URL apenas colunas que não são relações, pois relações não funcionam para ordenar na API
         Object.keys(this.state.searchFieldsOrder).forEach( orderField => {
             if(orderField.indexOf('.') == -1) {
-                orderBy = (orderBy.length > 0 ? ';' : '') + orderField
-                sortedBy = (sortedBy.length > 0 ? ';' : '') + this.state.searchFieldsOrder[orderField]
+                orderBy += (orderBy.length > 0 ? ';' : '') + orderField
+                sortedBy += (sortedBy.length > 0 ? ';' : '') + this.state.searchFieldsOrder[orderField]
             }
         })
         
@@ -103,6 +103,7 @@ class Table extends Component {
     }
 
     onClickReorder = (e, val) => {
+        console.log('onClickReorder ', e.target, val)
         const btn = e.target
         if(btn) {
             if(btn.classList.contains('fa-caret-up')) {
