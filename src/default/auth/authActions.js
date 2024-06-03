@@ -2,21 +2,27 @@ import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import _ from 'lodash'
 
-export function login(values) {
-    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/login`)
-}
-
-export function signup(values) {
-    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/signup`)
-}
-
-export function reset(values) {
-    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/change-password`)
+export function login(values, url) {
+    return submit(values, url)
 }
 
 function submit(values, url) {
 
     console.log('submit values: ', values, url);
+
+    switch (url) {
+        case 'login':
+            url = `${process.env.REACT_APP_API_HOST}/auth/login`
+            break;
+        case 'signup':
+            url = `${process.env.REACT_APP_API_HOST}/auth/signup`
+            break;
+        case 'reset':
+            url = `${process.env.REACT_APP_API_HOST}/auth/change-password`
+            break;
+        default:
+            break;
+    }
     
     return dispatch => {
         

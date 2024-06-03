@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { toastr } from 'react-redux-toastr'
 
 import './auth.css'
-import { login, signup, reset, selectProfile } from './authActions'
+import { login, selectProfile } from './authActions'
 import Row from '../../common/layout/row'
 // import Grid from '../../common/layout/grid'
 import Messages from '../../common/msg/Message'
@@ -45,11 +45,11 @@ class Auth extends Component {
 
             this.setState({ resetHidenButton: true })
 
-            reset(values)
+            login(values, 'reset')
         } else if (this.state.loginMode) {
-            login(values)
+            login(values, 'login')
         } else {
-            signup(values)
+            login(values, 'signup')
         }
     }
 
@@ -172,5 +172,5 @@ const mapStateToProps = state => ({
     profile: state.auth.profile,
     token: state.auth.token
 })
-const mapDispatchToProps = dispatch => bindActionCreators({ login, signup, reset, selectProfile }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ login, selectProfile }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Auth)
