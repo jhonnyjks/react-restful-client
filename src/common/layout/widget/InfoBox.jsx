@@ -24,11 +24,11 @@ export default props => (
                 </If>
 
                 <If test={props.progress}>
-                    <div className='progress'>
-                        <div className='progress-bar' style={{ width: props.progress }}></div>
+                    <div className='progress' {...props.progress}>
+                        <div className='progress-bar' style={{ width: props.progress.value || 0 }}></div>
                     </div>
                     <span className='progress-description'>
-                        {props.progressText}
+                        {props.progress.text}
                     </span>
                 </If>
             </div>
