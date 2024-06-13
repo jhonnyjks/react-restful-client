@@ -2,12 +2,30 @@
     background-color: #fff !important;
 }
 
+.bg-primary {
+    background-color: #006599 !important;
+}
+
+.login-box, .register-box {
+    min-width: 360px;
+    width: 420px;
+}
+
+.login-box > .card {
+    border-radius: 0.75rem;
+}
+
 .login-box-body {
     background-color: #eee;
 }
 
 .login-box button {
     margin-left: 0px;
+    font-size: 1.25rem;
+}
+
+.login-box .form-control-lg {
+    height: calc(2.875rem + 10px);
 }
 
 .login-box a:hover {
@@ -15,6 +33,33 @@
 }
 .image-logo {
     width: 360px;
+}
+
+.login-logo, .register-logo {
+    margin-bottom: 0px;
+    padding: 4px;
+}
+
+.login-logo > h4, .login-logo > h5 {
+    margin-bottom: 0;
+}
+
+.login-card-body, .register-card-body {
+    padding: 50px 20px 20px 20px;
+    border-bottom-left-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+.login-box .password-reset-link, .register-box .password-reset-link {
+    color: fieldtext !important;
+    padding: 10px 0px;
+}
+
+.login-box .copyright ,.register-box .copyright {
+    color: fieldtext !important;
+    width: 100%;
+    text-align: center;
+    display: block;
 }
 
 @media only screen and (max-width: 460px) {

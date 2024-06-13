@@ -119,3 +119,7 @@ hr.dashed {
 .search-select-container {
     z-index: 10;
 }
+
+.form-group > label {
+    font-weight: normal !important;
+}

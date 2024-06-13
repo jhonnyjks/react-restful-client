@@ -29,34 +29,22 @@ class Auth extends Component {
 
         const loginForm = (
             <form onSubmit={handleSubmit(v => this.onSubmit(v))}>
-                <Field component={Input} type="input" name="name"
-                    placeholder="Nome" icon='user' hide={loginMode} />
                 <Field component={Input} type="text" name="login"
                     placeholder="Login" icon='envelope' />
                 <Field component={Input} type="password" name="password"
                     placeholder="Senha" icon='lock' />
-                <Field component={Input} type="password" name="confirm_password"
-                    placeholder="Confirmar Senha" icon='lock' hide={loginMode} />
                 
-                <a href='#' className='pull-right' 
+                <a href='#' className='pull-right password-reset-link' 
                 onClick={e => {
                     toastr.warning('Mudar a senha', 'Por favor, entre em contato com ' + process.env.REACT_APP_ORGANIZATION + ' para criar uma nova senha provisória!')
                     return false
                 }}>
+
+                    <i className="fas fa-edit"></i> 
                     Esqueci minha senha
                 </a>
 
-                <div className="col-4">
-                    <button type="submit" className="btn btn-primary btn-block">{loginMode ? 'Entrar' : 'Criar'}</button>
-                </div>
-
-                <div className="social-auth-links text-center mb-3">
-                    <p>- OU -</p>
-                    <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeMode()}>
-                        {loginMode ? 'Novo usuário? Registrar aqui!' :
-                            'Já é cadastrado? Entrar aqui!'}
-                    </a>
-                </div>
+                <button type="submit" className="col-4 btn btn-warning btn-block">Entrar</button>
             </form>
         )
 
@@ -75,20 +63,30 @@ class Auth extends Component {
 
         return (
             <div className="login-page">
-                <div className="login-box">{
-                    process.env.REACT_APP_LOGIN_LOGO === undefined || process.env.REACT_APP_LOGIN_LOGO === "" ?
-                        <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div> :
-                        <div className="login-logo">
-                            <img className="image-logo" alt="logo" src={process.env.REACT_APP_LOGIN_LOGO} />
+                <div className="login-box">
+                    <div className="card bg-primary rounded-xg">
+                        <div className="card-header">
+                            { process.env.REACT_APP_LOGIN_LOGO === undefined || process.env.REACT_APP_LOGIN_LOGO === "" ?
+                                    <div className="login-logo">
+                                        <h4>{process.env.REACT_APP_NAME}</h4>
+                                        <h5>Sistema de Monitoramento do Maranhão</h5>
+                                        </div> :
+                                    <div className="login-logo">
+                                        <img className="image-logo" alt="logo" src={process.env.REACT_APP_LOGIN_LOGO} />
+                                    </div>
+                            }
+
                         </div>
-                }
-                    <div className="card">
                         <div className="card-body login-card-body col-xs-12">
-                            <p className="login-box-msg"> {this.props.profiles.length > 1 ? 'Selecione um perfil' : (this.state.loginMode ? 'Bem vindo!' : 'Crie sua conta')}</p>
+                            {this.props.profiles.length > 1 &&
+                                <p className="login-box-msg"> Selecione um perfil</p>
+                            }
                             {this.props.profiles.length > 1 ? selectProfile : loginForm}
+                            <Messages />
                         </div>
-                        <Messages />
                     </div>
+                   
+                    <small className='copyright'>Copyright © 2024. Desenvolvido pela Gestão de Sistemas - SEPLAN</small>
                 </div>
             </div>
         )

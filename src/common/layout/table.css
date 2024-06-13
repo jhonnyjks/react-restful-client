@@ -1,7 +1,13 @@
 table.fixed          { overflow: auto; height: 100px; }
 table.fixed thead { position: sticky; top: 0; z-index: 1; }
-table.fixed thead tr {background: #fff; }
-table.fixed thead {box-shadow: 0px 2px 1px rgba(0,0,0,0.1)}
+table.fixed thead tr {
+    background: #e8ecef;
+    color: #555;
+ }
+
+ table.fixed thead > tr > th {
+    font-weight: normal;
+ }
 
 .table-carret {
     color: #aaa;
@@ -9,4 +15,32 @@ table.fixed thead {box-shadow: 0px 2px 1px rgba(0,0,0,0.1)}
 .table-carret:hover {
     color: unset;
     cursor: pointer;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgb(251 251 251);
+}
+
+.carret-up-down {
+    display: block;
+    float: left;
+    width: 20px;
+}
+
+.carret-up-down.up > .fa-caret-up, .carret-up-down.down > .fa-caret-down {
+    color: #555;
+}
+
+.carret-up-down > i {
+    line-height: 16px;
+    float: left;
+    display: block;
+}
+
+.carret-up-down > .fa-caret-up {
+    margin-bottom: -5px;
+}
+
+.carret-up-down > .fa-caret-down {
+    margin-top: -5px;
 }

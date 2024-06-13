@@ -103,9 +103,18 @@ class Table extends Component {
     }
 
     onClickReorder = (e, val) => {
-        const btn = e.target
+        let btn = e.target
+
+        if(btn.tagName != 'DIV') {
+            btn = btn.parentElement
+        }
+
+        if(btn.tagName != 'DIV') {
+            btn = btn.parentElement
+        }
+
         if(btn) {
-            if(btn.classList.contains('fa-caret-up')) {
+            if(btn.classList.contains('up')) {
                 let sfo = {...this.state.searchFieldsOrder}
                 delete sfo[val]
                 
@@ -118,7 +127,7 @@ class Table extends Component {
                         }
                     }
                 )
-                btn.classList.replace('fa-caret-up', 'fa-caret-down')
+                btn.classList.replace('up', 'down')
             } else {
                 let sfo = {...this.state.searchFieldsOrder}
                 delete sfo[val]
@@ -132,7 +141,7 @@ class Table extends Component {
                         }
                     }
                 )
-                btn.classList.replace('fa-caret-down', 'fa-caret-up')
+                btn.classList.replace('down', 'up')
             }
         }
     }
@@ -160,15 +169,17 @@ class Table extends Component {
                 {(
                     Object.getOwnPropertyNames(head).map((val, index) => {                      
                        return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
-                            { head[val].title || head[val] }
+                            <span style={{display: 'block', float: 'left'}}>{ head[val].title || head[val] }</span>
                             { this.props.attributesSearch &&
-                                <i
-                                className="fas fa-caret-up fa-fw table-carret"
-                                onClick={ e => this.onClickReorder(e, val)}
-                                title={val.indexOf('.') < 0 ? 'Ordenar todos os registros' : 'Ordenar registros dessa página'}
-                                data-toggle="tooltip"
+                                <div 
+                                    className='carret-up-down up'
+                                    onClick={ e => this.onClickReorder(e, val)}
+                                    title={val.indexOf('.') < 0 ? 'Ordenar todos os registros' : 'Ordenar registros dessa página'}
+                                    data-toggle="tooltip"
                                 >
-                                </i>
+                                    <i className="fas fa-caret-up fa-fw table-carret"></i>
+                                    <i className="fas fa-caret-down fa-fw table-carret"></i>
+                                </div>
                             }
                         </th>
                                              
@@ -579,7 +590,7 @@ class Table extends Component {
                     </div>
                 </If>
                 <If test={this.state.width > 600}>
-                    <div className={'box ' + (this.props.isMaterial == undefined || (this.props.isMaterial != undefined && this.props.isMaterial) ? 'material-item ' : '') + 'pull-left'} style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
+                    <div className={'box ' + (this.props.isMaterial == undefined || (this.props.isMaterial != undefined && this.props.isMaterial) ? 'material-item ' : '') + 'pull-left'} style={{ paddingBottom: '3px', width: '100%', marginBottom: '0' }}>
                         <If test={this.props.title}>
                             <div className='box-header'>
                                 <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
@@ -596,7 +607,7 @@ class Table extends Component {
                                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
                             }
 
-                            <table className={`table table-hover fixed`} id={this.props.id || ''} {...this.props.table || {}}>
+                            <table className={`table table-hover table-striped fixed`} id={this.props.id || ''} {...this.props.table || {}}>
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}

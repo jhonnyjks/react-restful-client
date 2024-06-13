@@ -4,7 +4,7 @@ export default props => (
     <If test={!props.hide}>
         <div className="input-group mb-3 has-feedback">
             <input {...props.input}
-                className='form-control'
+                className='form-control form-control-lg'
                 placeholder={props.placeholder}
                 readOnly={props.readOnly}
                 type={props.type} />

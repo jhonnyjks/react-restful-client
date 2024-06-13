@@ -25,7 +25,7 @@ export default props => (
 
                 <If test={props.progress}>
                     <div className='progress' {...props.progress}>
-                        <div className='progress-bar' style={{ width: props.progress.value || 0 }}></div>
+                        <div className='progress-bar' style={{ width: props.progress.value || 0 }} {...props.progress.bar} ></div>
                     </div>
                     <span className='progress-description'>
                         {props.progress.text}
