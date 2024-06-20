@@ -113,10 +113,10 @@ class LabelAndSelect extends Component {
             <>
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
                 <div className='form-group'>
-                    <label htmlFor={this.props.name}>{this.props.label}</label>
+                    <label htmlFor={this.props.name} style={{ fontWeight: '600'}}>{this.props.label}</label>
                     <select name={this.props.name} {...this.props.input}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
-                        className={`custom-select mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
+                        className={`form-control mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
                         required={rules['required'] || false} >
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(

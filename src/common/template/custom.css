@@ -116,3 +116,18 @@ hr.dashed {
 .collapsed-box > .box-body {
     display: none;
 }
+
+select {
+    background-image:
+        linear-gradient(45deg, transparent 50%, #60666C 60%),
+        linear-gradient(135deg, #60666C 40%, transparent 50%) !important;
+    background-position:
+        calc(100% - 20px) 50%, /* Posição horizontal da primeira seta */
+        calc(100% - 15px) 50%; /* Posição horizontal da segunda seta */
+    background-size:
+        6px 6px,
+        6px 6px;
+    background-repeat: no-repeat;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
