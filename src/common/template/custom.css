@@ -136,10 +136,6 @@ select {
     padding: 0.25rem 1rem !important;
 }
 
-.card-footer{
-    background-color: #fff !important;
-}
-
 .fa, .fas {
     color: white !important;
 }

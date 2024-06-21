@@ -571,7 +571,7 @@ class Table extends Component {
         }
       
         return (
-          <div className="card-footer clearfix">
+          <div className="card-footer bg-white clearfix">
             <div className='row'>
                 <div className='col'>
                     <p className='m-0 float-left mt-3'>Exibindo {to} de {total} resultados</p>
