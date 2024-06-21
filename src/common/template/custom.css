@@ -131,3 +131,11 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
+.page-link{
+    padding: 0.25rem 1rem !important;
+}
+
+.card-footer{
+    background-color: #fff !important;
+}

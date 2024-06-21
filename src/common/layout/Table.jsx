@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Select from "react-select";
 import { Link, withRouter } from "react-router-dom";
+import _ from 'lodash'
 
 import "./react-select-custom.css"
 import "./table.css"
@@ -9,6 +10,7 @@ import ButtonListTrashed from '../form/ButtonListTrashed';
 import If from '../operator/If'
 import Row from './row'
 import { Button } from 'react-bootstrap';
+import { head } from 'lodash';
 class Table extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +20,7 @@ class Table extends Component {
             queryStrSearch: {},
             searchFields: {},
             searchFieldsValues: {},
+            searchFieldsOrder: {},
             withTrashed: false
         };
     }
@@ -40,7 +43,7 @@ class Table extends Component {
         this.props.generalSearch(e.target.value)
     }
 
-    doSearch = (e, search, page = null) => {
+    doSearch = (e = null, search = null, page = null) => {
 
         let queryStrSearch = this.state.queryStrSearch;
         let searchFields = this.state.searchFields
@@ -70,14 +73,80 @@ class Table extends Component {
         const queryStr = Object.values(queryStrSearch).join(';') + '&searchFields=' + Object.values(searchFields).join(';')
 
         // Adiciona ?page=1 quando uma pesquisa é realizada
-        const pageQueryParam = page !== null ? `?page=${page}` : '?page=1&'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
+        const pageQueryParam = page !== null ? `?page=${page}` : '?page=1'; // REMOVER O '?' E COLOCAR DIRETAMENTE NA URL DO GETLIST
 
-        this.props.attributesSearch(pageQueryParam + '&search=' + queryStr + '&searchJoin=and');
+        let orderBy = ''
+        let sortedBy = ''
+
+        // Adicionar na URL apenas colunas que não são relações, pois relações não funcionam para ordenar na API
+        Object.keys(this.state.searchFieldsOrder).forEach( orderField => {
+            if(orderField.indexOf('.') == -1) {
+                orderBy += (orderBy.length > 0 ? ';' : '') + orderField
+                sortedBy += (sortedBy.length > 0 ? ';' : '') + this.state.searchFieldsOrder[orderField]
+            }
+        })
+        
+        this.props.attributesSearch(
+            pageQueryParam + '&search=' + queryStr + '&searchJoin=and' +
+            (orderBy.length > 0 ? '&orderBy=' + orderBy : '') + 
+            (sortedBy.length > 0 ? '&sortedBy=' + sortedBy : ''));
+
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })
     }
 
     getBody() {
-        return this.props.paginate ? this.props.body.data : this.props.body
+        let body = this.props.paginate ? this.props.body.data : this.props.body
+        const orderFields = Object.keys(this.state.searchFieldsOrder)
+
+        if(orderFields.length > 0 && ( orderFields.toString().indexOf('.') > -1 || !this.props.attributesSearch )) {
+            body = _.orderBy(body, orderFields, Object.values(this.state.searchFieldsOrder));
+        }
+
+        return body
+    }
+
+    onClickReorder = (e, val) => {
+        let btn = e.target
+
+        if(btn.tagName != 'DIV') {
+            btn = btn.parentElement
+        }
+
+        if(btn.tagName != 'DIV') {
+            btn = btn.parentElement
+        }
+
+        if(btn) {
+            if(btn.classList.contains('up')) {
+                let sfo = {...this.state.searchFieldsOrder}
+                delete sfo[val]
+                
+                this.setState(
+                {searchFieldsOrder: { [val]: 'desc', ...sfo}},
+                    () => {
+                        // Se attributesSearch foi setada e 'val' não tem ponto, ou seja, é uma coluna e não uma relação 
+                        if(this.props.attributesSearch && val.indexOf('.') == -1) {
+                            this.doSearch()
+                        }
+                    }
+                )
+                btn.classList.replace('up', 'down')
+            } else {
+                let sfo = {...this.state.searchFieldsOrder}
+                delete sfo[val]
+
+                this.setState(
+                    {searchFieldsOrder: { [val]: 'asc', ...sfo }},
+                    () => {
+                        // Se attributesSearch foi setada e 'val' não tem ponto, ou seja, é uma coluna e não uma relação
+                        if(this.props.attributesSearch && val.indexOf('.') == -1) {
+                            this.doSearch()
+                        }
+                    }
+                )
+                btn.classList.replace('down', 'up')
+            }
+        }
     }
 
     renderHead = () => {
@@ -102,9 +171,22 @@ class Table extends Component {
             <tr>
                 {(
                     Object.getOwnPropertyNames(head).map((val, index) => {                      
-                       return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>{head[val].title || head[val]}</th>
-                                             
-                    })
+                        return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
+                             <span style={{display: 'block', float: 'left'}}>{ head[val].title || head[val] }</span>
+                             { this.props.attributesSearch &&
+                                 <div 
+                                     className='carret-up-down up'
+                                     onClick={ e => this.onClickReorder(e, val)}
+                                     title={val.indexOf('.') < 0 ? 'Ordenar todos os registros' : 'Ordenar registros dessa página'}
+                                     data-toggle="tooltip"
+                                 >
+                                     <i className="fas fa-caret-up fa-fw table-carret"></i>
+                                     <i className="fas fa-caret-down fa-fw table-carret"></i>
+                                 </div>
+                             }
+                         </th>
+                                              
+                     })
                 )}
                 
                 {this.props.withTrashed && <th><ButtonListTrashed 
@@ -186,8 +268,8 @@ class Table extends Component {
     renderBody = () => {
         const body = this.getBody()
         const actionsPath = this.props.path || this.props.location.pathname
-
-        if (body) {
+        
+        if (body.length) {
             return <tbody>
                 {
                     body.map((ntr, ii) => {
@@ -264,7 +346,7 @@ class Table extends Component {
                                     {this.props.actions.remove &&
                                         <button type='button' onClick={() => this.props.actions.remove(ntr)}
                                             style={ !ntr.deleted_at ? { border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px' } : {visibility: 'hidden'}} >
-                                            <i className='fa fa-trash'></i>
+                                            <i className='fa fa-trash-alt'></i>
                                         </button>
                                     }
 
@@ -294,6 +376,24 @@ class Table extends Component {
                     })
                 }
             </tbody>
+        }else{
+            const head = this.props.attributes
+            const cols = Object.getOwnPropertyNames(head).length
+            return (
+                <tbody>
+                    <tr>
+                        <td colSpan={cols+1}>
+
+                <div className='row'>
+                    <div className='col col-12 text-center'>
+                        <img alt="" src="data:image/png;base64,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" />
+                        <p>Não há dados a serem exibidos</p>
+                    </div>
+                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            )
         }
     }
 
@@ -381,7 +481,7 @@ class Table extends Component {
                                                 </Link>
                                                 }
                                                 {this.props.actions.remove && <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
-                                                    <i className='fa fa-trash'></i> Excluir
+                                                    <i className='fa fa-trash-alt'></i> Excluir
                                                 </button>
                                                 }
 
@@ -417,11 +517,13 @@ class Table extends Component {
         if (!pagination || pagination.total === undefined) {
           return null;
         }
-      
+
         const pages = [];
         const totalPages = pagination.last_page;
         const currentPage = pagination.current_page;
-        const displayPages = 20; // Exibir 20 páginas por padrão
+        const displayPages = 5; // Exibir 20 páginas por padrão
+        const total = pagination.total;
+        const to = pagination.to;
       
         let startPage = Math.max(1, currentPage - Math.floor(displayPages / 2));
         let endPage = Math.min(totalPages, startPage + displayPages - 1);
@@ -434,7 +536,7 @@ class Table extends Component {
         // Adiciona páginas ao redor da página atual
         for (let i = startPage; i <= endPage; i++) {
           pages.push(
-            <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+            <li key={i} className={`page-item ${i === currentPage ? '' : ''}`}>
               {i === currentPage ? (
                 <span className="page-link">{i}</span>
               ) : (
@@ -470,27 +572,35 @@ class Table extends Component {
       
         return (
           <div className="card-footer clearfix">
-            <ul className="pagination pagination-sm m-0 float-right mt-3">
-              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                <a
-                  className="page-link"
-                  onClick={() => this.doSearch(null, null, currentPage - 1)}
-                  aria-label="Previous"
-                >
-                  «
-                </a>
-              </li>
-              {pages}
-              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                <a
-                  className="page-link"
-                  onClick={() => this.doSearch(null, null, currentPage + 1)}
-                  aria-label="Next"
-                >
-                  »
-                </a>
-              </li>
-            </ul>
+            <div className='row'>
+                <div className='col'>
+                    <p className='m-0 float-left mt-3'>Exibindo {to} de {total} resultados</p>
+                </div>
+                <div className='col'>
+                    <ul className="pagination pagination-sm m-0 float-right mt-3">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <a
+                        className="page-link"
+                        onClick={() => this.doSearch(null, null, currentPage - 1)}
+                        aria-label="Previous"
+                        >
+                            <i className="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    {pages}
+                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                        <a
+                        className="page-link"
+                        onClick={() => this.doSearch(null, null, currentPage + 1)}
+                        aria-label="Next"
+                        >
+                        <i className="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    </ul>
+
+                </div>
+            </div>
           </div>
         );
     }
