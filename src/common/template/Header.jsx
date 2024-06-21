@@ -29,7 +29,7 @@ class Header extends Component {
       return <li key={i} className="nav-item dropdown">
         <a className="nav-link" data-toggle="dropdown" href="#" aria-expanded="true" title={notify.title}>
           
-          <i className={ "fas fa-" + notify.icon} style={{ width: '24px', height: '24px' }}></i>
+          <i className={ "fas fa-" + notify.icon + " color-icon-white"} style={{ width: '24px', height: '24px' }}></i>
           
           <span className={"badge badge-" + notify.type + " navbar-badge"}>
             { notify.items.length }
@@ -92,7 +92,7 @@ class Header extends Component {
     if(!this.state.intervalId) {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
-        this.props.getNotifications()
+        // this.props.getNotifications()
       }, 10000)})
     }
 

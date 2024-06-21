@@ -132,11 +132,12 @@ select {
     -moz-appearance: none;
 }
 
-.fa, .fas {
+
+.color-icon-white {
     color: white !important;
 }
 
-.fa, .fas:hover {
+.color-icon-white:hover {
     color: white !important;
     opacity: 0.7;
 }
@@ -170,4 +171,16 @@ strong {
     font-weight: 700;
     /* font-size: 16px; */
     line-height: 24px;
+}
+
+[class*='sidebar-dark-'] .sidebar a {
+    color: white !important;
+}
+
+[class*='sidebar-dark-'] {
+    background-color: #212529 !important;
+}
+
+.custom-bg-color {
+    background-color: #3f474e !important;
 }
