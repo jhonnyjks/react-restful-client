@@ -132,6 +132,9 @@ select {
     -moz-appearance: none;
 }
 
+.page-link{
+    padding: 0.25rem 1rem !important;
+}
 
 .color-icon-white {
     color: white !important;
