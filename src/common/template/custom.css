@@ -131,3 +131,43 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
+.fa, .fas {
+    color: white !important;
+}
+
+.fa, .fas:hover {
+    color: white !important;
+    opacity: 0.7;
+}
+
+.circle {
+    display: inline-block;
+    width: 27px;
+    height: 27px;
+    border-radius: 72px;
+    padding: 8px, 9px, 8px, 9px;    ;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    line-height: 24px;
+    font-weight: bold;
+    font-size: 16px;
+    vertical-align: middle; /* alinha verticalmente com o texto ao lado */
+    margin-top: -2px;
+}
+
+strong {
+    color: black !important;
+}
+
+.blue-text {
+    color: #007BFF !important;
+}
+
+.processo-text {
+    padding-left: 10px;
+    font-weight: 700;
+    /* font-size: 16px; */
+    line-height: 24px;
+}
