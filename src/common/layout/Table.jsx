@@ -36,8 +36,17 @@ class Table extends Component {
     }
 
     handleChangeSearch = e => {
-        this.setState({ search: e.target.value })
-        this.props.generalSearch(e.target.value)
+        let val = e.target.value
+        if(/^\d+$/.test(val.trim().replace(',', '').replace('.', ''))) {
+            if(val.includes('.') && val.includes(',')) {
+                val = val.replace('.', '').replace(',', '.')
+            } else if(val.includes(',')) {
+                val = val.replace(',', '.')
+            }
+        }
+
+        this.setState({ search: val })
+        this.props.generalSearch(val)
     }
 
     doSearch = (e = null, search = null, page = null) => {
@@ -47,8 +56,18 @@ class Table extends Component {
         let searchFieldsValues = this.state.searchFieldsValues
 
         if (['text', 'date'].indexOf(search?.type) > -1 && e.target && e.target.value) {
-            queryStrSearch[search.field] = search.field + ':' + e.target.value
-            searchFieldsValues[search.field] = e.target.value
+            // Corrigindo virgula na pesquisa
+            let val = e.target.value
+            if(/^\d+$/.test(val.trim().replace(',', '').replace('.', ''))) {
+                if(val.includes('.') && val.includes(',')) {
+                    val = val.replace('.', '').replace(',', '.')
+                } else if(val.includes(',')) {
+                    val = val.replace(',', '.')
+                }
+            }
+
+            queryStrSearch[search.field] = search.field + ':' + val
+            searchFieldsValues[search.field] = val
             searchFields[search.field] = search.field + ':like'
         } else if (e && e.value) {
             queryStrSearch[search.field] = search.field + ':' + e.value
