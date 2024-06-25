@@ -191,3 +191,15 @@ strong {
 .nav-sidebar .nav-item > .nav-link {
     margin-bottom: 0px !important;
 }
+
+[class*='sidebar-dark-'] .nav-sidebar > .nav-item.menu-open > .nav-link, 
+[class*='sidebar-dark-'] .nav-sidebar > .nav-item > .nav-link:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+[class*='sidebar-dark-'] .nav-treeview > .nav-item > .nav-link:focus {
+    color: #C2C7D0;
+    font-weight: 700;
+}
