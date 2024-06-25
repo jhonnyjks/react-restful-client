@@ -34,7 +34,7 @@ class Auth extends Component {
                 <Field component={Input} type="password" name="password"
                     placeholder="Senha" icon='lock' />
                 
-                <a href='#' className='pull-right password-reset-link' 
+               {/*  <a href='#' className='pull-right password-reset-link' 
                 onClick={e => {
                     toastr.warning('Mudar a senha', 'Por favor, entre em contato com ' + process.env.REACT_APP_ORGANIZATION + ' para criar uma nova senha provisória!')
                     return false
@@ -42,7 +42,7 @@ class Auth extends Component {
 
                     <i className="fas fa-edit"></i> 
                     Esqueci minha senha
-                </a>
+                </a> */}
 
                 <button type="submit" className="col-4 btn btn-warning btn-block">Entrar</button>
             </form>
