@@ -187,3 +187,7 @@ strong {
 .custom-bg-color {
     background-color: #3f474e !important;
 }
+
+.nav-sidebar .nav-item > .nav-link {
+    margin-bottom: 0px !important;
+}

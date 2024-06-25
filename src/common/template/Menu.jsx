@@ -5,7 +5,6 @@ import MenuItem from './MenuItem'
 import MenuTree from './MenuTree'
 import { menu as defaultMenu } from '../../default'
 import { menu } from '../../app/exports'
-import ProfileHeader from './ProfileHeader';
 
 const MainMenu = {...defaultMenu, ...menu}
 
@@ -53,7 +52,6 @@ class Menu extends Component {
                         })}
                     </ul>
                 </div>
-                <ProfileHeader/>
             </div>
         )
     }

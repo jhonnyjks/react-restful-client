@@ -73,8 +73,8 @@ class ProfileHeader extends Component {
                         <img src="https://dummyimage.com/160x160/fff/ggg" className="img-circle elevation-2" alt="User" />
                     </div>
                     <div className="info pl-3">
-                        <a href="#!" className="d-block">{name}</a>
-                        <a href="#!" className="d-block">Perfil: {this.props.profile.noun}</a>
+                        <a href="#!" className="d-block text-white font-weight-bold">{name}</a>
+                        <a href="#!" className="d-block text-white">{this.props.profile.noun}</a>
                     </div>
                 </div>
 
