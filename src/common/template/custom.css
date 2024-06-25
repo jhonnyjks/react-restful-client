@@ -203,3 +203,8 @@ strong {
     color: #C2C7D0;
     font-weight: 700;
 }
+
+.brand-link .brand-image {
+    width: 90% !important;
+    margin: 0px;
+}
