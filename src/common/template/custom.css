@@ -216,6 +216,8 @@ strong {
 .nav-tabs .nav-link, 
 .nav-tabs .nav-item.show .nav-link {
     color: #495057;
+    border-top-right-radius: 0; /* Remove arredondamento do canto superior direito */
+    border-bottom-right-radius: 0; /* Remove arredondamento do canto inferior direito */
 }
 
 .nav-tabs .nav-link.active, 
@@ -224,10 +226,13 @@ strong {
     background-color: #007BFF;
     font-weight: 700;
     border-bottom: none; /* Remove a linha inferior das abas ativas */
+    border-top-right-radius: 0; /* Remove arredondamento do canto superior direito */
+    border-bottom-right-radius: 0; /* Remove arredondamento do canto inferior direito */
 }
 
 .card-body.card-primary.card-outline {
-    border-top: 1px solid #007BFF;
+    border-top: 2px solid #007BFF;
     margin-top: -1px; /* Compensa a linha superior */
 }
+
 
