@@ -91,6 +91,7 @@ class Header extends Component {
         </ul>
         <ul className="navbar-nav ml-auto">
           { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
+          <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#suportModal">Dúvidas & Sugestões</button>
         </ul>
       </nav>
     )

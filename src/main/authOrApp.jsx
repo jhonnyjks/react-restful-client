@@ -3,11 +3,13 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
+import { toastr } from "react-redux-toastr"
+import Select from "react-select"
 
 import '../common/template/dependences'
 import App from './app'
 import Auth from '../default/auth/auth'
-import { validateToken } from '../default/auth/authActions'
+import { validateToken, loading } from '../default/auth/authActions'
 import { can } from '../common/helpers/index'
 
 const Loading = () => {
@@ -24,6 +26,12 @@ class AuthOrApp extends Component {
 
     constructor(props) {
         super(props)
+
+        this.state = {
+            programActions: [],
+            programAction: null,
+            programSubaction: null,
+        }
 
         //GLOBALS
         window.can = can
@@ -46,6 +54,101 @@ class AuthOrApp extends Component {
         }
     }
 
+    getActions = () => {
+        axios
+          .get(`${process.env.REACT_APP_API_HOST}/program_actions?filter:id,name&with=programSubactions:id,name,program_action_id`)
+          .then((resp) => {
+            this.setState({ programActions: resp.data.data });
+          })
+          .catch((e) => {
+            if (!e.response) {
+              toastr.error(
+                "Erro",
+                "Não foi possível obter a lista de ações para o suporte. Por favor, tente novamente."
+              );
+              console.log(e);
+            } else if (!e.response.data) {
+              toastr.error("Erro", e.response.message);
+            } else if (e.response.data) {
+              toastr.error("Erro", e.response.data.message);
+            }
+          });
+      };
+
+      onSuportSubmit = () => {
+        if(document.getElementById('suport_content').value.length < 10) {
+            toastr.warning(
+                "Atenção",
+                "Por favor, descreva melhor sua solicitação"
+              );
+
+              return false
+        }
+
+        this.props.loading(true)
+        axios
+        .post(
+            `${process.env.REACT_APP_API_HOST}/program_actions/suport`,
+            {
+                __program_action: this.state.programAction?.label || '---',
+                __program_subaction: this.state.programSubaction?.label || '---',
+                __content: document.getElementById('suport_content').value
+            }
+        )
+        .then((resp) => {
+            toastr.success(
+                "Enviado!",
+                "Enviado com sucesso!"
+              );
+
+            document.getElementById('suport_content').value = ''
+            document.getElementById('suport_program_subaction').value = ''
+            document.getElementById('suport_program_action').value = ''
+
+            document.getElementById('suportModalCancel').click()
+
+            this.props.loading(false)
+
+            this.setState({
+                programAction: null,
+                programSubaction: null
+              });
+        })
+        .catch((e) => {
+            this.props.loading(false)
+          if (!e.response) {
+            toastr.error(
+              "Erro",
+              "Não foi possível enviar a mensagem para o suporte. Por favor, tente novamente."
+            );
+            console.log(e);
+          } else if (!e.response.data) {
+            toastr.error("Erro", e.response.message);
+          } else if (e.response.data) {
+            toastr.error("Erro", e.response.data.message);
+          }
+        });
+
+        return false
+      }
+
+      handleActionChange = (e) => {
+        if (e && e.value) {
+          this.setState({
+            programAction: e,
+            programSubaction: null
+          });
+        }
+      };
+
+      handleSubactionChange = (e) => {
+        if (e && e.value) {
+          this.setState({
+            programSubaction: e,
+          });
+        }
+      };
+
     /**
      * 
      * @param {String} rel :: uma das relações da query string
@@ -56,6 +159,113 @@ class AuthOrApp extends Component {
         const relation = _.snakeCase(rel) + '_id'
         if(scope.actions[relation] && scope.actions[relation] > 0) return true
         return false
+    }
+
+    renderSuportModal = () => {
+
+        if(this.state.programActions.length == 0) this.getActions()
+
+        return <div
+        className="modal fade"
+        data-backdrop="static"
+        data-keyboard="false"
+        id="suportModal"
+        tabIndex="-1"
+        aria-labelledby="suportModalLabel"
+        aria-hidden="true"
+        >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+            { this.props.auth.loading &&
+            <div className="overlay d-flex justify-content-center" style={{paddingTop: '36%'}}>
+                <i className="spinner-grow" role="status"></i>
+            </div> }
+            <div className="modal-header">
+                <h5 className="modal-title" id="suportModalLabel">
+                Suporte - Como podemos lhe atender melhor?
+                </h5>
+                <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                >
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div className="modal-body">
+                <form>
+                <div className="form-group">
+                    <label htmlFor="suport_program_action" className="col-form-label"
+                    >Ação:</label>
+                   
+                    <Select
+                        id='suport_program_action'
+                        name="program_action"
+                        className="search-select-container"
+                        classNamePrefix="search-select"
+                        onChange={this.handleActionChange}
+                        options={
+                            this.state.programActions.map((e) => ({
+                            value: e.id,
+                            label: e.id + " - " + e.name
+                            })) || []
+                        }
+                        value={ this.state.programAction }
+                        style={{zIndex: 11}}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="suport_program_subaction" className="col-form-label"
+                    >Subação:</label>
+                   
+                    <Select
+                        id='suport_program_subaction'
+                        name="suport_program_subaction"
+                        className="search-select-container"
+                        classNamePrefix="search-select"
+                        onChange={this.handleSubactionChange}
+                        options={(() => {
+                            let opts = []
+                            if(this.state.programAction && this.state.programActions) {
+                                const item = this.state.programActions.find(p => p.id == this.state.programAction.value)
+                                
+                                if(item && item.program_subactions) {
+                                    return item.program_subactions.map((e) => ({
+                                        value: e.id,
+                                        label: e.id + " - " + e.name,
+                                        }))
+                                }
+                            }
+
+                            return opts
+                        })()}
+                        value={ this.state.programSubaction }
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="suport_content" className="col-form-label"
+                    >Dúvidas e Sugestões:
+                    </label>
+                    <textarea className="form-control" id="suport_content" style={{height: '200px'}}></textarea>
+                </div>
+                </form>
+            </div>
+            <div className="modal-footer">
+                <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+                id="suportModalCancel" 
+                >
+                Cancelar
+                </button>
+                <button type="button" className="btn btn-primary" onClick={this.onSuportSubmit}>Enviar</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
     }
 
     render() {
@@ -75,6 +285,7 @@ class AuthOrApp extends Component {
             { loading && <Loading /> }
             { (token && validToken && profile) && <App>{this.props.children}</App> }
             { !(token && validToken && profile) && <Auth /> }
+            {(token && validToken && profile) && this.renderSuportModal()}
         </>
     }
 
@@ -203,7 +414,7 @@ class AuthOrApp extends Component {
             // Se o escopo existe, remove atributos sem permissão
             if(scopes[route]) {
                 Object.keys(conf.data).forEach(attr => {
-                    if(methodToPermission[conf.method].indexOf(scopes[route].actions[attr]) > -1) data[attr] = conf.data[attr]
+                    if(methodToPermission[conf.method].includes(scopes[route].actions[attr]) || attr.slice(0, 2) == '__') data[attr] = conf.data[attr]
                 })
             } else {
                 data = conf.data
@@ -214,5 +425,5 @@ class AuthOrApp extends Component {
     }
 }
 const mapStateToProps = state => ({ auth: state.auth })
-const mapDispatchToProps = dispatch => bindActionCreators({ validateToken }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ validateToken, loading }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(AuthOrApp)
