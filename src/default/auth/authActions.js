@@ -2,24 +2,39 @@ import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import _ from 'lodash'
 
-export function login(values) {
-    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/login`)
-}
-
-export function signup(values) {
-    return submit(values, `${process.env.REACT_APP_API_HOST}/auth/signup`)
+export function login(values, url) {
+    return submit(values, url)
 }
 
 function submit(values, url) {
+
+    console.log('submit values: ', values, url);
+
+    switch (url) {
+        case 'login':
+            url = `${process.env.REACT_APP_API_HOST}/auth/login`
+            break;
+        case 'signup':
+            url = `${process.env.REACT_APP_API_HOST}/auth/signup`
+            break;
+        case 'reset':
+            url = `${process.env.REACT_APP_API_HOST}/auth/change-password`
+            break;
+        default:
+            break;
+    }
+    
     return dispatch => {
         
         dispatch({ type: 'AUTH_LOADING', payload: true })
 
         axios.post(url, values)
             .then(resp => {
-                toastr.success('Sucesso', resp.data.message)
 
-                if (resp.data.data.profiles.length === 1) {
+                if (resp.data.data && resp.data.data.profiles && resp.data.data.profiles.length === 1) {
+                    
+                    toastr.success('Sucesso', resp.data.message)
+
                     dispatch([
                         selectProfile(
                             resp.data.data.profiles.length ? resp.data.data.profiles[0] : null,
@@ -27,11 +42,12 @@ function submit(values, url) {
                         )
                     ])
                 } else {
+                    toastr.info('Sucesso', resp.data.message)
+
                     dispatch({ type: 'AUTH_LOADING', payload: false })
                 }
 
                 dispatch({ type: 'USER_FETCHED', payload: resp.data })
-
             })
             .catch(e => {
 

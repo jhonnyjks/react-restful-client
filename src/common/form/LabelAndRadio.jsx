@@ -140,17 +140,18 @@ class LabelAndRadio extends Component {
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => (
                                 e && e.id > -1 ? (
-                                    <div key={e.id} style={{ marginBottom: '-10px' }}>
-                                      
-                                        <label  htmlFor={this.props.name} style={{ fontWeight: 'normal'}} className='radio'>
+                                    <div key={e.id} className='form-check'>
+                                        <input
+                                            type="radio"
+                                            value={e.id}
+                                            checked={this.state.selectedOption === e.id}
+                                            onChange={this.onValueChange}
+                                            style={{ marginRight: '5px' }}
+                                            className='form-check-input'
+                                        /> 
+                                        <label  htmlFor={this.props.name} style={{ fontWeight: 'normal'}} className='form-check-label'>
                                             {this.props.label}
-                                            <input
-                                                type="radio"
-                                                value={e.id}
-                                                checked={this.state.selectedOption === e.id}
-                                                onChange={this.onValueChange}
-                                                style={{ marginRight: '5px' }}
-                                            /> 
+
                                             { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
                                         </label>
                                     </div>

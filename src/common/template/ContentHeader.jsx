@@ -9,7 +9,7 @@ export default props => (
         <div className="container-fluid">
         <div className="row mb-2">
             <div className="col-sm-6">
-                <h1 className="pull-left">{props.title} <small style={{fontSize: 15}}>{props.small}</small></h1>
+                <h1 className="pull-left"><strong>{props.title}</strong> <small style={{fontSize: 15, marginLeft: '0.5em'}}>{props.small}</small></h1>
             </div>
             <div className="col-sm-6">
                 <h1 className='pull-right'>

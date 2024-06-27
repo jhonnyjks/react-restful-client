@@ -5,7 +5,6 @@ import MenuItem from './MenuItem'
 import MenuTree from './MenuTree'
 import { menu as defaultMenu } from '../../default'
 import { menu } from '../../app/exports'
-import ProfileHeader from './ProfileHeader';
 
 const MainMenu = {...defaultMenu, ...menu}
 
@@ -22,8 +21,7 @@ class Menu extends Component {
         const scopes = this.props.scopes
         return (
             <div>
-                <ProfileHeader/>
-                <div className="mt-2">
+                <div style={{ marginTop: '40px' }}>
                     <ul className='nav nav-pills nav-sidebar flex-column'>
                         {Object.keys(MainMenu).map((path) => {
 

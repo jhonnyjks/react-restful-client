@@ -135,19 +135,20 @@ class LabelAndCheckBox extends Component {
             { (this.props.readOnly === false || this.hasPermission(permission, 'read') || this.props.forceToShow) && <Grid cols={this.props.cols} style={this.props.style || {}} className={this.props.className || {}} >
               
                 <div className='form-group'>
-                    <label htmlFor={this.props.name}>{this.props.label}</label>
+                    <label htmlFor={this.props.name} style={{ fontWeight: '600'}}>{this.props.label}</label>
                         
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => (
                                 e && e.id > -1 ? (
-                                    <div key={e.id} style={{ marginBottom: '-10px' }}>
-                                        <label style={{ fontWeight: 'normal'}} className='checkbox'>
-                                            <input
-                                                type="checkbox"
-                                                checked={this.props.input.value === 1}
-                                                onChange={this.handleChange}                                                
-                                                style={{ marginRight: '5px' }}
-                                            /> 
+                                    <div key={e.id} className='form-check'>
+                                        <input
+                                            type="checkbox"
+                                            checked={this.props.input.value === 1}
+                                            onChange={this.handleChange}                                                
+                                            style={{ marginRight: '5px' }}
+                                            className='form-check-input'
+                                        /> 
+                                        <label style={{ fontWeight: 'normal'}} className='form-check-label'>
                                             { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
                                         </label>
                                     </div>

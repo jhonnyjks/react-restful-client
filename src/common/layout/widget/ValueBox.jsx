@@ -20,8 +20,8 @@ export default props => (
             </If>
 
             <If test={props.loading}>
-                <div class="overlay">
-                    <i class="fa fa-refresh fa-spin"></i>
+                <div className="overlay">
+                    <i className="fa fa-refresh fa-spin"></i>
                 </div>
             </If>
         </div>

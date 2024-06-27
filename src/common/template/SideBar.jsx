@@ -4,18 +4,22 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { openCloseMiniSideBar, setSideBar } from './templateActions'
 import Menu from './Menu'
+import ProfileHeader from './ProfileHeader';
 
 const SidebarSema = props => (
-    <aside className='main-sidebar sidebar-dark-success elevation-4'>
+    <aside className='main-sidebar sidebar-dark-success elevation-4' style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <a href="#!" className="brand-link">
             { process.env.REACT_APP_LOGO ?
-            <img src={process.env.REACT_APP_LOGO} alt={process.env.REACT_APP_NAME} className="brand-image brand-image--custom"
-                style={{ opacity: .8 }}></img>
+            <img src={process.env.REACT_APP_LOGO} alt={process.env.REACT_APP_NAME} className="brand-image brand-image--custom"></img>
             : <span className="brand-text font-weight-light text-center"><strong>{process.env.REACT_APP_NAME}</strong></span>
             }
         </a>
-        <div className='sidebar sidebar--sema'>
+        <div className='sidebar sidebar--sema' style={{ flex: 2, overflowY: 'auto'}}>
             <Menu />
+        </div>
+
+        <div style={{ paddingRight: '20px', paddingLeft: '20px', marginBottom: '-40px' }}>
+            <ProfileHeader/>
         </div>
     </aside>
 )
@@ -69,4 +73,4 @@ class SideBar extends React.Component {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ openCloseMiniSideBar, setSideBar }, dispatch)
 const mapStateToProps = state => ({ template: state.template })
-export default connect(mapStateToProps, mapDispatchToProps)(SideBar)
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);
