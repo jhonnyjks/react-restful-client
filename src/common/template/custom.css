@@ -235,4 +235,91 @@ strong {
     margin-top: -1px; /* Compensa a linha superior */
 }
 
+.bs-stepper .step-trigger {
+    padding: 8px !important;
+}
 
+.bs-stepper-label {
+    color: black;
+    font-weight: 400;
+}
+
+.bs-stepper-header {
+    border-bottom: 2px solid #007BFF;
+}
+
+.bs-stepper-circle-success {
+    display: inline-flex;
+    align-content: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    padding: .5em 0;
+    margin: .25rem;
+    line-height: 1em;
+    color: #fff;
+    background-color: #28a745;
+    border-radius: 1em;
+}
+
+.callout {
+    border-radius: 4px;
+    border-left: 0px;
+    box-shadow: none;
+    border: 1px solid #ADB5BD; /* Cor da borda */
+    margin-bottom: 0;
+    margin-top: 1rem;
+}
+
+.callout-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.selected-callout {
+    background-color: #cce5ff;
+    border: 1px solid #007BFF;
+    cursor: pointer;
+}
+
+.form-content {
+    padding-bottom: 30px;
+    color: #212529;
+}
+
+.form-description {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 22px;
+    margin-bottom: 4px;
+    color: #212529;
+}
+
+.form-content {
+    text-align: justify;
+    color: #212529;
+}
+
+.form-section-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #212529;
+    position: relative;
+    display: inline-block; /* Para que a linha fique apenas sob o texto */
+}
+
+.form-section-title::after {
+    content: "";
+    display: block;
+    width: 116%;
+    border-bottom: 2px solid #007BFF;
+    position: absolute;
+    left: -20px; /* Ajuste conforme necessário para a quantidade que você deseja ultrapassar */
+    top: 100%; /* Posição logo abaixo do texto */
+}
