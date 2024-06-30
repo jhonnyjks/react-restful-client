@@ -59,71 +59,76 @@ class Auth extends Component {
 
         const loginForm = (
             <form onSubmit={handleSubmit(v => this.onSubmit(v))}>
+                <label className={loginMode || resetMode?'d-none':''}>Nome</label>
                 <Field component={Input} type="input" name="name"
-                    placeholder="Nome" icon='user' hide={loginMode || resetMode} />
+                    placeholder="Digite seu nome"  hide={loginMode || resetMode} />
+                <label className={resetMode?'d-none':''}>Usuário</label>
                 <Field component={Input} type="text" name="login"
-                    placeholder="Login" icon='envelope' hide={resetMode} />
-                <Field component={Input} type="password" name="password"
-                    placeholder="Senha" icon='lock' hide={resetMode} />
-                <Field component={Input} type="password" name="confirm_password"
-                    placeholder="Confirmar Senha" icon='lock' hide={loginMode || resetMode} />
-
-                {resetMode && (
-                    <Field component={Input} type="text" name="login"
-                        placeholder="Informe Login ou email" icon='envelope' />
-                )}
-                
+                    placeholder="Digite seu login" hide={resetMode} />
                 {resetMode ? null : (
                     <a href='#' className='pull-right' 
                         onClick={e => {
                             e.preventDefault();
                             this.changeResetMode();
                         }}>
-                        Esqueci minha senha
+                        Esqueceu a senha?
                     </a>
                 )}
+                <label className={resetMode?'d-none':''}>Senha</label>
+                <Field component={Input} type="password" name="password"
+                    placeholder="Digite a sua senha"  hide={resetMode} />
+
+                <label className={loginMode || resetMode?'d-none':''}>Confirmar Senha</label>
+                <Field component={Input} type="password" name="confirm_password"
+                    placeholder="Confirmar Senha"  hide={loginMode || resetMode} />
+
+                {resetMode && (
+                    <>
+                        <label>Login ou email</label>
+
+                        <Field component={Input} type="text" name="login"
+                            placeholder="Informe Login ou email"  />
+                    </>
+                )}
+                
+                
 
                 {loginMode && !signupMode && !resetMode && (
-                    <div className="col-4">
                         <button type="submit" className="btn btn-primary btn-block">
                             Entrar
                         </button>
-                    </div>
                 )}
 
                 {signupMode && !loginMode && !resetMode && (
-                    <div className="col-4">
                         <button type="submit" className="btn btn-primary btn-block">
                             Criar
                         </button>
-                    </div>
                 )}
 
                 {resetMode && !loginMode && !signupMode && !resetHidenButton && (
-                    <div className="col-4">
+                    
                         <button type="submit" className="btn btn-primary btn-block">
                             Redefinir
                         </button>
-                    </div>
                 )}
 
                 <div className="social-auth-links text-center mb-3">
                     <p>- OU -</p>
 
                     {loginMode && !signupMode && !resetMode && (
-                        <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeSignupMode()}>
+                        <a href="#!" className="btn btn-block btn-outline-primary" onClick={() => this.changeSignupMode()}>
                             Novo usuário? Registrar aqui!
                         </a>
                     )}
 
                     {signupMode && !loginMode && !resetMode && (
-                        <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeLoginMode()}>
+                        <a href="#!" className="btn btn-block btn-outline-primary" onClick={() => this.changeLoginMode()}>
                             Já é cadastrado? Entrar aqui!
                         </a>
                     )}
 
                     {resetMode && !loginMode && !signupMode && (
-                        <a href="#!" className="btn btn-block btn-primary" onClick={() => this.changeLoginMode()}>
+                        <a href="#!" className="btn btn-block btn-outline-primary" onClick={() => this.changeLoginMode()}>
                             Já é cadastrado? Entrar aqui!
                         </a>
                     )}
@@ -134,31 +139,36 @@ class Auth extends Component {
         const selectProfile = (
             <ul className='list-group custom-list-group'>
                 {this.props.profiles.map(profile => (
-                    <a key={profile.id} href="#!" className=' text-center col-xs-12'
+                    <a key={profile.id} href="#!" className=' btn btn-block btn-primary'
                         onClick={() => this.props.selectProfile(profile, this.props.token)}>
-                        <li className='list-group-item col-xs-12'>
-                            <b>{profile.noun}</b>
-                        </li>
+                            {profile.noun}
                     </a>
                 ))}
             </ul>
         )
 
         return (
-            <div className="login-page">
-                <div className="login-box">{
-                    process.env.REACT_APP_LOGIN_LOGO === undefined || process.env.REACT_APP_LOGIN_LOGO === "" ?
+            <div>
+                <div className='bloco-azul'></div>
+                <div className="login-page">
+                    <div className="login-box">{
+                        process.env.REACT_APP_LOGIN_LOGO === undefined || process.env.REACT_APP_LOGIN_LOGO === "" ?
                         <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div> :
-                        <div className="login-logo">
-                            <img className="image-logo" alt="logo" src={process.env.REACT_APP_LOGIN_LOGO} />
+                            <div className="login-logo">
+                                <img className="image-logo" alt="logo" src={process.env.REACT_APP_LOGIN_LOGO} />
+                            </div>
+                    }
+                        <div className="card">
+                            <div className="card-body login-card-body col-xs-12">
+                                <h2 className="login-box-msg"> 
+                                    <strong>
+                                        {this.props.profiles.length > 1 ? 'Selecione um perfil' : (resetMode ? 'Redefinir Senha' : (loginMode ? 'Bem vindo!' : 'Crie sua conta'))}
+                                    </strong>
+                                </h2>
+                                {resetMode ? loginForm : (this.props.profiles.length > 1 ? selectProfile : loginForm)}
+                            </div>
+                            <Messages />
                         </div>
-                }
-                    <div className="card">
-                        <div className="card-body login-card-body col-xs-12">
-                            <p className="login-box-msg"> {this.props.profiles.length > 1 ? 'Selecione um perfil' : (resetMode ? 'Redefinir Senha' : (loginMode ? 'Bem vindo!' : 'Crie sua conta'))}</p>
-                            {resetMode ? loginForm : (this.props.profiles.length > 1 ? selectProfile : loginForm)}
-                        </div>
-                        <Messages />
                     </div>
                 </div>
             </div>

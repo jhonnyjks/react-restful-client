@@ -14,11 +14,29 @@
     cursor: pointer;
 }
 .image-logo {
-    width: 360px;
+    width: 205px;
+}
+
+.bloco-azul{
+    background-color:#007BFF;
+     height: 40vh
+}
+
+.login-page, .register-page {
+    background: transparent;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    top: -210px;
+    align-items: flex-start;
+}
+
+.login-box, .register-box {
+    width: 520px;
 }
 
 @media only screen and (max-width: 460px) {
     .image-logo {
-        width: 225px;
+        width: 210px;
     }
 }
