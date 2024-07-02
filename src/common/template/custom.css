@@ -323,3 +323,46 @@ strong {
     left: -20px; /* Ajuste conforme necessário para a quantidade que você deseja ultrapassar */
     top: 100%; /* Posição logo abaixo do texto */
 }
+
+.btn-submit-sigep {
+    height: 48px;
+    padding: 12px 24px;
+    gap: 8px;
+    border-radius: 4px;
+    background-color: rgb(13, 110, 253);
+    border: none;
+    cursor: pointer;
+}
+
+.label-submit-sigep {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgb(248, 249, 250);
+}
+
+.btn-back-sigep {
+    height: 48px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: #6C757D;
+    border-style: solid;
+    opacity: 1;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.label-back-sigep {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: #343A40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
