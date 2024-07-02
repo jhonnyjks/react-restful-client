@@ -269,7 +269,7 @@ class Table extends Component {
         const body = this.getBody()
         const actionsPath = this.props.path || this.props.location.pathname
         
-        if (body.length) {
+        if (body && body.length) {
             return <tbody>
                 {
                     body.map((ntr, ii) => {
