@@ -366,3 +366,8 @@ strong {
     justify-content: center;
     height: 100%;
 }
+
+.user-panel .image {
+    display: inline-block;
+    padding-left: 0px !important;
+}
