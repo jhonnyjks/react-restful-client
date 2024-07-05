@@ -611,8 +611,8 @@ class Table extends Component {
                 <If test={this.state.width > 600}>
                     <div className={'box ' + (this.props.isMaterial == undefined || (this.props.isMaterial != undefined && this.props.isMaterial) ? 'material-item ' : '') + 'pull-left'} style={{ paddingBottom: '3px', width: '100%', marginBottom: '0' }}>
                         <If test={this.props.title}>
-                            <div className='box-header'>
-                                <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
+                            <div className='box-header' style={{background: '#e8ecef'}}>
+                                <h5 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h5>
                                 {this.props.renderHead && <hr />}
                             </div>
                         </If>
