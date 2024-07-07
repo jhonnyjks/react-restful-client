@@ -140,19 +140,35 @@ class LabelAndCheckBox extends Component {
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => (
                                 e && e.id > -1 ? (
-                                    <div key={e.id} className='form-check'>
-                                        <input
-                                            type="checkbox"
-                                            checked={this.props.input.value === 1}
-                                            onChange={this.handleChange}                                                
-                                            style={{ marginRight: '5px' }}
-                                            className='form-check-input'
-                                        /> 
-                                        <label style={{ fontWeight: 'normal'}} className='form-check-label'>
-                                            { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
-                                        </label>
-                                    </div>
-                                ) : <></>
+                                    <>
+                                        <div key={e.id} className='form-check'>
+                                            <input
+                                                type="checkbox"
+                                                checked={this.props.input.value === 1}
+                                                onChange={this.handleChange}                                                
+                                                style={{ marginRight: '5px' }}
+                                                className='form-check-input'
+                                            /> 
+                                            <label style={{ fontWeight: 'normal'}} className='form-check-label'>
+                                                { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
+                                            </label>
+                                        </div>
+                                    </>
+                                ) : <>
+                                        <div  className="custom-control custom-switch">
+                                            <input 
+                                                type="checkbox" 
+                                                checked={this.props.input.value === 1}
+                                                onChange={this.handleChange} 
+                                                className="custom-control-input" 
+                                            />
+                                            <label className="custom-control-label">
+                                                <font style={{marginLeft: '-18px'}}>
+                                                    { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
+                                                </font>
+                                            </label>
+                                        </div>
+                                </>
                             )
                         )}
 
