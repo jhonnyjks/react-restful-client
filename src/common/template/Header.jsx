@@ -77,7 +77,7 @@ class Header extends Component {
           <div className="dropdown-divider"></div>      
           
           { notify.linkToList && 
-            <a href={ notify.linkToList } className="dropdown-item dropdown-footer">
+            <a href={ linkToList } className="dropdown-item dropdown-footer">
               <button type="button" className="btn btn-primary w-100">Ver Todos</button>
             </a>
           }
@@ -92,7 +92,7 @@ class Header extends Component {
     if(!this.state.intervalId) {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
-        this.props.getNotifications()
+        // this.props.getNotifications()
       }, 10000)})
     }
 
