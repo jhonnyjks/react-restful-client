@@ -312,16 +312,17 @@ strong {
     color: #212529;
     position: relative;
     display: inline-block; /* Para que a linha fique apenas sob o texto */
+    padding-bottom: 4px;
 }
 
 .form-section-title::after {
     content: "";
     display: block;
-    width: 116%;
+    width: calc(100% + 20px);
     border-bottom: 2px solid #007BFF;
     position: absolute;
     left: -20px; /* Ajuste conforme necessário para a quantidade que você deseja ultrapassar */
-    top: 100%; /* Posição logo abaixo do texto */
+    bottom: 0; /* Posição logo abaixo do texto */
 }
 
 .btn-submit-sigep {
