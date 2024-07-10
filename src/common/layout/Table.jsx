@@ -165,12 +165,23 @@ class Table extends Component {
             return null
         }
 
+        console.log('cabecalhos: ', head);
+
         return <thead>
 
            
             <tr>
                 {(
-                    Object.getOwnPropertyNames(head).map((val, index) => {                      
+                    Object.getOwnPropertyNames(head)
+                        .filter((val, index) => {
+
+                            if (typeof head[val].show != 'undefined') {
+                                return head[val].show
+                            } else {
+                                return true
+                            }
+                        })
+                        .map((val, index) => {                      
                         return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
                              <span style={{display: 'block', float: 'left'}}>{ head[val].title || head[val] }</span>
                              { this.props.attributesSearch &&
@@ -189,14 +200,13 @@ class Table extends Component {
                      })
                 )}
                 
-                {this.props.withTrashed && <th><ButtonListTrashed 
+                {this.props.actions &&  <th>
+                    {this.props.withTrashed && <><ButtonListTrashed 
                                                 title="Incluir itens excluídos"
                                                 onListTrashed={this.props.actionsHeader.listTrashed}
                                                 onColorResolve={this.props.iconColorResolve.onColorResolve}                                               
-                                                ></ButtonListTrashed></th> }
-
-
-                {this.props.actions && <th></th>}
+                                                ></ButtonListTrashed></> }
+                </th>}
             </tr>
 
             {this.props.attributes && this.renderSearch(head)}          
