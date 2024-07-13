@@ -165,8 +165,6 @@ class Table extends Component {
             return null
         }
 
-        console.log('cabecalhos: ', head);
-
         return <thead>
 
            
@@ -183,19 +181,21 @@ class Table extends Component {
                         })
                         .map((val, index) => {                      
                         return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
-                             <span style={{display: 'block', float: 'left'}}>{ head[val].title || head[val] }</span>
-                             { this.props.attributesSearch &&
-                                 <div 
-                                     className='carret-up-down up'
-                                     onClick={ e => this.onClickReorder(e, val)}
-                                     title={val.indexOf('.') < 0 ? 'Ordenar todos os registros' : 'Ordenar registros dessa página'}
-                                     data-toggle="tooltip"
-                                 >
-                                     <i className="fas fa-caret-up fa-fw table-carret"></i>
-                                     <i className="fas fa-caret-down fa-fw table-carret"></i>
-                                 </div>
-                             }
-                         </th>
+                                    <strong>
+                                        <span style={{display: 'block', float: 'left'}}>{ head[val].title || head[val] }</span>
+                                        { this.props.attributesSearch &&
+                                            <div 
+                                                className='carret-up-down up'
+                                                onClick={ e => this.onClickReorder(e, val)}
+                                                title={val.indexOf('.') < 0 ? 'Ordenar todos os registros' : 'Ordenar registros dessa página'}
+                                                data-toggle="tooltip"
+                                            >
+                                                <i className="fas fa-caret-up fa-fw table-carret"></i>
+                                                <i className="fas fa-caret-down fa-fw table-carret"></i>
+                                            </div>
+                                        }
+                                    </strong>
+                                </th>
                                               
                      })
                 )}
@@ -534,6 +534,7 @@ class Table extends Component {
         const displayPages = 5; // Exibir 20 páginas por padrão
         const total = pagination.total;
         const to = pagination.to;
+        const from = pagination.from;
       
         let startPage = Math.max(1, currentPage - Math.floor(displayPages / 2));
         let endPage = Math.min(totalPages, startPage + displayPages - 1);
@@ -584,7 +585,7 @@ class Table extends Component {
           <div className="card-footer bg-white clearfix">
             <div className='row'>
                 <div className='col'>
-                    <p className='m-0 float-left mt-3'>Exibindo {to} de {total} resultados</p>
+                    <p className='m-0 float-left mt-3'> Exibindo do item {from} ao {to}, de {total} resultados</p>
                 </div>
                 <div className='col'>
                     <ul className="pagination pagination-sm m-0 float-right mt-3">

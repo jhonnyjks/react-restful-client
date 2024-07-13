@@ -8,7 +8,7 @@ table.fixed thead tr {
     font-weight: normal;
  }
 .table-carret {
-    color: #444444 !important;
+    color: #ADB5BD;
 }
 .table-carret:hover {
     color: unset;
@@ -23,7 +23,7 @@ table.fixed thead tr {
     width: 20px;
 }
 .carret-up-down.up > .fa-caret-up, .carret-up-down.down > .fa-caret-down {
-    color: #555;
+    color: #0D6EFD;
 }
 .carret-up-down > i {
     line-height: 16px;

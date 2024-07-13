@@ -26,6 +26,7 @@ export default (state = INITIAL_STATE, action) => {
                     last_page: paginationData.last_page,
                     total: paginationData.total,
                     to: paginationData.to,
+from: paginationData.from,
                 }
             };
 
