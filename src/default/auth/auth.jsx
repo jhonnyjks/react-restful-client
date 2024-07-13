@@ -151,7 +151,7 @@ class Auth extends Component {
             <div>
                 <div className='bloco-azul'></div>
                 <div className="login-page">
-                    <div className="login-box">{
+                    <div className="login-box container">{
                         process.env.REACT_APP_LOGIN_LOGO === undefined || process.env.REACT_APP_LOGIN_LOGO === "" ?
                         <div className="login-logo"><b>{process.env.REACT_APP_NAME}</b></div> :
                             <div className="login-logo">
@@ -159,7 +159,7 @@ class Auth extends Component {
                             </div>
                     }
                         <div className="card">
-                            <div className="card-body login-card-body col-xs-12">
+                            <div className="card-body login-card-body rounded-lg col-xs-12">
                                 <h2 className="login-box-msg"> 
                                     <strong>
                                         {this.props.profiles.length > 1 ? 'Selecione um perfil' : (resetMode ? 'Redefinir Senha' : (loginMode ? 'Bem vindo!' : 'Crie sua conta'))}
