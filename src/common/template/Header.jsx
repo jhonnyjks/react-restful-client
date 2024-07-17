@@ -23,8 +23,6 @@ class Header extends Component {
   renderNotifications = (notifications) => 
     notifications.map((notify, i) => {
       const linkToList =  process.env.PUBLIC_URL + notify.linkToList
-
-      console.log('notify: ', notify);
             
       return <li key={i} className="nav-item dropdown">
         <a className="nav-link" data-toggle="dropdown" href="#" aria-expanded="true" title={notify.title}>
@@ -92,7 +90,7 @@ class Header extends Component {
     if(!this.state.intervalId) {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
-        this.props.getNotifications()
+        // this.props.getNotifications()
       }, 10000)})
     }
 
