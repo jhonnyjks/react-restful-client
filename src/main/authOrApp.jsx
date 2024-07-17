@@ -197,7 +197,7 @@ class AuthOrApp extends Component {
                 <form>
                 <div className="form-group">
                     <label htmlFor="suport_program_action" className="col-form-label"
-                    >Ação:</label>
+                    >Ação <small>(Opcional)</small>:</label>
                    
                     <Select
                         id='suport_program_action'
@@ -217,7 +217,7 @@ class AuthOrApp extends Component {
                 </div>
                 <div className="form-group">
                     <label htmlFor="suport_program_subaction" className="col-form-label"
-                    >Subação:</label>
+                    >Subação <small>(Opcional)</small>:</label>
                    
                     <Select
                         id='suport_program_subaction'
