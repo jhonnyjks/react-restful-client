@@ -90,7 +90,7 @@ class Header extends Component {
     if(!this.state.intervalId) {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
-        // this.props.getNotifications()
+        this.props.getNotifications()
       }, 10000)})
     }
 
