@@ -24,8 +24,6 @@ class Header extends Component {
   renderNotifications = (notifications) => 
     notifications.map((notify, i) => {
       const linkToList =  process.env.PUBLIC_URL + notify.linkToList
-
-      console.log('notify: ', notify);
             
       return <li key={i} className="nav-item dropdown">
         <a className="nav-link" data-toggle="dropdown" href="#" aria-expanded="true" title={notify.title}>
