@@ -116,14 +116,19 @@ class Header extends Component {
             }
         </a>
         </ul>
-        <ul className="navbar-nav ml-auto d-none d-sm-block" style={{ paddingRight: '40px' }}>
-          { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
-        </ul>
-        <ul className="navbar-nav ml-auto d-block d-sm-none">
-            <a className="nav-link nav-link--sm" data-widget="pushmenu">
-              <i className="fas fa-th-large"></i>
-            </a>
-        </ul>
+        {innerWidth >= 767.98 ? (
+          <ul className={"navbar-nav ml-auto" }style={{ paddingRight: '40px' }}>
+            { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
+          </ul>
+        ):(
+          <ul className="navbar-nav ml-auto">
+              <a className="nav-link nav-link--sm" data-widget="pushmenu">
+                <i className="fas fa-th-large"></i>
+              </a>
+          </ul>
+        )
+
+        }
       </nav>
     )
   }
