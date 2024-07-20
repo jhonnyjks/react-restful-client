@@ -372,3 +372,16 @@ strong {
     display: inline-block;
     padding-left: 0px !important;
 }
+
+
+@media (max-width: 767.98px) {
+    .main-sidebar{
+        min-width:300px;
+    }
+    .sidebar-collapse .main-sidebar{
+        margin-left: -300px ;
+    }
+    .sidebar-open .main-sidebar, .sidebar-open .main-sidebar::before {
+        margin-left: 0;
+    }
+}
