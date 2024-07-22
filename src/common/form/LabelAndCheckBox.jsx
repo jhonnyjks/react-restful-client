@@ -158,13 +158,13 @@ class LabelAndCheckBox extends Component {
                                     : <>
                                             <div className="custom-control custom-switch">
                                                 <input 
-                                                    id={'custom_'+index}
+                                                    id={this.props.id+'_custom_'+index}
                                                     type="checkbox" 
                                                     checked={this.props.input.value === 1}
                                                     onChange={this.handleChange} 
                                                     className="custom-control-input" 
                                                 />
-                                                <label for={'custom_'+index} className="custom-control-label">
+                                                <label for={this.props.id+'_custom_'+index} className="custom-control-label">
                                                     <font style={{marginLeft: '-18px'}}>
                                                         { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
                                                     </font>
