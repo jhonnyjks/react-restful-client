@@ -384,7 +384,7 @@ strong {
 }
 
 .sub-section-body {
-    padding: 1.25rem;
+    padding: 0.5rem;
 }
 
 .sub-section-footer {
@@ -396,7 +396,6 @@ strong {
     font-size: 14px;
     line-height: 21px;
 }
-
 
 .section-number {
     display: flex;
@@ -426,4 +425,16 @@ strong {
 .col-11-section {
     flex: 0 0 calc(97% - 7px);
     max-width: calc(97% - 7px);
+}
+
+.btn-question {
+    border: 1px solid #007BFF; /* Borda sólida de 1px com a cor azul */
+    background-color: transparent; /* Torna o fundo transparente para destacar a borda */
+    color: #007BFF; /* Define a cor do texto como azul */
+    font-size: 1rem; /* Ajuste o tamanho da fonte conforme necessário */
+    padding: 0.5rem 1rem; /* Ajuste o padding conforme necessário */
+}
+
+.icon-question {
+    color: #007BFF;
 }
