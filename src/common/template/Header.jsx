@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { openCloseSideBar, openCloseMiniSideBar, getNotifications } from './templateActions'
+import { log } from "devexpress-richedit/dist/pdfkit";
 
 
 class Header extends Component {
@@ -93,10 +94,11 @@ class Header extends Component {
         this.props.getNotifications()
       }, 10000)})
     }
+    const { innerWidth, innerHeight } = window;
 
     return (
-      <nav className={"main-header navbar navbar-expand navbar-" + (process.env.REACT_APP_THEME || 'green') + " navbar-dark"}>
-        <ul className="navbar-nav" style={{ paddingLeft: '40px' }}>
+      <nav className={`main-header navbar navbar-expand ${innerWidth >= 767.98 ? 'navbar-primary':''} navbar-dark`}>
+        <ul className="navbar-nav">
           <li className="nav-item">
             <a href="#!" className="nav-link nav-link--bg" onClick={(e) => this.props.openCloseSideBar(e)} data-widget="pushmenu">
               <i className="fas fa-bars"></i>
@@ -106,9 +108,27 @@ class Header extends Component {
             </a>
           </li>
         </ul>
-        <ul className="navbar-nav ml-auto" style={{ paddingRight: '40px' }}>
-          { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
+        <ul className="navbar-nav m-auto">
+        <a href="#!" className="brand-link text-center d-block d-sm-none">
+            { process.env.REACT_APP_LOGO ?
+            <img style={{maxWidth:'113px'}} src={process.env.REACT_APP_LOGO} alt={process.env.REACT_APP_NAME} className="brand-image brand-image--custom"></img>
+            : <span className="brand-text font-weight-light text-center"><strong>{process.env.REACT_APP_NAME}</strong></span>
+            }
+        </a>
         </ul>
+        {innerWidth >= 767.98 ? (
+          <ul className={"navbar-nav ml-auto" }style={{ paddingRight: '40px' }}>
+            { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
+          </ul>
+        ):(
+          <ul className="navbar-nav ml-auto">
+              <a className="nav-link nav-link--sm" data-widget="pushmenu">
+                <i className="fas fa-th-large"></i>
+              </a>
+          </ul>
+        )
+
+        }
       </nav>
     )
   }

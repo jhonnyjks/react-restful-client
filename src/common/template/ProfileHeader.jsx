@@ -74,17 +74,23 @@ class ProfileHeader extends Component {
 
         return (
             <React.Fragment>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {this.props.profiles.length > 1 && (
-                        <Link to="/trocar-perfil" className="d-block mt-2 btn btn-secondary btn-sm custom-bg-color" style={{ color: '' }}>
-                            <i className="nav-icon fas fa-sync-alt"></i>
-                            {hover && <span style={{ fontWeight: '400', fontSize: '16px', lineHeight: '24px', paddingLeft: '10px' }}>Trocar Perfil</span>}
-                        </Link>
-                    )}
-                    <a href="#!" className="d-block mt-2 btn btn-secondary btn-sm custom-bg-color" onClick={(e) => this.changeOpen(e)}>
-                        <i className="nav-icon fas fa-power-off"></i>
-                        {hover && <span> Sair</span>}
-                    </a>
+                <div className="row">
+                    <div className='col-md-12 col-7'>
+                        {this.props.profiles.length > 1 && (
+                            <Link to="/trocar-perfil" className="mt-2 btn-block btn btn-secondary btn-sm custom-bg-color" style={{ color: '' }}>
+                                <i className="nav-icon fas fa-sync-alt"></i>
+                                {hover && <span style={{ fontWeight: '400', fontSize: '16px', lineHeight: '24px', paddingLeft: '10px' }}>Trocar Perfil</span>}
+                            </Link>
+                        )}
+                    </div>
+                    <div className='col-md-12 col-5'>
+                        <a href="#!" className="mt-2 btn-block btn btn-secondary btn-sm custom-bg-color" onClick={(e) => this.changeOpen(e)}>
+                            <i className="nav-icon fas fa-power-off"></i>
+                            {hover && <span> Sair</span>}
+                        </a>
+
+                    </div>
+
                 </div>
 
                 {this.state.open && (<this.RenderSidebarMenu />)}

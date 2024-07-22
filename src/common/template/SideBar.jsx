@@ -22,25 +22,30 @@ class SidebarSema extends Component {
     }
 
     render() {
-        return (
-            <aside className='main-sidebar sidebar-dark-success elevation-4'
-                   style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
-                   onMouseEnter={this.handleMouseEnter}
-                   onMouseLeave={this.handleMouseLeave}>
-                <a href="#!" className="brand-link">
-                    { process.env.REACT_APP_LOGO ?
-                    <img src={process.env.REACT_APP_LOGO} alt={process.env.REACT_APP_NAME} className="brand-image brand-image--custom"></img>
-                    : <span className="brand-text font-weight-light text-center"><strong>{process.env.REACT_APP_NAME}</strong></span>
-                    }
-                </a>
-                <div className='sidebar sidebar--sema' style={{ flex: 2, overflowY: 'auto'}}>
-                    <Menu />
-                </div>
+        const { innerWidth, innerHeight } = window;
 
-                <div style={{ paddingRight: '20px', paddingLeft: '20px', marginBottom: '-40px' }}>
-                    <ProfileHeader hover={this.state.hover} />
-                </div>
-            </aside>
+        return (
+            <div>
+                <aside className='main-sidebar sidebar-dark-success elevation-4'
+                    style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}>
+                    <a href="#!" className="brand-link 	d-none d-sm-block">
+                        { process.env.REACT_APP_LOGO ?
+                        <img src={process.env.REACT_APP_LOGO} alt={process.env.REACT_APP_NAME} className="brand-image brand-image--custom"></img>
+                        : <span className="brand-text font-weight-light text-center"><strong>{process.env.REACT_APP_NAME}</strong></span>
+                        }
+                    </a>
+                    <div className='sidebar sidebar--sema' style={{ flex: 2, overflowY: 'auto'}}>
+                        <Menu />
+                    </div>
+
+                    <div style={{ paddingRight: '20px', paddingLeft: '20px', marginBottom: '-40px' }}>
+                        <ProfileHeader hover={this.state.hover || (innerWidth <= 767.98)} />
+                    </div>
+                </aside>
+                <div id="sidebar-overlay" onClick={this.props.openCloseMiniSideBar}></div>
+            </div>
         );
     }
 }

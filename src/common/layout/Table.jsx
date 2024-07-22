@@ -407,6 +407,120 @@ class Table extends Component {
         }
     }
 
+    // renderBodyAccordion = () => {
+    //     const bodyAccordion = this.getBody()
+    //     const actionsPath = this.props.path || this.props.location.pathname
+
+    //     if (bodyAccordion) {
+    //         return (
+    //             <React.Fragment>
+    //                 {
+    //                     bodyAccordion.map((ntr, index) => {
+    //                         let body = Object.keys(ntr)
+    //                         let val = ntr
+
+    //                         if (val[this.props.labelMobile] && val[this.props.labelMobile].id) val = val[this.props.labelMobile]
+
+    //                         return <div className="card" key={index}>
+    //                             <button className="btn btn-link" data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
+
+    //                                 <div className="card-header" id={`heading${index}`}>
+    //                                     <h5 className="mb-0">
+    //                                         <strong>{val[this.props.labelMobile] || val["name"] || val["title"] || val["id"] || val["description"]}</strong>
+
+    //                                     </h5>
+    //                                 </div>
+    //                             </button>
+
+    //                             <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#accordion">
+    //                                 <div className="card-body ml-4 mr-4">
+    //                                     {
+    //                                         body.map((key, index) => {
+    //                                             let n = val
+    //                                             let isObj = false
+
+    //                                             key.split('.').forEach((i) => {
+    //                                                 n = n[i]
+    //                                             })
+
+    //                                             if (this.props.translate && this.props.translate[key] !== undefined) {
+    //                                                 let name_value = this.props.translate[key].filter(e => e.id === ntr[key])[0]
+    //                                                 n = name_value ? name_value.name : ntr[key]
+    //                                             }
+
+    //                                             // Se 'n' for um objeto, puxa o atributo de texto do objeto, para ter informações amigáveis
+    //                                             if (n && n.id) {
+    //                                                 isObj = true
+    //                                                 // Se houver callback no atributo, call back o callback
+    //                                                 if (this.props.attributes && this.props.attributes[key] && this.props.attributes[key].callback) {
+    //                                                     n = this.props.attributes[key].callback(n, bodyAccordion[index])
+    //                                                 } else {
+    //                                                     n = n.name || n.title || n.description || Object.keys(n)[1]
+    //                                                     if (n.length > 32) n = n.slice(0, 31) + '...'
+    //                                                 }
+    //                                             }
+
+    //                                             // Se 'attributes' estiver setado, e se o atributo atual estiver no array setado, exibe a coluna.
+    //                                             if (this.props.attributes) {
+    //                                                 // Se houver callback no atributo, call back o callback
+    //                                                 if (this.props.attributes[key]) {
+    //                                                     if (!isObj && this.props.attributes[key].callback) {
+    //                                                         return <div key={index}>
+    //                                                             <div className="row" key={index}>
+    //                                                                 <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {this.props.attributes[key].callback(n, bodyAccordion[index])}
+    //                                                             </div>
+    //                                                         </div>
+    //                                                     }
+    //                                                     return <div key={index}>
+    //                                                         <div className="row" key={index}>
+    //                                                             <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {n}
+    //                                                         </div>
+    //                                                     </div>
+    //                                                 } else {
+    //                                                     return null;
+    //                                                 }
+    //                                             }
+    //                                         })
+    //                                     }
+    //                                 </div>
+    //                                 <div className="card-footer text-center">
+    //                                     {this.props.actions &&
+    //                                         <div>
+    //                                             {this.props.actions.update && <Link to={actionsPath + '/' + val.id} className='btn btn-primary col-5' >
+    //                                                 <i className='fa fa-edit'></i> Editar
+    //                                             </Link>
+    //                                             }
+    //                                             {this.props.actions.remove && <button className='btn btn-danger col-5' onClick={() => this.props.actions.remove(val)}>
+    //                                                 <i className='fa fa-trash-alt'></i> Excluir
+    //                                             </button>
+    //                                             }
+
+    //                                             {Object.keys(this.props.actions).map((vv, ii) => {
+    //                                                 if (vv != 'update' && vv != 'remove' && (!this.props.actions[vv].condition || this.props.actions[vv].condition(val))) {
+    //                                                     let style = { marginTop: '10px' }
+
+    //                                                     if (this.props.actions[vv].style) {
+    //                                                         Object.keys(this.props.actions[vv].style).map(key => style[key] = this.props.actions[vv].style[key])
+    //                                                     }
+
+    //                                                     return <button style={style} key={ii} className={this.props.actions[vv].className} onClick={() => this.props.actions[vv].onClick(val)}>
+    //                                                         <i className={this.props.actions[vv].icon}></i> {this.props.actions[vv].label}
+    //                                                     </button>
+    //                                                 }
+    //                                             })}
+
+    //                                         </div>
+    //                                     }
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                     })
+    //                 }
+    //             </React.Fragment>
+    //         )
+    //     }
+    // }
+
     renderBodyAccordion = () => {
         const bodyAccordion = this.getBody()
         const actionsPath = this.props.path || this.props.location.pathname
@@ -619,7 +733,7 @@ class Table extends Component {
     render() {
         return (
             <React.Fragment>
-                <If test={this.state.width < 600}>
+                {/* <If test={this.state.width < 600}>
                     {this.props.generalSearch &&
                         <LabelAndInput forceToShow={true} type="text" cols='12 12' placeholder='PESQUISAR' readOnly={false}
                             input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
@@ -627,7 +741,97 @@ class Table extends Component {
                     <div id="accordion">
                         {this.renderBodyAccordion()}
                     </div>
-                </If>
+                </If> */}
+                 {/* <If test={this.state.width < 600}>
+                 <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
+                        <If test={this.props.title}>
+                            <div className='box-header'>
+                                <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
+                                {this.props.renderHead && <hr />}
+                            </div>
+                        </If>
+                        <div className='box-body no-padding'>
+                            <If test={this.props.headComponent}>
+                                {this.props.headComponent}
+                            </If>
+
+                            {this.props.generalSearch &&
+                                <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
+                                    input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
+                            }
+
+                            <table className={`table table-hover fixed`}>
+                                {this.renderHead()}
+                                {this.renderBody()}
+                                {this.props.children}
+                            </table>
+                        </div>
+                        <div className="box-footer">
+                            {this.renderPagination()}
+                        </div>
+                    </div>
+                </If> */}
+<If test={this.state.width < 600}>
+    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
+        <If test={this.props.title}>
+            <div className='box-header'>
+                <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
+                {this.props.renderHead && <hr />}
+            </div>
+        </If>
+        <div className='box-body no-padding'>
+            <If test={this.props.headComponent}>
+                {this.props.headComponent}
+            </If>
+
+            {this.props.generalSearch &&
+                <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
+                    input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
+            }
+
+            <div className="table-container">
+                <table className={`table table-hover fixed`}>
+                    {this.renderHead()}
+                    {this.renderBody()}
+                    {this.props.children}
+                </table>
+            </div>
+        </div>
+        <div className="box-footer">
+            {this.renderPagination()}
+        </div>
+    </div>
+</If>
+<If test={this.state.width >= 600}>
+    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
+        <If test={this.props.title}>
+            <div className='box-header'>
+                <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
+                {this.props.renderHead && <hr />}
+            </div>
+        </If>
+        <div className='box-body no-padding'>
+            <If test={this.props.headComponent}>
+                {this.props.headComponent}
+            </If>
+
+            {this.props.generalSearch &&
+                <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
+                    input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
+            }
+
+            <table className={`table table-hover fixed`}>
+                {this.renderHead()}
+                {this.renderBody()}
+                {this.props.children}
+            </table>
+        </div>
+        <div className="box-footer">
+            {this.renderPagination()}
+        </div>
+    </div>
+</If>
+
                 <If test={this.state.width > 600}>
                     <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
                         <If test={this.props.title}>
