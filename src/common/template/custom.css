@@ -452,3 +452,7 @@ strong {
         margin-left: 0;
     }
 }
+
+.bs-stepper-content {
+    padding: 0 20px 20px !important;
+}
