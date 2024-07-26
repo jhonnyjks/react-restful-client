@@ -373,8 +373,6 @@ strong {
     padding-left: 0px !important;
 }
 
-
-
 .section-title {
     font-weight: 700;
     font-size: 16px;
@@ -439,6 +437,28 @@ strong {
 
 .icon-question {
     color: #007BFF;
+}
+
+.title-conditional {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19.2px;
+    color: #212529;
+    position: relative;
+    display: inline-block; /* Para que a linha fique apenas sob o texto */
+    padding-bottom: 4px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.title-conditional::after {
+    content: "";
+    display: block;
+    width: calc(105% + 16px);
+    border-bottom: 2px solid #007BFF;
+    position: absolute;
+    left: -16px; /* Ajuste conforme necessário para a quantidade que você deseja ultrapassar */
+    bottom: 0; /* Posição logo abaixo do texto */
 }
 
 @media (max-width: 767.98px) {

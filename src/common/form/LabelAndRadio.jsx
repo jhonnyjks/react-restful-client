@@ -140,7 +140,7 @@ class LabelAndRadio extends Component {
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => (
                                 e && e.id > -1 ? (
-                                    <div key={e.id} className='form-check'>
+                                    <div key={e.id} className='form-check' style={{ marginBottom: '-12px' }}>
                                         <input
                                             type="radio"
                                             value={e.id}
