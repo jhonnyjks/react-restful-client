@@ -9,8 +9,14 @@ class SidebarSema extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hover: false
+            hover: false,
+            width: 0,
+            height: 0,
         };
+
+        window.addEventListener("resize", () => {
+            this.setState({ width: window.innerWidth, height: window.innerHeight });
+        });
     }
 
     handleMouseEnter = () => {
@@ -22,7 +28,6 @@ class SidebarSema extends Component {
     }
 
     render() {
-        const { innerWidth, innerHeight } = window;
 
         return (
             <div>
@@ -41,7 +46,7 @@ class SidebarSema extends Component {
                     </div>
 
                     <div style={{ paddingRight: '20px', paddingLeft: '20px', marginBottom: '-40px' }}>
-                        <ProfileHeader hover={this.state.hover || (innerWidth <= 767.98)} />
+                        <ProfileHeader hover={this.state.hover || (this.state.width <= 600)} />
                     </div>
                 </aside>
                 <div id="sidebar-overlay" onClick={this.props.openCloseMiniSideBar}></div>

@@ -12,11 +12,19 @@ class Header extends Component {
     super(props)
 
     this.state = {
-      intervalId: null
+      intervalId: null,
+      width: 0,
+      height: 0,
     }
+
+    window.addEventListener("resize", () => {
+      this.setState({ width: window.innerWidth, height: window.innerHeight });
+    });
   }
 
   componentWillUnmount() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+
     clearInterval(this.state.intervalId);
     this.setState({intervalId: null})
   }
@@ -87,17 +95,17 @@ class Header extends Component {
   
 
   render() {
-
     if(!this.state.intervalId) {
       this.props.getNotifications()
       this.setState({intervalId: setInterval(() => {
         this.props.getNotifications()
       }, 10000)})
     }
-    const { innerWidth, innerHeight } = window;
+
+    console.log('width',this.state.width);
 
     return (
-      <nav className={`main-header navbar navbar-expand ${innerWidth >= 767.98 ? 'navbar-primary':''} navbar-dark`}>
+      <nav className={`main-header navbar navbar-expand ${this.state.width >= 600 ? 'navbar-primary':''} navbar-dark`}>
         <ul className="navbar-nav">
           <li className="nav-item">
             <a href="#!" className="nav-link nav-link--bg" onClick={(e) => this.props.openCloseSideBar(e)} data-widget="pushmenu">
@@ -116,13 +124,13 @@ class Header extends Component {
             }
         </a>
         </ul>
-        {innerWidth >= 767.98 ? (
+        {this.state.width >= 600 ? (
           <ul className={"navbar-nav ml-auto" }style={{ paddingRight: '40px' }}>
             { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
           </ul>
         ):(
           <ul className="navbar-nav ml-auto">
-              <a className="nav-link nav-link--sm" data-widget="pushmenu">
+              <a className="nav-link " data-widget="pushmenu">
                 <i className="fas fa-th-large"></i>
               </a>
           </ul>
