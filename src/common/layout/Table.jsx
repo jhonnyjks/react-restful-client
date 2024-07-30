@@ -182,7 +182,7 @@ class Table extends Component {
                         .map((val, index) => {                      
                         return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
                                     <strong>
-                                        <span style={{display: 'block', float: 'left'}}>{ head[val].title || head[val] }</span>
+                                        <span className='d-flex'>{ head[val].title || head[val] }
                                         { this.props.attributesSearch &&
                                             <div 
                                                 className='carret-up-down up'
@@ -194,6 +194,7 @@ class Table extends Component {
                                                 <i className="fas fa-caret-down fa-fw table-carret"></i>
                                             </div>
                                         }
+                                        </span>
                                     </strong>
                                 </th>
                                               
@@ -645,7 +646,7 @@ class Table extends Component {
         const pages = [];
         const totalPages = pagination.last_page;
         const currentPage = pagination.current_page;
-        const displayPages = 5; // Exibir 20 páginas por padrão
+        const displayPages = this.state.width >= 600 ? 5: 3; // Exibir 20 páginas por padrão
         const total = pagination.total;
         const to = pagination.to;
         const from = pagination.from;
@@ -772,7 +773,7 @@ class Table extends Component {
                     </div>
                 </If> */}
 <If test={this.state.width < 600}>
-    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
+    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px'  }}>
         <If test={this.props.title}>
             <div className='box-header'>
                 <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
@@ -790,7 +791,7 @@ class Table extends Component {
             }
 
             <div className="table-container">
-                <table className={`table table-hover fixed`}>
+                <table className={`table table-hover table-responsive`}>
                     {this.renderHead()}
                     {this.renderBody()}
                     {this.props.children}
@@ -820,7 +821,7 @@ class Table extends Component {
                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
             }
 
-            <table className={`table table-hover fixed`}>
+            <table className={`table table-hover table-responsive`}>
                 {this.renderHead()}
                 {this.renderBody()}
                 {this.props.children}
@@ -831,36 +832,6 @@ class Table extends Component {
         </div>
     </div>
 </If>
-
-                <If test={this.state.width > 600}>
-                    <div className='box material-item' style={{ paddingBottom: '3px', width: '100%', marginBottom: '40px' }}>
-                        <If test={this.props.title}>
-                            <div className='box-header'>
-                                <h4 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h4>
-                                {this.props.renderHead && <hr />}
-                            </div>
-                        </If>
-                        <div className='box-body no-padding'>
-                            <If test={this.props.headComponent}>
-                                {this.props.headComponent}
-                            </If>
-
-                            {this.props.generalSearch &&
-                                <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
-                                    input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
-                            }
-
-                            <table className={`table table-hover fixed`}>
-                                {this.renderHead()}
-                                {this.renderBody()}
-                                {this.props.children}
-                            </table>
-                        </div>
-                        <div className="box-footer">
-                            {this.renderPagination()}
-                        </div>
-                    </div>
-                </If>
             </React.Fragment>
         )
     }
