@@ -13,8 +13,8 @@ class Header extends Component {
 
     this.state = {
       intervalId: null,
-      width: 0,
-      height: 0,
+      width: window.innerWidth,
+      height: window.innerHeight,
     }
 
     window.addEventListener("resize", () => {
@@ -101,8 +101,6 @@ class Header extends Component {
         this.props.getNotifications()
       }, 10000)})
     }
-
-    console.log('width',this.state.width);
 
     return (
       <nav className={`main-header navbar navbar-expand ${this.state.width >= 600 ? 'navbar-primary':''} navbar-dark`}>

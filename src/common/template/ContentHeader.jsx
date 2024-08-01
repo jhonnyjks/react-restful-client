@@ -18,6 +18,11 @@ export default class  ContentHeader extends Component{
             this.setState({ width: window.innerWidth, height: window.innerHeight });
         });
     }
+
+    componentDidMount() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+    
+        }
     
 
 
