@@ -432,7 +432,6 @@ strong {
     background-color: transparent; /* Torna o fundo transparente para destacar a borda */
     color: #007BFF; /* Define a cor do texto como azul */
     font-size: 1rem; /* Ajuste o tamanho da fonte conforme necessário */
-    padding: 0.5rem 1rem; /* Ajuste o padding conforme necessário */
 }
 
 .icon-question {
@@ -459,6 +458,13 @@ strong {
     position: absolute;
     left: -16px; /* Ajuste conforme necessário para a quantidade que você deseja ultrapassar */
     bottom: 0; /* Posição logo abaixo do texto */
+}
+
+.delete-option-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    opacity: 0.2;
+    font-size: 0.7em;
 }
 
 @media (max-width: 767.98px) {
