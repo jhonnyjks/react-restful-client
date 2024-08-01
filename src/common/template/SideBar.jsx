@@ -27,6 +27,11 @@ class SidebarSema extends Component {
         this.setState({ hover: false });
     }
 
+    componentDidMount() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+    
+        }
+
     render() {
 
         return (
