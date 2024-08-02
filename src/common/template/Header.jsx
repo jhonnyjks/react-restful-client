@@ -38,6 +38,7 @@ class Header extends Component {
   }
 
   handleNotificationClick = (notify) => {
+    console.log("Notificação clicada:", notify);
     // Atualiza o estado com a notificação selecionada
     this.setState({ selectedNotification: notify });
   };
@@ -48,9 +49,13 @@ class Header extends Component {
   }
 
   toggleNotifications() {
+
+    console.log("Clicou no toogle??")
+
+
     this.setState((prevState) => ({
       showNotifications: !prevState.showNotifications,
-      selectedNotification: null, // Resetar a notificação selecionada ao alternar o menu
+      selectedNotification: null, // Reset the selected notification when toggling the menu
     }));
   }
 
@@ -62,113 +67,109 @@ class Header extends Component {
         <li key={i} className="nav-item dropdown">
           <a
             className="nav-link"
-            data-toggle="dropdown"
-            href="#"
-            aria-expanded="true"
+            onClick={() => this.handleNotificationClick(notify)} // Atualiza o estado com a notificação clicada
+            aria-expanded="false"
             title={notify.title}
           >
             <i
               className={"fas fa-" + notify.icon + " color-icon-white"}
-              style={{ width: "24px", height: "24px" }}
+              style={{ width: "24px", height: "24px", color: "#ffffff" }} // Cor do ícone para branco
             ></i>
             <span className={"badge badge-" + notify.type + " navbar-badge"}>
               {notify.items.length}
             </span>
           </a>
-
-          <div
-            className="dropdown-menu dropdown-menu-lg dropdown-menu-right"
-            style={{ left: "inherit", right: "0px" }}
-          >
+          {this.state.width >= 600 && ( // Renderiza o dropdown apenas em desktop
             <div
-              className="dropdown-item dropdown-header"
-              style={{
-                textAlign: "left",
-                paddingTop: "20px",
-                paddingLeft: "20px",
-              }}
+              className="dropdown-menu dropdown-menu-lg dropdown-menu-right"
+              style={{ left: "inherit", right: "0px" }}
             >
-              <span className="circle">{notify.items.length}</span>
-              <strong className="processo-text text-truncate">
-                {notify.title}
-              </strong>
-            </div>
+              <div
+                className="dropdown-item dropdown-header"
+                style={{ textAlign: "left", paddingTop: "20px", paddingLeft: "20px" }}
+              >
+                <span className="circle">{notify.items.length}</span>
+                <strong className="processo-text text-truncate">
+                  {notify.title}
+                </strong>
+              </div>
+              <div style={{ marginLeft: "15px", marginRight: "15px" }}>
+                <div className="dropdown-divider"></div>
+              </div>
+              {notify.items.slice(0, 10).map((item, j) => {
+                let itemLink = item.link || notify.linkToItem;
+                itemLink =
+                  process.env.PUBLIC_URL +
+                  itemLink +
+                  (itemLink[itemLink.length - 1] !== "/" ? "/" : "") +
+                  item.id;
 
-            <div style={{ marginLeft: "15px", marginRight: "15px" }}>
-              <div className="dropdown-divider"></div>
-            </div>
+                let itemTime =
+                  (new Date() - new Date(item.date)) / 60000;
+                if (itemTime < 1) {
+                  itemTime =
+                    Number.parseInt(itemTime * 60) +
+                    " segundo" +
+                    (Number.parseInt(itemTime * 60) > 1 ? "s" : "");
+                } else if (itemTime > 1439) {
+                  itemTime =
+                    Number.parseInt(itemTime / 1440) +
+                    " dia" +
+                    (Number.parseInt(itemTime / 1440) > 1 ? "s" : "");
+                } else if (itemTime > 59) {
+                  itemTime =
+                    Number.parseInt(itemTime / 60) +
+                    " hora" +
+                    (Number.parseInt(itemTime / 60) > 1 ? "s" : "");
+                } else {
+                  itemTime =
+                    Number.parseInt(itemTime) +
+                    " minuto" +
+                    (Number.parseInt(itemTime) > 1 ? "s" : "");
+                }
 
-            {notify.items.slice(0, 10).map((item, j) => {
-              let itemLink = item.link || notify.linkToItem;
-              itemLink =
-                process.env.PUBLIC_URL +
-                itemLink +
-                (itemLink[itemLink.length - 1] !== "/" ? "/" : "") +
-                item.id;
-
-              let itemTime =
-                (new Date() - new Date(item.date)) / 60000;
-              if (itemTime < 1) {
-                itemTime =
-                  Number.parseInt(itemTime * 60) +
-                  " segundo" +
-                  (Number.parseInt(itemTime * 60) > 1 ? "s" : "");
-              } else if (itemTime > 1439) {
-                itemTime =
-                  Number.parseInt(itemTime / 1440) +
-                  " dia" +
-                  (Number.parseInt(itemTime / 1440) > 1 ? "s" : "");
-              } else if (itemTime > 59) {
-                itemTime =
-                  Number.parseInt(itemTime / 60) +
-                  " hora" +
-                  (Number.parseInt(itemTime / 60) > 1 ? "s" : "");
-              } else {
-                itemTime =
-                  Number.parseInt(itemTime) +
-                  " minuto" +
-                  (Number.parseInt(itemTime) > 1 ? "s" : "");
-              }
-
-              return (
-                <div key={item.id}>
-                  <a
-                    href={itemLink}
-                    className="dropdown-item"
-                  >
-                    <i className={"fas fa-file-alt mr-2 blue-text"}></i>{" "}
-                    {item.entity?.initials || ""} {item.id}
-                    <span
-                      className="float-right text-muted text-sm"
-                      title={new Date(item.date).toLocaleString()}
+                return (
+                  <div key={item.id}>
+                    <a
+                      href={itemLink}
+                      className="dropdown-item"
+                      onClick={() => this.handleNotificationClick(item)}
+                      style={{ color: "#ffffff" }} // Cor do texto para branco
                     >
-                      {itemTime}
-                    </span>
-                  </a>
-                </div>
-              );
-            })}
-
-            <div className="dropdown-divider"></div>
-            {notify.linkToList && (
-              <a href={linkToList} className="dropdown-item dropdown-footer">
-                <button type="button" className="btn btn-primary w-100">
-                  Ver Todos
-                </button>
-              </a>
-            )}
-          </div>
+                      <i className={"fas fa-file-alt mr-2"} style={{ color: "#ffffff" }}></i> {/* Cor do ícone para branco */}
+                      {item.entity?.initials || ""} {item.id}
+                      <span
+                        className="float-right text-muted text-sm"
+                        title={new Date(item.date).toLocaleString()}
+                        color="#ffffff" 
+                      >
+                        {itemTime}
+                      </span>
+                    </a>
+                  </div>
+                );
+              })}
+              <div className="dropdown-divider"></div>
+              {notify.linkToList && (
+                <a href={linkToList} className="dropdown-item dropdown-footer">
+                  <button type="button" className="btn btn-primary w-100">
+                    Ver Todos
+                  </button>
+                </a>
+              )}
+            </div>
+          )}
         </li>
       );
     });
 
   render() {
-    const { showNotifications, selectedNotification, width } = this.state;
+    const { showNotifications, selectedNotification } = this.state;
 
     return (
       <nav
         className={`main-header navbar navbar-expand ${
-          width >= 600 ? "navbar-primary" : ""
+          this.state.width >= 600 ? "navbar-primary" : ""
         } navbar-dark`}
       >
         <ul className="navbar-nav">
@@ -207,7 +208,7 @@ class Header extends Component {
             )}
           </a>
         </ul>
-        {width >= 600 ? (
+        {this.state.width >= 600 ? (
           <ul
             className={"navbar-nav ml-auto"}
             style={{ paddingRight: "40px" }}
@@ -223,67 +224,110 @@ class Header extends Component {
             </a>
           </ul>
         )}
-
-        {/* Renderizar o menu de notificações apenas quando showNotifications for true em mobile */}
-        {showNotifications && width < 600 && !selectedNotification && (
-          <div className="dropdown-menu dropdown-menu-right show">
+        {/* Renderizar o menu de notificações apenas quando showNotifications for true */}
+        {showNotifications && this.state.width < 600 && !selectedNotification && (
+          <div className="dropdown-menu dropdown-menu-right show" style={{ backgroundColor: '#0D6EFD', color: '#ffffff' }}>
             {this.props.notifications.map((notify, i) => (
-              <div
+            
+            
+            
+            <div
                 key={i}
                 className="dropdown-item"
                 onClick={() => this.handleNotificationClick(notify)}
+                style={{ color: '#ffffff', 
+                        display: 'flex', 
+                        flexDirection: 'row' , 
+                        alignItems: 'center',
+                        justifyContent: 'space-between'}} // Texto branco
               >
-                <i className={`fas fa-${notify.icon}`}></i> {notify.title}
-                <span className="badge badge-primary">
-                  {notify.items.length}
+               
+
+                <a
+
+
+                   
+                    className="nav-link"           
+                    aria-expanded="false"
+                    style={{maxWidth: "56px"}}
+               >
+             <i
+                    className={"fas fa-" + notify.icon + " color-icon-white"}
+                    style={{ width: "34px", height: "34px", color: "#ffffff" }} // Cor do ícone para branco
+                  ></i> 
+                  <span className={"badge badge-" + notify.type + " navbar-badge"}> {notify.items.length} </span>
+
+
+            </a>
+                 
+              
+                
+                <span className="brand-text font-weight-light text-right">
+                    {notify.title}
                 </span>
-              </div>
-            ))}
+              
+              
+           
+             </div>
+
+
+
+         ))}
           </div>
         )}
-
-        {/* Renderizar a lista de notificações detalhadas da notificação selecionada em mobile */}
-        {selectedNotification && width < 600 && (
-          <div className="dropdown-menu dropdown-menu-right show">
-            <div className="dropdown-header">
-              <i className={`fas fa-${selectedNotification.icon}`}></i>{" "}
+        {/* Renderizar a lista de notificações detalhadas da notificação selecionada */}
+        {selectedNotification && (
+          <div className="dropdown-menu dropdown-menu-right show" style={{ backgroundColor: '#0D6EFD' }}>
+            <div className="dropdown-header" style={{ color: '#ffffff' }}> 
+              <span className="circle">{selectedNotification.items.length}</span> 
+              <i className={`fas fa-${selectedNotification.icon}`} style={{ color: '#ffffff' }}></i>{" "}
               {selectedNotification.title}
             </div>
             {selectedNotification.items.map((item, i) => (
-              <div key={i} className="dropdown-item">
+              <div key={i} className="dropdown-item"  >
                 <a
                   href={
-                    process.env.PUBLIC_URL +
-                    (item.link || selectedNotification.linkToItem) +
-                    (item.link[item.link.length - 1] !== "/" ? "/" : "") +
-                    item.id
-                  }
+                  process.env.PUBLIC_URL +
+                  (item.link || selectedNotification.linkToItem) +
+                  (item.link[item.link.length - 1] !== "/" ? "/" : "") +
+                  item.id
+                }
+                  className="dropdown-item"
+                  style={{ color: '#ffffff' }}
                 >
-                  <i className="fas fa-file-alt"></i> {item.entity?.initials || ""}{" "}
+                  <i className="fas fa-file-alt" style={{ color: '#ffffff' }}></i> {item.entity?.initials || ""}{" "}
                   {item.id}
-                  <span className="float-right text-muted text-sm">
-                    Há {Math.floor((new Date() - new Date(item.date)) / 86400000)}{" "}
-                    dias
-                  </span>
+                  
+                   
+                    <span className="float-right text-sm" style={{ marginLeft: "20px"}} >
+                        Há {Math.floor((new Date() - new Date(item.date)) / 86400000)}{" "}
+                        dias
+                    </span>
+                  
+                    
                 </a>
               </div>
             ))}
-            <div className="dropdown-divider"></div>
-            <button
-              type="button"
-              className="btn btn-secondary w-100"
-              onClick={() => this.setState({ selectedNotification: null })}
-            >
-              Voltar
-            </button>
+            <div className="dropdown-divider" ></div>
             <a
               href={process.env.PUBLIC_URL + selectedNotification.linkToList}
-              className="dropdown-item dropdown-footer"
+              className="dropdown-item dropdown-footer"             
             >
-              <button type="button" className="btn btn-primary w-100">
+              <button  onClick={() => this.toggleNotifications()} type="button" className="btn btn-primary w-100" style={{backgroundColor: "white", color: "#0D6EFD"}}>
                 Ver Todos
               </button>
-            </a>
+              { this.state.width < 600 &&
+                  <button type="button"
+                    className="btn btn-primary w-100"
+                    onClick={() => this.setState({ selectedNotification: null })}
+                    style={{marginTop: "5px", backgroundColor: "transparent"}}
+                  >
+                    Voltar
+                </button>
+               }
+            </a>          
+
+           
           </div>
         )}
       </nav>

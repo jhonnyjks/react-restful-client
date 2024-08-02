@@ -494,7 +494,24 @@ strong {
     cursor: pointer; /* Adiciona cursor pointer para indicar itens clicáveis */
 }
 
+.dropdown-item:hover {
+    background-color: mediumaquamarine; /* Torna o fundo transparente no hover */
+}
+
 .navbar-nav .dropdown-menu {
     left: 10px; /* Ajuste o posicionamento */
     right: 0;
 }
+
+/* Estilos específicos para mobile */
+@media (max-width: 599px) {
+    .dropdown-menu {
+      background-color: #0D6EFD; /* Azul */
+      color: #ffffff; /* Texto branco */
+    }
+  
+    .dropdown-item, .dropdown-header, .float-right {
+      color:  #ffffff; /* Texto branco */
+    }
+  }
+  
