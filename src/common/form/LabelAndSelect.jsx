@@ -117,7 +117,8 @@ class LabelAndSelect extends Component {
                     <select name={this.props.name} {...this.props.input}
                         disabled={this.props.readOnly !== false ? this.props.readOnly || !this.hasPermission(permission, action) : false}
                         className={`form-control mb-3 ${this.state.error.flag === true ? `is-invalid` : ``}`}
-                        required={rules['required'] || false} >
+                        // required={rules['required'] || false} 
+                    >
                         <option value="">{this.props.placeholder}</option>
                         {this.props.options && this.props.options[0] && this.props.options.map(
                             e => (((e && e.id > -1) || (e && e.value)) ? (<option key={e.id || e.value} value={e.id || e.value}>
