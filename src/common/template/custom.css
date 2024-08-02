@@ -482,3 +482,19 @@ strong {
 .bs-stepper-content {
     padding: 0 20px 20px !important;
 }
+
+.dropdown-menu {
+    max-width: 600px; /* Defina uma largura máxima */
+    overflow-y: auto; /* Adicione rolagem, se necessário */
+    /* background-color: #0047AB; Altere para a cor de fundo desejada */
+}
+
+.dropdown-item {
+    white-space: normal; /* Permita que o texto quebre em várias linhas */
+    cursor: pointer; /* Adiciona cursor pointer para indicar itens clicáveis */
+}
+
+.navbar-nav .dropdown-menu {
+    left: 10px; /* Ajuste o posicionamento */
+    right: 0;
+}
