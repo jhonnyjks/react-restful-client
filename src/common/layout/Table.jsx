@@ -89,8 +89,8 @@ class Table extends Component {
         this.props.attributesSearch(
             pageQueryParam + '&search=' + queryStr + '&searchJoin=and' +
             (orderBy.length > 0 ? '&orderBy=' + orderBy : '') + 
-            (sortedBy.length > 0 ? '&sortedBy=' + sortedBy : ''));
-
+            (sortedBy.length > 0 ? '&sortedBy=' + sortedBy : '')
+        );
         this.setState({ queryStrSearch, searchFields, searchFieldsValues })
     }
 
@@ -183,7 +183,7 @@ class Table extends Component {
                         return <th key={index} style={ !head[val].notColor ? head[val].style || {} : {}}>
                                     <strong>
                                         <span className='d-flex'>{ head[val].title || head[val] }
-                                        { this.props.attributesSearch &&
+                                        { this.props.attributesSearch && !head[val].notSort &&
                                             <div 
                                                 className='carret-up-down up'
                                                 onClick={ e => this.onClickReorder(e, val)}
