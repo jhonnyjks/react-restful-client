@@ -22,7 +22,6 @@ class Menu extends Component {
         const scopes = this.props.scopes
         return (
             <div>
-                <ProfileHeader/>
                 <div className="mt-2">
                     <ul className='nav nav-pills nav-sidebar flex-column'>
                         {Object.keys(MainMenu).map((path) => {
@@ -54,6 +53,7 @@ class Menu extends Component {
                         })}
                     </ul>
                 </div>
+                <ProfileHeader/>
             </div>
         )
     }

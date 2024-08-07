@@ -78,7 +78,7 @@ class Header extends Component {
     } */
 
     return (
-      <nav className={"main-header navbar navbar-expand navbar-" + (process.env.REACT_APP_THEME || 'green') + " navbar-dark"}>
+      <nav className={"main-header navbar navbar-expand navbar-" + (process.env.REACT_APP_THEME || 'green')}>
         <ul className="navbar-nav">
           <li className="nav-item">
             <a href="#!" className="nav-link nav-link--bg" onClick={(e) => this.props.openCloseSideBar(e)} data-widget="pushmenu">
@@ -91,7 +91,7 @@ class Header extends Component {
         </ul>
         <ul className="navbar-nav ml-auto">
           { (this.props.notifications && this.props.notifications.length > 0) && this.renderNotifications(this.props.notifications) }
-          <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#suportModal">Dúvidas & Sugestões</button>
+          <button type="button" className="btn btn-warning" data-toggle="modal" data-target="#suportModal">Dúvidas & Sugestões</button>
         </ul>
       </nav>
     )

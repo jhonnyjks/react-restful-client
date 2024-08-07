@@ -52,7 +52,7 @@ class ProfileHeader extends Component {
             <React.Fragment>
                 <div className="user-panel mt-3 pb-3 mb-1 d-flex">
                     <div className="image">
-                        <img src="https://dummyimage.com/160x160/fff/ggg" className="img-circle elevation-2" alt="User" />
+                        <i className="nav-icon fas fa-sign-out-alt"></i>
                     </div>
                     <div className="info">
                         <a href="#!" className="d-block">{name}</a>

@@ -6,7 +6,7 @@ import { openCloseMiniSideBar, setSideBar } from './templateActions'
 import Menu from './Menu'
 
 const SidebarSema = props => (
-    <aside className='main-sidebar sidebar-dark-success elevation-4'>
+    <aside className='main-sidebar sidebar-dark-dark bg-primary elevation-4'>
         <a href="#!" className="brand-link">
             { process.env.REACT_APP_LOGO ?
             <img src={process.env.REACT_APP_LOGO} alt={process.env.REACT_APP_NAME} className="brand-image brand-image--custom"
