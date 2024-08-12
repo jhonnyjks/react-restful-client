@@ -52,6 +52,7 @@ class LabelAndSelect extends Component {
     handleSelectChange = (selectedOptions) => {
         const change = this.props.input.onChange || this.props.onChange
         if (change) {
+            this.props.input.onChange(selectedOptions);
             if (Array.isArray(selectedOptions)) {
                 // Para múltiplas seleções, extrai os valores dos objetos selecionados
                 const values = selectedOptions.map(option => option.value);
