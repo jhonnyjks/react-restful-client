@@ -790,8 +790,8 @@ class Table extends Component {
                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
             }
 
-            <div className="table-container">
-                <table className={`table table-hover table-responsive`}>
+            <div className="table-container table-responsive">
+                <table className={`table table-hover `}>
                     {this.renderHead()}
                     {this.renderBody()}
                     {this.props.children}
@@ -820,12 +820,13 @@ class Table extends Component {
                 <LabelAndInput forceToShow={true} type="text" cols='12 6 4' placeholder='PESQUISAR' readOnly={false}
                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
             }
-
-            <table className={`table table-hover table-responsive`}>
-                {this.renderHead()}
-                {this.renderBody()}
-                {this.props.children}
-            </table>
+            <div className='table-responsive'>
+                <table className={`table table-hover `}>
+                    {this.renderHead()}
+                    {this.renderBody()}
+                    {this.props.children}
+                </table>
+            </div>
         </div>
         <div className="box-footer">
             {this.renderPagination()}
