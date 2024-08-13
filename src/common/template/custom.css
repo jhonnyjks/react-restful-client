@@ -248,6 +248,10 @@ strong {
     border-bottom: 2px solid #007BFF;
 }
 
+.mobile-margin-adjustment {
+    margin: 0; /* Margem padrão para telas grandes */
+}
+
 .bs-stepper-circle-success {
     display: inline-flex;
     align-content: center;
@@ -427,6 +431,12 @@ strong {
     max-width: calc(97% - 7px);
 }
 
+.btn-add {
+    margin-top: 10px;
+    margin-left: 3%;
+    font-weight: 700;
+}
+
 .btn-question {
     border: 1px solid #007BFF; /* Borda sólida de 1px com a cor azul */
     background-color: transparent; /* Torna o fundo transparente para destacar a borda */
@@ -513,5 +523,59 @@ strong {
     .dropdown-item, .dropdown-header, .float-right {
       color:  #ffffff; /* Texto branco */
     }
-  }
+}
+
+/* Ajuste para telas menores que 768px */
+@media (max-width: 768px) {
+
+    .bs-stepper-header {
+        margin: 0 !important;
+        text-align: center;
+    }
+
+    .mobile-margin-adjustment {
+        margin: 0 -10px;
+    }
+
+    .card-mobile {
+        color: red !important;
+    }
+
+    .section-number {
+        width: 40px;
+        height: 51px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .col-11-section {
+        flex: 0 0 calc(97% - 7px);
+        max-width: calc(97% - 7px);
+    }
+
+    .bg-title-mobile {
+        margin-left: 10px;
+        background-color: #E9ECEF;
+        width: 101%;
+        height: 51px;
+    }
+
+    .section-title {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 19.2px;
+        padding-top: 12px;
+        padding-left: 15px;
+    }
+
+    .btn-add {
+        margin-top: 0;
+        margin-left: 3%;
+    }
+
+    .title-conditional {
+        left: -22px;
+    }
+
+}
   
