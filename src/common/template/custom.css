@@ -467,7 +467,7 @@ strong {
     font-size: 0.7em;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 700px) {
     .main-sidebar{
         min-width:300px;
     }
@@ -476,6 +476,10 @@ strong {
     }
     .sidebar-open .main-sidebar, .sidebar-open .main-sidebar::before {
         margin-left: 0;
+    }
+
+    .dxrePages{
+        zoom: 0.3;
     }
 }
 
