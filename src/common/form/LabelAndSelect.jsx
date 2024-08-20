@@ -48,24 +48,15 @@ class LabelAndSelect extends Component {
         }
     }
 
-    handleSelectChange = (selectedOptions, event) => {
-        const change = this.props.input.onChange || this.props.onChange;
-
-        console.log(this.props);
+    handleSelectChange = (selectedOptions) => {
         
+        const change = this.props.input.onChange || this.props.onChange;
     
         if (change) {
-            let e = {
-                target: {
-                    id: this.props.input.id || this.props.id || null,
-                    name: event.name,
-                    value: selectedOptions.value,
-                    type: 'select'
-                }
-            };
+            let e = selectedOptions.value
     
             console.log('Event:', e);
-            // change(e);
+            change(e);
         }
     }
 
@@ -142,17 +133,25 @@ class LabelAndSelect extends Component {
                         <Select
                             isMulti={isMulti}
                             name={this.props.name || this.props.input.name || null}
-                            options={this.props.options.map(option => ({
-                                value: option.id || option.value,
-                                label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
-                            }))}
-                            id={this.props.input.id || this.props.id || null}
+                            options={[
+                                { value: '', label: '-- Selecione --' },
+                                ...this.props.options.map(option => ({
+                                    value: option.id || option.value,
+                                    label: option[this.props.textAttr] || option.name || option.noun || option.title || option.description || option.id
+                                }))
+                            ]}
                             className={selectClassName}
                             classNamePrefix="select"
                             styles={selectStyles}
                             // required={rules['required'] || this.props.required || false}
                             onChange={this.handleSelectChange}
-                            value={isMulti ? selectedOptions : selectedOptions[0]} // Ajuste aqui para suportar seleção única
+                            value={
+                                selectedOptions && selectedOptions.length > 0
+                                    ? isMulti
+                                        ? selectedOptions
+                                        : selectedOptions[0]
+                                    : { value: '', label: '-- Selecione --' }
+                            } // Define o valor padrão como "-- Selecione --"
                             readOnly={this.props.input.readOnly || this.props.readOnly || false}
                             onBlur={this.props.onBlur || null}
                             // this.props.input.onBlur vem do reduxForm e é incompatível com o react-select dessa forma.
