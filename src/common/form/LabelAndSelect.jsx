@@ -53,11 +53,16 @@ class LabelAndSelect extends Component {
         const change = this.props.input.onChange || this.props.onChange;
     
         if (change) {
-            let e = selectedOptions.value
-    
-            console.log('Event:', e);
-            change(e);
-        }
+
+            if (Array.isArray(selectedOptions)) {
+                const values = selectedOptions.map(option => option.value);
+            } else if (selectedOptions) {
+                change(selectedOptions.value);
+            } else {
+                change(null);
+            }
+               
+        }   
     }
 
     componentWillUpdate(nextProps) {
