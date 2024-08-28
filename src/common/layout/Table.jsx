@@ -637,6 +637,9 @@ class Table extends Component {
     }
     
     renderPagination() {
+
+        const isMobile = this.state.width <= 768;
+        
         const { pagination } = this.props;
       
         if (!pagination || pagination.total === undefined) {
@@ -697,37 +700,80 @@ class Table extends Component {
         }
       
         return (
-          <div className="card-footer bg-white clearfix">
-            <div className='row'>
-                <div className='col'>
-                    <p className='m-0 float-left mt-3'> Exibindo do item {from} ao {to}, de {total} resultados</p>
-                </div>
-                <div className='col'>
-                    <ul className="pagination pagination-sm m-0 float-right mt-3">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <a
-                        className="page-link"
-                        onClick={() => this.doSearch(null, null, currentPage - 1)}
-                        aria-label="Previous"
-                        >
-                            <i className="fas fa-angle-double-left"></i>
-                        </a>
-                    </li>
-                    {pages}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <a
-                        className="page-link"
-                        onClick={() => this.doSearch(null, null, currentPage + 1)}
-                        aria-label="Next"
-                        >
-                        <i className="fas fa-angle-double-right"></i>
-                        </a>
-                    </li>
-                    </ul>
 
-                </div>
+            <div>
+
+                {isMobile ? (
+                    <div className="card-footer bg-white clearfix">
+                        
+                        <div className='row d-flex justify-content-center'>
+                            <div className='col'>
+                                <p className='m-0 text-center mt-3'> Exibindo do item {from} ao {to}, de {total} resultados</p>
+                            </div>
+                        </div>
+
+                        <div className="row d-flex justify-content-center">
+                            <div className='col'>
+                                <ul className="pagination pagination-sm m-0 mt-3 d-flex justify-content-center">
+                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                        <a
+                                        className="page-link"
+                                        onClick={() => this.doSearch(null, null, currentPage - 1)}
+                                        aria-label="Previous"
+                                        >
+                                            <i className="fas fa-angle-double-left"></i>
+                                        </a>
+                                    </li>
+                                    {pages}
+                                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                        <a
+                                        className="page-link"
+                                        onClick={() => this.doSearch(null, null, currentPage + 1)}
+                                        aria-label="Next"
+                                        >
+                                        <i className="fas fa-angle-double-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    ) : (
+                    <div className="card-footer bg-white clearfix">
+                        <div className='row'>
+                            <div className='col'>
+                                <p className='m-0 float-left mt-3'> Exibindo do item {from} ao {to}, de {total} resultados</p>
+                            </div>
+                            <div className='col'>
+                                <ul className="pagination pagination-sm m-0 float-right mt-3">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <a
+                                    className="page-link"
+                                    onClick={() => this.doSearch(null, null, currentPage - 1)}
+                                    aria-label="Previous"
+                                    >
+                                        <i className="fas fa-angle-double-left"></i>
+                                    </a>
+                                </li>
+                                {pages}
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <a
+                                    className="page-link"
+                                    onClick={() => this.doSearch(null, null, currentPage + 1)}
+                                    aria-label="Next"
+                                    >
+                                    <i className="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                                </ul>
+            
+                            </div>
+                        </div>
+                    </div>
+                )}
+
             </div>
-          </div>
         );
     }
     
