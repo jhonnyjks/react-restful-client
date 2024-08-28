@@ -638,7 +638,7 @@ class Table extends Component {
     
     renderPagination() {
 
-        const isMobile = this.state.width <= 768;
+        const isMobile = this.state.width <= 600;
         
         const { pagination } = this.props;
       
