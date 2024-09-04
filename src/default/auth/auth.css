@@ -35,6 +35,18 @@
     width: 520px;
 }
 
+.btn-gov {
+    color: #ffffff;
+    background-color: #0c326f;
+    border-color: #0c326f;
+    box-shadow: none;
+}
+
+.btn-gov:hover {
+    background-color: #0b4778;
+    border-color: #0b4778;
+}
+
 @media only screen and (max-width: 460px) {
     .image-logo {
         width: 210px;
