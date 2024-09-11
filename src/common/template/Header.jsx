@@ -264,61 +264,83 @@ class Header extends Component {
               color: '#ffffff',
               maxHeight: '300px', // Define a altura máxima da área de rolagem
               overflowY: 'auto',  // Adiciona barra de rolagem vertical
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
-            <div className="dropdown-header" style={{ color: '#ffffff' }}>
+            <div
+              className="dropdown-header"
+              style={{
+                color: '#ffffff',
+                flex: '0 0 auto', // Mantém o cabeçalho fixo no topo
+              }}
+            >
               <span className="circle">{selectedNotification.items.length}</span>
               <i className={`fas fa-${selectedNotification.icon}`} style={{ color: '#ffffff' }}></i>{" "}
               {selectedNotification.title}
             </div>
-            {selectedNotification.items.map((item, i) => (
-              <div key={i} className="dropdown-item">
-                <a
-                  href={
-                    process.env.PUBLIC_URL +
-                    (item.link || selectedNotification.linkToItem) +
-                    (item.link[item.link.length - 1] !== "/" ? "/" : "") +
-                    item.id
-                  }
-                  className="dropdown-item"
-                  style={{ color: '#ffffff' }}
-                >
-                  <i className="fas fa-file-alt" style={{ color: '#ffffff' }}></i> {item.entity?.initials || ""}{" "}
-                  {item.id}
-                  <span className="float-right text-sm" style={{ marginLeft: "20px" }}>
-                    Há {Math.floor((new Date() - new Date(item.date)) / 86400000)} dias
-                  </span>
-                </a>
-              </div>
-            ))}
-            <div className="dropdown-divider"></div>
-            <a
-              href={process.env.PUBLIC_URL + selectedNotification.linkToList}
-              className="dropdown-item dropdown-footer"
-              style={{ padding: '0' }} // Remove o preenchimento da âncora
+            <div
+              className="dropdown-body"
+              style={{
+                flex: '1 1 auto', // Área de rolagem
+                overflowY: 'auto',
+              }}
             >
-              <button
-                onClick={() => this.toggleNotifications()}
-                type="button"
-                className="btn btn-primary w-100"
-                style={{ backgroundColor: "white", color: "#0D6EFD" }}
+              {selectedNotification.items.map((item, i) => (
+                <div key={i} className="dropdown-item">
+                  <a
+                    href={
+                      process.env.PUBLIC_URL +
+                      (item.link || selectedNotification.linkToItem) +
+                      (item.link[item.link.length - 1] !== "/" ? "/" : "") +
+                      item.id
+                    }
+                    className="dropdown-item"
+                    style={{ color: '#ffffff' }}
+                  >
+                    <i className="fas fa-file-alt" style={{ color: '#ffffff' }}></i> {item.entity?.initials || ""}{" "}
+                    {item.id}
+                    <span className="float-right text-sm" style={{ marginLeft: "20px" }}>
+                      Há {Math.floor((new Date() - new Date(item.date)) / 86400000)} dias
+                    </span>
+                  </a>
+                </div>
+              ))}
+            </div>
+            <div
+              className="dropdown-footer"
+              style={{
+                flex: '0 0 auto', // Fixa os botões na parte inferior
+                backgroundColor: '#0D6EFD',
+                padding: '10px',
+              }}
+            >
+              <a
+                href={process.env.PUBLIC_URL + selectedNotification.linkToList}
+                className="dropdown-item dropdown-footer"
               >
-                Ver Todos
-              </button>
+                <button
+                  onClick={() => this.toggleNotifications()}
+                  type="button"
+                  className="btn btn-primary w-100"
+                  style={{ backgroundColor: "white", color: "#0D6EFD" }}
+                >
+                  Ver Todos
+                </button>
+              </a>
               {this.state.width < 600 && (
                 <button
                   type="button"
                   className="btn btn-primary w-100"
                   onClick={() => this.setState({ selectedNotification: null })}
-                  style={{ marginTop: "5px", backgroundColor: "transparent" }}
+                  style={{ marginTop: "5px", backgroundColor: "transparent", color: "#ffffff" }}
                 >
                   Voltar
                 </button>
               )}
-            </a>
+            </div>
           </div>
         )}
-
       </nav>
     );
   }
