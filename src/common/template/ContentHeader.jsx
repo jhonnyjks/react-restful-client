@@ -34,7 +34,7 @@ export default class  ContentHeader extends Component{
                     <div className="col-sm-6">
                         <h1 className="pull-left" style={{lineHeight:'1em'}}>
                             <strong className={`${this.state.width < 600?'d-block':''}`}>{this.props.title}</strong> 
-                            <small style={{fontSize: 15}}>{this.props.small}</small>
+                            <small style={{fontSize: 15}}> {this.props.small}</small>
                         </h1>
                     </div>
                     <div className="col-sm-6">
