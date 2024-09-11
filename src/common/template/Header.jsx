@@ -61,28 +61,30 @@ class Header extends Component {
 
   renderNotifications = (notifications) =>
     notifications.map((notify, i) => {
-      
       const linkToList = process.env.PUBLIC_URL + notify.linkToList;
 
       return (
-        <div>
+        <div key={i}>
           {this.state.width >= 600 ? (
-            // Se a largura for maior ou igual a 600px, renderiza este conteúdo
-            <div>
-              <li key={i} className="nav-item dropdown">
+            <li className="nav-item dropdown">
+              <a className="nav-link" data-toggle="dropdown" href="#" aria-expanded="true" title={notify.title}>
+                <i className={"fas fa-" + notify.icon + " color-icon-white"} style={{ width: '24px', height: '24px' }}></i>
+                <span className={"badge badge-" + notify.type + " navbar-badge"}>{notify.items.length}</span>
+              </a>
 
-                <a className="nav-link" data-toggle="dropdown" href="#" aria-expanded="true" title={notify.title}>
-
-                  <i className={"fas fa-" + notify.icon + " color-icon-white"} style={{ width: '24px', height: '24px' }}></i>
-
-                  <span className={"badge badge-" + notify.type + " navbar-badge"}>
-                    {notify.items.length}
-                  </span>
-                </a>
-
-                <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right" style={{ left: 'inherit', right: '0px' }}>
-
-                  <div className="dropdown-item dropdown-header" style={{ textAlign: 'left', paddingTop: '10px', paddingLeft: '20px' }}>
+              {/* Menu dropdown */}
+              <div
+                className="dropdown-menu dropdown-menu-lg dropdown-menu-right"
+                style={{ left: 'inherit', right: '0px' }}
+              >
+                {/* Contêiner rolável para itens de notificação */}
+                <div
+                  style={{
+                    maxHeight: '300px', // Define altura máxima para a área de rolagem
+                    overflowY: 'auto', // Adiciona barra de rolagem vertical
+                  }}
+                >
+                  <div className="dropdown-item dropdown-header" style={{ textAlign: 'left', paddingTop: '10px' }}>
                     <span className="circle">{notify.items.length}</span>
                     <strong className="processo-text text-truncate">{notify.title}</strong>
                   </div>
@@ -91,63 +93,69 @@ class Header extends Component {
                     <div className="dropdown-divider"></div>
                   </div>
 
-                  {notify.items.slice(0, 10).map((item, j) => {
+                  {notify.items.map((item, j) => {
+                    let itemLink = item.link || notify.linkToItem;
+                    itemLink =
+                      process.env.PUBLIC_URL + itemLink + (itemLink[itemLink.length - 1] !== '/' ? '/' : '') + item.id;
 
-                    let itemLink = item.link || notify.linkToItem
-                    itemLink = process.env.PUBLIC_URL + itemLink + (itemLink[itemLink.length - 1] != '/' ? '/' : '') + item.id
-
-                    let itemTime = ((new Date()) - (new Date(item.date))) / 60000
+                    let itemTime = (new Date() - new Date(item.date)) / 60000;
                     if (itemTime < 1) {
-                      itemTime = Number.parseInt(itemTime * 60) + ' segundo' + (Number.parseInt(itemTime * 60) > 1 ? 's' : '')
+                      itemTime = Number.parseInt(itemTime * 60) + ' segundo' + (Number.parseInt(itemTime * 60) > 1 ? 's' : '');
                     } else if (itemTime > 1439) {
-                      itemTime = Number.parseInt(itemTime / 1440) + ' dia' + (Number.parseInt(itemTime / 1440) > 1 ? 's' : '')
+                      itemTime = Number.parseInt(itemTime / 1440) + ' dia' + (Number.parseInt(itemTime / 1440) > 1 ? 's' : '');
                     } else if (itemTime > 59) {
-                      itemTime = Number.parseInt(itemTime / 60) + ' hora' + (Number.parseInt(itemTime / 60) > 1 ? 's' : '')
+                      itemTime = Number.parseInt(itemTime / 60) + ' hora' + (Number.parseInt(itemTime / 60) > 1 ? 's' : '');
                     } else {
-                      itemTime = Number.parseInt(itemTime) + ' minuto' + (Number.parseInt(itemTime) > 1 ? 's' : '')
+                      itemTime = Number.parseInt(itemTime) + ' minuto' + (Number.parseInt(itemTime) > 1 ? 's' : '');
                     }
 
                     return (
                       <div key={item.id}>
                         <a href={itemLink} className="dropdown-item">
                           <i className={"fas fa-file-alt mr-2 blue-text"}></i> {item.entity?.initials || ''} {item.id}
-                          <span className="float-right text-muted text-sm" title={(new Date(item.date)).toLocaleString()}>
+                          <span className="float-right text-muted text-sm" title={new Date(item.date).toLocaleString()}>
                             {itemTime}
                           </span>
                         </a>
                       </div>
                     );
-
                   })}
-                  <div className="dropdown-divider"></div>
-                  {notify.linkToList &&
-                    <a href={linkToList} className="dropdown-item dropdown-footer">
+                </div>
+
+                {/* Contêiner fixo para o botão "Ver Todos" */}
+                {notify.linkToList && (
+                  <div
+                    className="dropdown-footer"
+                    style={{
+                      padding: '10px 15px',
+                      borderTop: '1px solid #e9ecef', // Adiciona uma borda superior para separar
+                    }}
+                  >
+                    <a href={linkToList}>
                       <button type="button" className="btn btn-primary w-100">Ver Todos</button>
                     </a>
-                  }
-                </div>
-              </li>
-            </div>
+                  </div>
+                )}
+              </div>
+            </li>
           ) : (
             // Se a largura for menor que 600px, renderiza este conteúdo
-            <div>
-              <li key={i} className="nav-item dropdown">
-                <a
-                  className="nav-link"
-                  onClick={() => this.handleNotificationClick(notify)} // Atualiza o estado com a notificação clicada
-                  aria-expanded="false"
-                  title={notify.title}
-                >
-                  <i
-                    className={"fas fa-" + notify.icon + " color-icon-white"}
-                    style={{ width: "24px", height: "24px", color: "#ffffff" }} // Cor do ícone para branco
-                  ></i>
-                  <span className={"badge badge-" + notify.type + " navbar-badge"}>
-                    {notify.items.length}
-                  </span>
-                </a>
-              </li>
-            </div>
+            <li key={i} className="nav-item dropdown">
+              <a
+                className="nav-link"
+                onClick={() => this.handleNotificationClick(notify)}
+                aria-expanded="false"
+                title={notify.title}
+              >
+                <i
+                  className={"fas fa-" + notify.icon + " color-icon-white"}
+                  style={{ width: "24px", height: "24px", color: "#ffffff" }}
+                ></i>
+                <span className={"badge badge-" + notify.type + " navbar-badge"}>
+                  {notify.items.length}
+                </span>
+              </a>
+            </li>
           )}
         </div>
       );
@@ -217,9 +225,6 @@ class Header extends Component {
         {showNotifications && this.state.width < 600 && !selectedNotification && (
           <div className="dropdown-menu dropdown-menu-right show" style={{ backgroundColor: '#0D6EFD', color: '#ffffff' }}>
             {this.props.notifications.map((notify, i) => (
-
-
-
               <div
                 key={i}
                 className="dropdown-item"
@@ -232,12 +237,7 @@ class Header extends Component {
                   justifyContent: 'space-between'
                 }} // Texto branco
               >
-
-
                 <a
-
-
-
                   className="nav-link"
                   aria-expanded="false"
                   style={{ maxWidth: "56px" }}
@@ -247,35 +247,32 @@ class Header extends Component {
                     style={{ width: "34px", height: "34px", color: "#ffffff" }} // Cor do ícone para branco
                   ></i>
                   <span className={"badge badge-" + notify.type + " navbar-badge"}> {notify.items.length} </span>
-
-
                 </a>
-
-
-
                 <span className="brand-text font-weight-light text-right">
                   {notify.title}
                 </span>
-
-
-
               </div>
-
-
-
             ))}
           </div>
         )}
         {/* Renderizar a lista de notificações detalhadas da notificação selecionada */}
         {selectedNotification && (
-          <div className="dropdown-menu dropdown-menu-right show" style={{ backgroundColor: '#0D6EFD' }}>
+          <div
+            className="dropdown-menu dropdown-menu-right show"
+            style={{
+              backgroundColor: '#0D6EFD',
+              color: '#ffffff',
+              maxHeight: '300px', // Define a altura máxima da área de rolagem
+              overflowY: 'auto',  // Adiciona barra de rolagem vertical
+            }}
+          >
             <div className="dropdown-header" style={{ color: '#ffffff' }}>
               <span className="circle">{selectedNotification.items.length}</span>
               <i className={`fas fa-${selectedNotification.icon}`} style={{ color: '#ffffff' }}></i>{" "}
               {selectedNotification.title}
             </div>
             {selectedNotification.items.map((item, i) => (
-              <div key={i} className="dropdown-item"  >
+              <div key={i} className="dropdown-item">
                 <a
                   href={
                     process.env.PUBLIC_URL +
@@ -288,39 +285,40 @@ class Header extends Component {
                 >
                   <i className="fas fa-file-alt" style={{ color: '#ffffff' }}></i> {item.entity?.initials || ""}{" "}
                   {item.id}
-
-
-                  <span className="float-right text-sm" style={{ marginLeft: "20px" }} >
-                    Há {Math.floor((new Date() - new Date(item.date)) / 86400000)}{" "}
-                    dias
+                  <span className="float-right text-sm" style={{ marginLeft: "20px" }}>
+                    Há {Math.floor((new Date() - new Date(item.date)) / 86400000)} dias
                   </span>
-
-
                 </a>
               </div>
             ))}
-            <div className="dropdown-divider" ></div>
+            <div className="dropdown-divider"></div>
             <a
               href={process.env.PUBLIC_URL + selectedNotification.linkToList}
               className="dropdown-item dropdown-footer"
+              style={{ padding: '0' }} // Remove o preenchimento da âncora
             >
-              <button onClick={() => this.toggleNotifications()} type="button" className="btn btn-primary w-100" style={{ backgroundColor: "white", color: "#0D6EFD" }}>
+              <button
+                onClick={() => this.toggleNotifications()}
+                type="button"
+                className="btn btn-primary w-100"
+                style={{ backgroundColor: "white", color: "#0D6EFD" }}
+              >
                 Ver Todos
               </button>
-              {this.state.width < 600 &&
-                <button type="button"
+              {this.state.width < 600 && (
+                <button
+                  type="button"
                   className="btn btn-primary w-100"
                   onClick={() => this.setState({ selectedNotification: null })}
                   style={{ marginTop: "5px", backgroundColor: "transparent" }}
                 >
                   Voltar
                 </button>
-              }
+              )}
             </a>
-
-
           </div>
         )}
+
       </nav>
     );
   }
