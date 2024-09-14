@@ -69,6 +69,8 @@ function submit(values, url) {
 }
 
 export function logout() {
+    axios.get(`${process.env.REACT_APP_API_HOST}/auth/logout`)
+    
     return { type: 'USER_FETCHED', payload: {} }
 }
 
