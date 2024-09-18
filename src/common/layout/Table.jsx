@@ -39,8 +39,21 @@ class Table extends Component {
     }
 
     handleChangeSearch = e => {
-        this.setState({ search: e.target.value })
-        this.props.generalSearch(e.target.value)
+        let queryStr = 'search=' + e.target.value + '&searchJoin=or&searchFields='
+    
+        // Acumula os campos em um array
+        const searchFields = Object.entries(this.props.attributes).map(attr => {
+            return (attr[1].search?.field || attr[0]) + ':like';
+        });
+    
+        // Junta todos os campos com ";"
+        queryStr += searchFields.join(';');
+    
+        // Chama a função de busca com a query montada
+        this.props.generalSearch(queryStr);
+    
+        // Atualiza o estado
+        this.setState({ search: e.target.value });
     }
 
     doSearch = (e = null, search = null, page = null) => {
