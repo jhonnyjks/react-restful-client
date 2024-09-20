@@ -38,23 +38,37 @@ class Table extends Component {
         window.removeEventListener('resize', this.updateDimensions);
     }
 
+    toCamelCaseForRelations = str => {
+        if (str.includes('.')) {
+            const parts = str.split('.');
+            return parts.map((part, index) => {
+                // Converte o primeiro campo da relação
+                if (index === 0) {
+                    return part.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+                }
+                // Mantém os demais campos sem alteração
+                return part;
+            }).join('.');
+        }
+        return str; // Retorna o campo original se não for uma relação
+    };
+    
     handleChangeSearch = e => {
-        let queryStr = 'search=' + e.target.value + '&searchJoin=or&searchFields='
+        const buildSearchFields = () => {
+            return Object.entries(this.props.attributes).map(attr => {
+                const field = attr[1].search?.field || attr[0];
+                return `${this.toCamelCaseForRelations(field)}:like`; // Converte para camelCase
+            }).join(';');
+        };
     
-        // Acumula os campos em um array
-        const searchFields = Object.entries(this.props.attributes).map(attr => {
-            return (attr[1].search?.field || attr[0]) + ':like';
-        });
-    
-        // Junta todos os campos com ";"
-        queryStr += searchFields.join(';');
-    
+        const queryStr = `search=${e.target.value}&searchJoin=or&searchFields=${buildSearchFields()}`;
+        
         // Chama a função de busca com a query montada
         this.props.generalSearch(queryStr);
-    
+        
         // Atualiza o estado
         this.setState({ search: e.target.value });
-    }
+    };        
 
     doSearch = (e = null, search = null, page = null) => {
 
