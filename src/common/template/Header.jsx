@@ -32,7 +32,7 @@ class Header extends Component {
     this.updateDimensions();
     this.setState({
       intervalId: setInterval(() => {
-        // this.props.getNotifications();
+        this.props.getNotifications();
       }, 10000),
     });
   }
