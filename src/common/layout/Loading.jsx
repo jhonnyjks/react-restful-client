@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 
 class Loading extends Component {
+    constructor(props) {
+        super(props);
+    }
 
     render() {
         return (
@@ -8,7 +11,7 @@ class Loading extends Component {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                height: '80vh',
+                height: '100vh',
             }}>
                 <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
                     <span className="sr-only">Loading...</span>

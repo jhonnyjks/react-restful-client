@@ -9,26 +9,35 @@ import App from './app'
 import Auth from '../default/auth/auth'
 import { validateToken } from '../default/auth/authActions'
 import { can } from '../common/helpers/index'
-
-const Loading = () => {
-    return (
-        <div className="login-page text-center">
-            <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        </div>
-    )
-}
+import Loading from '../common/layout/Loading'
 
 class AuthOrApp extends Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            laoding:false,
+        }
 
         //GLOBALS
         window.can = can
 
         this.interceptRequest.bind(this)
+
+        // Tratamentos antes do request
+        axios.interceptors.request.use(this.interceptRequest, function (error) {
+            // Do something with request error
+            this.setState({loading:false})
+            return Promise.reject(error)
+        })
+
+        axios.interceptors.response.use((response) => {
+            this.setState({loading:false})
+            return response;
+        }, (error) => {
+            this.setState({loading:false})
+            return Promise.reject(error);
+        });
     }
 
     componentWillMount() {
@@ -59,13 +68,9 @@ class AuthOrApp extends Component {
     }
 
     render() {
-        const { token, validToken, profile, loading, profiles } = this.props.auth
-
-        // Tratamentos antes do request
-        axios.interceptors.request.use(this.interceptRequest, function (error) {
-            // Do something with request error
-            return Promise.reject(error)
-        })
+        const { token, validToken, profile, profiles } = this.props.auth
+        const { loading } = this.state
+        
 
         if (token && validToken && profile) {
             axios.defaults.headers.common['authorization'] = token.type + ' ' + token.token
@@ -73,12 +78,14 @@ class AuthOrApp extends Component {
 
         return <>
             { loading && <Loading /> }
-            { (token && validToken && profile) && <App>{this.props.children}</App> }
-            { !(token && validToken && profile) && <Auth /> }
+            { (token && validToken && profile) && <App loading={loading}>{this.props.children}</App> }
+            { !(token && validToken && profile) && <Auth loading={loading}/> }
         </>
     }
 
     interceptRequest = (conf) => {
+        if(!conf.url.includes('notifications'))
+            this.setState({loading:true})
 
         const scopes = this.props.auth.profile ? this.props.auth.profile.scopes : {}
         let url = conf.url       

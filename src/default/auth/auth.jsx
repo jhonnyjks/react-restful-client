@@ -148,7 +148,7 @@ class Auth extends Component {
         )
 
         return (
-            <div>
+            <div className={`${this.props.loading?'d-none':''}`}>
                 <div className='bloco-azul'></div>
                 <div className="login-page">
                     <div className="login-box container">{
