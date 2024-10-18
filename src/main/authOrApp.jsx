@@ -78,8 +78,8 @@ class AuthOrApp extends Component {
 
         return <>
             { loading && <Loading /> }
-            { (token && validToken && profile) && <App loading={loading}>{this.props.children}</App> }
-            { !(token && validToken && profile) && <Auth loading={loading}/> }
+            { (token && validToken && profile) && <App>{this.props.children}</App> }
+            { !(token && validToken && profile) && <Auth/> }
         </>
     }
 

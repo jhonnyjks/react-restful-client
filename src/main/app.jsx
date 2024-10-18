@@ -18,7 +18,7 @@ class App extends Component {
     render() {        
         return (
             <HashRouter>
-                    <div className={`wrapper ${this.props.loading?'d-none':''}`}>
+                    <div className="wrapper">
                         <Header />
                         <SideBar />
                         <Routes />

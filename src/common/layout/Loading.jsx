@@ -7,14 +7,11 @@ class Loading extends Component {
 
     render() {
         return (
-            <div className="" style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100vh',
-            }}>
-                <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
-                    <span className="sr-only">Loading...</span>
+            <div className="overlay-wrapper">
+                <div class="overlay">
+                    <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
+                        <span className="sr-only">Carregando...</span>
+                    </div>
                 </div>
             </div>
         );
