@@ -32,7 +32,8 @@ class AuthOrApp extends Component {
         })
 
         axios.interceptors.response.use((response) => {
-            this.setState({loading:false})
+            if(!response.config.url.includes('notifications'))
+                this.setState({loading:false})
             return response;
         }, (error) => {
             this.setState({loading:false})
