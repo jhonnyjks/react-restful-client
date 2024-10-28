@@ -32,7 +32,8 @@ class AuthOrApp extends Component {
         })
 
         axios.interceptors.response.use((response) => {
-            this.setState({loading:false})
+            if(!response.config.url.includes('notifications'))
+                this.setState({loading:false})
             return response;
         }, (error) => {
             this.setState({loading:false})
@@ -78,8 +79,8 @@ class AuthOrApp extends Component {
 
         return <>
             { loading && <Loading /> }
-            { (token && validToken && profile) && <App loading={loading}>{this.props.children}</App> }
-            { !(token && validToken && profile) && <Auth loading={loading}/> }
+            { (token && validToken && profile) && <App>{this.props.children}</App> }
+            { !(token && validToken && profile) && <Auth/> }
         </>
     }
 

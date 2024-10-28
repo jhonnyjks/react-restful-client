@@ -76,10 +76,19 @@ class Table extends Component {
         let searchFields = this.state.searchFields
         let searchFieldsValues = this.state.searchFieldsValues
 
-        if (['text', 'date'].indexOf(search?.type) > -1 && e.target && e.target.value) {
+        if (['text'].indexOf(search?.type) > -1 && e.target && e.target.value) {
             queryStrSearch[search.field] = search.field + ':' + e.target.value
             searchFieldsValues[search.field] = e.target.value
             searchFields[search.field] = search.field + ':like'
+        }else if (['date'].indexOf(search?.type) > -1 && e.target && e.target.value) {
+            let data =  new Date(e.target.value);
+            console.log('data',data.getFullYear());
+            if(data.getFullYear() >= 1000){
+                queryStrSearch[search.field] = search.field + ':' + e.target.value
+                searchFieldsValues[search.field] = e.target.value
+                searchFields[search.field] = search.field + ':like'
+            }
+            else return
         } else if (e && e.value) {
             queryStrSearch[search.field] = search.field + ':' + e.value
             searchFieldsValues[search.field] = e.value
