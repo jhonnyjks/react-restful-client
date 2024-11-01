@@ -30,11 +30,14 @@ class Header extends Component {
 
   componentDidMount() {
     this.updateDimensions();
-    this.setState({
-      intervalId: setInterval(() => {
-        this.props.getNotifications();
-      }, 10000),
-    });
+
+    this.props.getNotifications();
+
+    const intervalId = setInterval(() => {
+      this.props.getNotifications();
+    }, 10000);
+
+    this.setState({ intervalId });
   }
 
   handleNotificationClick = (notify) => {
