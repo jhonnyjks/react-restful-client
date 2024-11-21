@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component,useRef  } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -20,6 +20,8 @@ class Auth extends Component {
             resetMode: false,
             resetHidenButton: false, 
         }
+
+        
     }
 
     changeLoginMode() {
@@ -57,14 +59,30 @@ class Auth extends Component {
         const { loginMode, signupMode, resetMode, resetHidenButton } = this.state
         const { handleSubmit } = this.props
 
+        const loginInput = document.querySelector('input[name="login"]');
+        const passwordInput = document.querySelector('input[name="password"]');
+
+        if(loginInput){
+            loginInput.addEventListener('keydown', (event) => {
+            // Verifica se a tecla TAB foi pressionada
+                if (event.key === "Tab") {
+                    event.preventDefault(); // Impede o comportamento padrão do TAB
+                    passwordInput.focus(); // Move o foco para o input de senha
+                }
+            });
+        }
+
         const loginForm = (
             <form onSubmit={handleSubmit(v => this.onSubmit(v))}>
                 <label className={loginMode || resetMode?'d-none':''}>Nome</label>
                 <Field component={Input} type="input" name="name"
                     placeholder="Digite seu nome"  hide={loginMode || resetMode} />
+                <label className={loginMode || resetMode?'d-none':''}>Email</label>
+                <Field component={Input} type="input" name="email"
+                    placeholder="Digite seu email"  hide={loginMode || resetMode} />
                 <label className={resetMode?'d-none':''}>Usuário</label>
                 <Field component={Input} type="text" name="login"
-                    placeholder="Digite seu login" hide={resetMode} />
+                    placeholder="Digite seu login" hide={resetMode}/>
                 {resetMode ? null : (
                     <a href='#' className='pull-right' 
                         onClick={e => {
