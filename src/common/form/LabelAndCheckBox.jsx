@@ -164,7 +164,7 @@ class LabelAndCheckBox extends Component {
                                                     onChange={this.handleChange} 
                                                     className="custom-control-input" 
                                                 />
-                                                <label for={this.props.id+'_custom_'+index} className="custom-control-label">
+                                                <label htmlFor={this.props.id+'_custom_'+index} className="custom-control-label">
                                                     <font style={{marginLeft: '-18px'}}>
                                                         { (this.props.callback ? this.props.callback(e) : null) || e[this.props.textAttr] || e.name || e.noun || e.title || e.description || e.id }
                                                     </font>
