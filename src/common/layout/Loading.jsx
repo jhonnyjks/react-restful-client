@@ -7,8 +7,8 @@ class Loading extends Component {
 
     render() {
         return (
-            <div className="overlay-wrapper">
-                <div className="overlay">
+            <div className="overlay-wrapper" >
+                <div className="overlay" style={{backgroundColor:'white'}}>
                     <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
                         <span className="sr-only">Carregando...</span>
                     </div>
