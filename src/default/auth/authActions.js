@@ -28,7 +28,7 @@ function submit(values, url) {
         
         dispatch({ type: 'AUTH_LOADING', payload: true })
 
-        axios.post(url, values)
+        return axios.post(url, values)
             .then(resp => {
 
                 if (resp.data.data && resp.data.data.profiles && resp.data.data.profiles.length === 1) {
