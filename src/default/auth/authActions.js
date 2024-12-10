@@ -8,8 +8,6 @@ export function login(values, url) {
 
 function submit(values, url) {
 
-    console.log('submit values: ', values, url);
-
     switch (url) {
         case 'login':
             url = `${process.env.REACT_APP_API_HOST}/auth/login`
@@ -48,6 +46,8 @@ function submit(values, url) {
                 }
 
                 dispatch({ type: 'USER_FETCHED', payload: resp.data })
+
+                return resp;
             })
             .catch(e => {
 
@@ -64,6 +64,8 @@ function submit(values, url) {
                 } else if (e.response.data) {
                     toastr.error('Erro', e.response.data.message)
                 }
+
+                return e.response;
             })
     }
 }

@@ -53,7 +53,9 @@ class Auth extends Component {
         } else {
             login(values, 'signup')
                 .then(res => {
-                    this.changeLoginMode()
+                    if(res.status == 200){
+                        this.changeLoginMode()
+                    }
                 })
         }
     }
