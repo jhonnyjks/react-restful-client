@@ -34,7 +34,7 @@ class Header extends Component {
     this.props.getNotifications();
 
     const intervalId = setInterval(() => {
-      this.props.getNotifications();
+      // this.props.getNotifications();
     }, 10000);
 
     this.setState({ intervalId });
