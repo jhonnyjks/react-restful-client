@@ -25,20 +25,18 @@ class Auth extends Component {
     }
 
     componentDidMount() {
-        // Verifica a URL para os parâmetros user_id e validate_token
-        const urlParams = new URLSearchParams(window.location.search);  // Captura os parâmetros da URL
-        const userId = urlParams.get('user_id');  // Obtém o user_id
-        const validateToken = urlParams.get('validate_token');  // Obtém o validate_token
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('user_id');
+        const validateToken = urlParams.get('validate_token')
 
-        // Se ambos os parâmetros existirem, faz um log
         if (userId && validateToken) {
-            console.log('Parâmetros encontrados:');
-            console.log('user_id:', userId);
-            console.log('validate_token:', validateToken);
-            
-            // Você pode adicionar os valores ao estado ou valores do formulário, se necessário
-            // Exemplo: adicionando ao objeto `values` de um formulário ou algo similar
-            // this.setState({ userId, validateToken });
+
+            let values = {
+                id: userId,
+                hash: validateToken,
+            }
+
+            this.props.login(values, 'verifield-email')
         }
     }
 
