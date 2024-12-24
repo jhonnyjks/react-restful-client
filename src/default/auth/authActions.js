@@ -17,31 +17,18 @@ function submit(values, url) {
         case 'reset':
             url = `${process.env.REACT_APP_API_HOST}/auth/change-password`;
             break;
-        case 'verifield-email':
-
-            const apiHost = process.env.REACT_APP_API_HOST;
-            const baseUrl = apiHost.replace('/api', '');
-
-            url = `${baseUrl}/email/verify/${values.id}/${values.hash}`;
-            console.log('entrou em verifield-email');
-            console.log('values: ', values);
-            console.log('url: ', url);
-            console.log('url padrão: ', `${baseUrl}`);
-            
+        case 'verified-email':
+            url = `${process.env.REACT_APP_API_HOST}/auth/verified-email`;
             break;
         default:
             break;
     }
 
     return dispatch => {
-        console.log('entrou...');
 
         dispatch({ type: 'AUTH_LOADING', payload: true });
 
-        // Verificar se a rota usa GET ou POST
-        const method = url.includes('/email/verify/') ? 'get' : 'post';
-
-        return axios[method](url, method === 'post' ? values : { params: values })
+        return axios.post(url, values)
             .then(resp => {
                 if (resp.data.data && resp.data.data.profiles && resp.data.data.profiles.length === 1) {
                     toastr.success('Sucesso', resp.data.message);

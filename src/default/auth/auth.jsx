@@ -36,7 +36,7 @@ class Auth extends Component {
                 hash: validateToken,
             }
 
-            this.props.login(values, 'verifield-email')
+            this.props.login(values, 'verified-email')
         }
     }
 
