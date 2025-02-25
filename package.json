@@ -23,6 +23,7 @@
     "devextreme": "^21.2.4",
     "expose-loader": "^0.7.5",
     "file-loader": "^6.2.0",
+    "file-saver": "^2.0.5",
     "font-awesome": "4.7.0",
     "history": "^5.0.1",
     "ionicons": "4.4.3",
@@ -68,6 +69,7 @@
     "threads": "^1.0.0-beta.8",
     "url-loader": "^4.1.1",
     "web-vitals": "^1.0.1",
+    "xlsx": "^0.18.5",
     "xmldom": "^0.3.0"
   },
   "scripts": {

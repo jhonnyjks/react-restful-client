@@ -11,6 +11,7 @@ import If from '../operator/If'
 import Row from './row'
 import { Button } from 'react-bootstrap';
 import { head } from 'lodash';
+import ButtonExport from '../form/ButtonExport';
 class Table extends Component {
     constructor(props) {
         super(props);
@@ -186,7 +187,6 @@ class Table extends Component {
     }
 
     renderHead = () => {
-
         if (this.props.renderHead === false) return null
 
         let b = this.getBody()
@@ -238,11 +238,21 @@ class Table extends Component {
                 )}
                 
                 {this.props.actions &&  <th>
-                    {this.props.withTrashed && <><ButtonListTrashed 
+                    {this.props.withExport && <>
+                                            <ButtonExport
+                                            title="Exportar em Excel"
+                                            head={head}
+                                            body={this.props.body_export?this.props.body_export:b}
+                                            ></ButtonExport>
+                                            </> }
+                    {this.props.withTrashed && <>
+                                                <ButtonListTrashed 
                                                 title="Incluir itens excluídos"
                                                 onListTrashed={this.props.actionsHeader.listTrashed}
                                                 onColorResolve={this.props.iconColorResolve.onColorResolve}                                               
-                                                ></ButtonListTrashed></> }
+                                                ></ButtonListTrashed>
+                                                </> }
+                    
                 </th>}
             </tr>
 
