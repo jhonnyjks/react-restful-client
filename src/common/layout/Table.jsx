@@ -238,11 +238,10 @@ class Table extends Component {
                 )}
                 
                 {this.props.actions &&  <th>
-                    {this.props.withExport && <>
+                    {this.props.onExport && <>
                                             <ButtonExport
                                             title="Exportar em Excel"
-                                            head={head}
-                                            body={this.props.body_export?this.props.body_export:b}
+                                            onExport={this.props.onExport.bind(this)}
                                             ></ButtonExport>
                                             </> }
                     {this.props.withTrashed && <>

@@ -23,50 +23,12 @@ export default class ButtonExport extends Component {
 
         };
     } 
-    
-    getNestedValue = (obj, path) => {
-        return path.split('.').reduce((acc, key) => acc && acc[key], obj);
-    };
 
-    transformData = (head, body) => {
-        return body.map(row => {
-            let newRow = {};
-            for (let key in head) {
-                let value = this.getNestedValue(row, key);
-                if(head && head[key] && head[key].callback){
-                    let valueCalback = head[key].callback(value,row);
-                    console.log(typeof valueCalback,valueCalback);
-                    
-                    newRow[head[key].title || head[key]] = (typeof valueCalback != 'object') ?valueCalback:value;
-                }else{
-                    newRow[head[key].title || head[key]] = value;
-                }
 
-            }
-            return newRow;
-        });
-    };
-
-    exportToExcel = () => {
-        const head = this.props.head;
-        const body = this.props.body;
-        
-        const data = this.transformData(head,body);
-    
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Dados');
-    
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    
-        saveAs(dataBlob, 'arquivo.xlsx');
-    };
-  
     render() {
 
       return (
-        <button title={this.props.title} type='button' onClick={this.exportToExcel}
+        <button title={this.props.title} type='button' onClick={this.props.onExport}
             style={{ border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px' }} >            
             {this.props.label}
             <i 
