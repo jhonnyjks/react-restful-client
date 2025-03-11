@@ -205,11 +205,14 @@ class AuthOrApp extends Component {
                         className="search-select-container"
                         classNamePrefix="search-select"
                         onChange={this.handleActionChange}
-                        options={
-                            this.state.programActions.map((e) => ({
+                        options={(() => {
+                            const actions = this.props.auth.entities?.map(e => e.entity_id) || []
+
+                            return this.state.programActions.filter(pa => actions.includes(pa.estimate_unit_id)).map((e) => ({
                             value: e.id,
                             label: e.id + " - " + e.name
                             })) || []
+                        })()
                         }
                         value={ this.state.programAction }
                         style={{zIndex: 11}}
