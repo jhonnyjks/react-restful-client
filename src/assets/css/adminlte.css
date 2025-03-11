@@ -18416,7 +18416,7 @@ html.maximized-card {
   -ms-flex-pack: center;
   justify-content: center;
   text-align: center;
-  width: 70px;
+  min-width: 70px;
 }
 
 .info-box .info-box-icon > img {
