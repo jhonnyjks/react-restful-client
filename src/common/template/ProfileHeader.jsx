@@ -70,6 +70,8 @@ class ProfileHeader extends Component {
 
     render() {
         const { name, /*email*/ } = this.props.user;
+        const entity = this.props.entities.length != 0 ? this.props.entities[0].entity :null;
+        
         const { hover } = this.props;
 
         return (
@@ -102,7 +104,7 @@ class ProfileHeader extends Component {
                     {hover && (
                         <div className="info pl-3">
                             <a href="#!" className="d-block text-white font-weight-bold">{name}</a>
-                            <a href="#!" className="d-block text-white">{this.props.profile.noun}</a>
+                            <a href="#!" title={`${this.props.profile.noun} / ${entity?entity.name:''}`} className="d-block text-white">{this.props.profile.noun} / {entity?entity.initials:''}</a>
                         </div>
                     )}
                 </div>
@@ -112,6 +114,6 @@ class ProfileHeader extends Component {
     }
 }
 
-const mapStateToProps = state => ({ user: state.auth.user, profile: state.auth.profile, profiles: state.auth.profiles });
+const mapStateToProps = state => ({ user: state.auth.user, profile: state.auth.profile, profiles: state.auth.profiles,entities: state.auth.entities });
 const mapDispatchToProps = dispatch => bindActionCreators({ logout }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileHeader);
