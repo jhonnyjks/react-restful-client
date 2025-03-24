@@ -302,12 +302,14 @@ class AuthOrApp extends Component {
 
             // Dividindo url e queryString
             url = url.split('?')
+            url = url.filter(v => v.length)
 
             // Obtendo rota
             const route = url[0].replace(process.env.REACT_APP_API_HOST, '').replaceAll('/', '')
 
             // Dividindo queries
             url[1] = url[1].split('&')
+            url[1] = url[1].filter(v => v.length)
             // Dividindo evalidando entidades com permissões de escopos
             url[1] = url[1].map((queryy) => {
                 let query = queryy.split('=')
