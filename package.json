@@ -28,7 +28,7 @@
     "history": "^5.0.1",
     "ionicons": "4.4.3",
     "jquery": "^3.6.0",
-    "jszip": "^2.4.0",
+    "jszip": "^3.8.0",
     "leaflet": "^1.6.0",
     "leaflet-kml": "^1.0.1",
     "loam": "^1.0.0",
