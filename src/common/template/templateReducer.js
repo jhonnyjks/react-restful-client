@@ -1,4 +1,4 @@
-const INITIAL_STATE = { sideBarOpened: false }
+const INITIAL_STATE = { sideBarOpened: false, notifications: [] }
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -11,6 +11,9 @@ export default (state = INITIAL_STATE, action) => {
         case 'NOTIFICATIONS_FETCHED':
             return { ...state, notifications: action.payload.data ? action.payload.data.data : [] }
 
+        case 'NOTIFICATIONS_CLEANED':
+            return { ...state, notifications: [] }
+            
         default:
             return state;
     }

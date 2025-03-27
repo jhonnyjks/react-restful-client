@@ -47,3 +47,10 @@ export function getNotifications() {
         payload: request
     }
 }
+
+export function initNotifications() {
+    return {
+        type: 'NOTIFICATIONS_CLEANED',
+        payload: []
+    }
+}

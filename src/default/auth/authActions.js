@@ -1,6 +1,7 @@
 import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import _ from 'lodash'
+import { initNotifications } from '../../common/template/templateActions';
 
 export function login(values, url) {
     return submit(values, url)
@@ -69,8 +70,11 @@ function submit(values, url) {
 
 export function logout() {
     axios.get(`${process.env.REACT_APP_API_HOST}/auth/logout`)
-    
-    return { type: 'USER_FETCHED', payload: {} }
+    return dispatch => {
+        dispatch(initNotifications());
+        dispatch({ type: 'USER_FETCHED', payload: {} })
+        return 
+    }
 }
 
 export function validateToken(token, profile) {
