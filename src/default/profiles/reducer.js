@@ -16,15 +16,19 @@ export default (state = INITIAL_STATE, action) => {
                 ? (action.payload.data.data.data || action.payload.data.data)
                 : [];
             
-            const paginationData = action.payload.data.data
+            const paginationData = action.payload.data?.data || null
 
             return { 
                 ...state, 
                 list: responseData,
-                pagination: {
-                    current_page: paginationData.current_page,
+                pagination: paginationData ? {
+                    current_page: paginationData.current_page ,
                     last_page: paginationData.last_page,
                     total: paginationData.total,
+                } : {
+                    current_page: null,
+                    last_page: null,
+                    total: null,
                 }
             };
 

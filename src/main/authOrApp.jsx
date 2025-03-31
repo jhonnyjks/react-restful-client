@@ -9,7 +9,7 @@ import Select from "react-select"
 import '../common/template/dependences'
 import App from './app'
 import Auth from '../default/auth/auth'
-import { validateToken, loading } from '../default/auth/authActions'
+import { validateToken, loading, logout } from '../default/auth/authActions'
 import { can } from '../common/helpers/index'
 
 const Loading = () => {
@@ -280,6 +280,19 @@ class AuthOrApp extends Component {
             return Promise.reject(error)
         })
 
+        // Tratamentos pós request
+        axios.interceptors.response.use(r => {
+            return r
+        }, function (error) {
+            // Se o token não é válido, redireciona para a tela de login
+            if(error.response?.data?.message.includes('Não autenticado.')) {
+                this.props.logout()
+            }
+
+            // Do something with request error
+            return Promise.reject(error)
+        }.bind(this))
+
         if (token && validToken && profile) {
             axios.defaults.headers.common['authorization'] = token.type + ' ' + token.token
         }
@@ -430,5 +443,5 @@ class AuthOrApp extends Component {
     }
 }
 const mapStateToProps = state => ({ auth: state.auth })
-const mapDispatchToProps = dispatch => bindActionCreators({ validateToken, loading }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ validateToken, loading, logout }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(AuthOrApp)
