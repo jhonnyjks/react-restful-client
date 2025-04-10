@@ -7,7 +7,7 @@ import _ from 'lodash'
 import '../common/template/dependences'
 import App from './app'
 import Auth from '../default/auth/auth'
-import { validateToken } from '../default/auth/authActions'
+import { validateToken, logout} from '../default/auth/authActions'
 import { can } from '../common/helpers/index'
 import Loading from '../common/layout/Loading'
 
@@ -39,6 +39,19 @@ class AuthOrApp extends Component {
             this.setState({loading:false})
             return Promise.reject(error);
         });
+
+        // Tratamentos pós request
+        axios.interceptors.response.use(r => {
+            return r
+        }, function (error) {
+            // Se o token não é válido, redireciona para a tela de login
+            if(error.response?.data?.message.includes('Não autenticado.')) {
+                this.props.logout()
+            }
+
+            // Do something with request error
+            return Promise.reject(error)
+        }.bind(this))
     }
 
     componentWillMount() {
@@ -222,5 +235,5 @@ class AuthOrApp extends Component {
     }
 }
 const mapStateToProps = state => ({ auth: state.auth })
-const mapDispatchToProps = dispatch => bindActionCreators({ validateToken }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ validateToken, logout }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(AuthOrApp)

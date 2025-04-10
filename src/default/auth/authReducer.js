@@ -1,5 +1,5 @@
-const sesionKey = '_react_client_session'
-const profileKey = '_react_client_profile'
+export const sesionKey = '_react_client_session'
+export const profileKey = '_react_client_profile'
 const INITIAL_STATE = JSON.parse(localStorage.getItem(sesionKey)) ? {
     user: JSON.parse(localStorage.getItem(sesionKey)).user,
     token: JSON.parse(localStorage.getItem(sesionKey)).token,
@@ -18,11 +18,16 @@ export default (state = INITIAL_STATE, action) => {
         case 'USER_FETCHED':
             if (action.payload.data && action.payload.data.user) {
                 localStorage.setItem(sesionKey, JSON.stringify({
+                    ...state,
                     user: action.payload.data.user,
                     token: {
                         ...state.token,
                         ...action.payload.data.token
-                    }
+                    },
+                    profiles: action.payload.data.profiles,
+                    entities: action.payload.data.entities ? action.payload.data.entities : [],
+                    profile: null,
+                    validToken: true
                 }))
 
                 return {
@@ -37,6 +42,8 @@ export default (state = INITIAL_STATE, action) => {
                     profile: null,
                     validToken: true
                 }
+            } else if(action.payload.validToken && action.payload.user && action.payload.token) {
+                return action.payload
             } else {
                 localStorage.removeItem(sesionKey)
                 localStorage.removeItem(profileKey)
@@ -49,8 +56,8 @@ export default (state = INITIAL_STATE, action) => {
 
         case 'USER_CHANGED':
             localStorage.setItem(sesionKey, JSON.stringify({
-                user: action.payload,
-                token: state.token
+                ...state,
+                user: action.payload
             }))
 
             return {
@@ -63,8 +70,7 @@ export default (state = INITIAL_STATE, action) => {
 
         case 'AUTH_EXTRA':
             localStorage.setItem(sesionKey, JSON.stringify({
-                user: state.user,
-                token: state.token, 
+                ...state, 
                 custom: {...state.custom, ...action.payload}
             }))
 

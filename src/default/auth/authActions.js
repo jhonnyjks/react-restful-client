@@ -2,6 +2,7 @@ import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import _ from 'lodash'
 import { initNotifications } from '../../common/template/templateActions';
+import {sesionKey} from './authReducer'
 
 export function login(values, url) {
     return submit(values, url)
@@ -82,30 +83,23 @@ export function validateToken(token, profile) {
 
         dispatch({ type: 'AUTH_LOADING', payload: true })
 
-        // Obtendo sessão salva para evitar requisição em ambiente dev
-        if (process.env.NODE_ENV === 'developmentt') {
-            let devSession = JSON.parse(localStorage.getItem('devSession'))
-            if (devSession) {
-                dispatch({ type: 'USER_FETCHED', payload: devSession })
-                dispatch({ type: 'PROFILE_SELECTED', payload: profile })
-                dispatch({ type: 'AUTH_LOADING', payload: false })
-                return
-            }
+        // Obtendo sessão salva para evitar requisição
+        let devSession = JSON.parse(localStorage.getItem(sesionKey))
+        if (devSession) {
+            dispatch({ type: 'USER_FETCHED', payload: devSession })
+            dispatch({ type: 'PROFILE_SELECTED', payload: profile })
+            dispatch({ type: 'AUTH_LOADING', payload: false })
+            return
         }
+        
 
         if (token) {
             axios.get(`${process.env.REACT_APP_API_HOST}/auth/validate`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
 
-                // Salvando request para evitar requisição de validação de sessão em ambiente dev
-                if (process.env.NODE_ENV === 'developmentt') {
-                    localStorage.setItem('devSession', JSON.stringify(resp.data))
-                }
-
                 const profiles = resp.data.data.profiles
 
-                
                 if (profiles.length === 1 && profile === null) {
                     dispatch(selectProfile(profiles[0], token))
                 } else if (_.findIndex(profiles, { id: profile.id }) > -1) {
