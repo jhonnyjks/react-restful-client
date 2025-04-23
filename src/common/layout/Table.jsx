@@ -70,7 +70,7 @@ class Table extends Component {
     }
 
     componentDidUpdate() {
-        if(this.state.exporting && this.state.bodyToExport.length > 0) {
+        if(this.state.exporting && (this.state.bodyToExport.length > 0 || this.props.exportOnePage)) {
             this.exportToExcel()
         }
     }
@@ -112,6 +112,10 @@ class Table extends Component {
     }
 
     doSearch = (e = null, search = null, page = null, exporting = false) => {
+
+        if(exporting && (!this.state.pagination || this.props.exportOnePage)) {
+            return this.setState({ exporting })
+        }
 
         let queryStrSearch = this.state.queryStrSearch;
         let searchFields = this.state.searchFields
@@ -633,7 +637,6 @@ class Table extends Component {
         }
       
         return (
-          <div className="card-footer clearfix">
             <ul className="pagination pagination-sm m-0 float-right mt-3">
               <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                 <a
@@ -654,15 +657,7 @@ class Table extends Component {
                   »
                 </a>
               </li>
-              <a onClick={() => this.doSearch(null, null, null, true)}
-                aria-label="Exportar em Planilha"
-                title="Exportar em Planilha"
-                style={{ marginLeft: '20px', cursor: 'pointer', color: '#3d9970', fontSize: '1.7em', marginTop: '-4px' }}
-                >
-                <i className='fas fa-file-excel' />
-            </a>
             </ul>
-          </div>
         );
     }
     
@@ -704,7 +699,24 @@ class Table extends Component {
                             </table>
                         </div>
                         <div className="box-footer">
-                            {this.renderPagination()}
+                            <div className="card-footer clearfix">
+                                { this.props.export &&
+                                    <a onClick={() => this.doSearch(null, null, null, true)}
+                                        aria-label="Exportar em Planilha"
+                                        title="Exportar em Planilha"
+                                        style={{ 
+                                            marginLeft: '20px',
+                                            cursor: 'pointer',
+                                            color: '#3d9970',
+                                            fontSize: '1.7em',
+                                            marginTop: '12px',
+                                            float: 'right'
+                                        }} >
+                                        <i className='fas fa-file-excel' />
+                                    </a>
+                        }
+                                {this.renderPagination()}
+                            </div>
                         </div>
                     </div>
                 </If>
