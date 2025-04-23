@@ -46,14 +46,13 @@ class Table extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
 
-        if(!_.isEqual(nextProps.body?.data || nextProps.body, prevState.body)) {
+        if(!_.isEqual(nextProps.body?.data || nextProps.body, prevState.body) &&
+            !_.isEqual(nextProps.body?.data || nextProps.body, prevState.bodyToExport)) {
             if(prevState.exporting) {
                 return {
                     bodyToExport: nextProps.body?.data || nextProps.body || []
                 }
-            } else if(
-                (nextProps.body?.data || nextProps.body || []).length <= prevState.pagination?.per_page ||
-                prevState.body.length == 0) {
+            } else {
                 return {
                     body: nextProps.body?.data || nextProps.body || [],
                     pagination: nextProps.pagination || null,
