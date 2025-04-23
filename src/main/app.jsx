@@ -3,7 +3,7 @@ import { HashRouter } from 'react-router-dom'
 
 import Header from '../common/template/Header'
 import SideBar from '../common/template/SideBar'
-import Footer from '../common/template/Footer'
+// import Footer from '../common/template/Footer'
 import Messages from '../common/msg/Message'
 import Routes from './routes'
 
@@ -13,7 +13,7 @@ export default props => (
             <Header />
             <SideBar />
             <Routes />
-            <Footer />
+            {/* <Footer /> */}
             <Messages />
         </div>
     </HashRouter>

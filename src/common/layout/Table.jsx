@@ -2,23 +2,41 @@ import React, { Component } from 'react'
 import Select from "react-select";
 import { Link, withRouter } from "react-router-dom";
 import _ from 'lodash'
+import {  utils, writeFileXLSX } from 'xlsx';
 
 import "./react-select-custom.css"
 import "./table.css"
 import LabelAndInput from '../form/LabelAndInput';
 import ButtonListTrashed from '../form/ButtonListTrashed';
 import If from '../operator/If'
+
+const Loading = () => {
+    return (
+        <div className="login-page text-center"
+        style={{background: "#e9ecef78", height: "100%", position: "fixed", width: "100%", zIndex: 2, top: 0}}>
+            <div className="spinner-grow text-success" style={{width: "3rem", height: "3rem"}} role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
+        </div>
+    )
+}
+
 class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.id || 'tbl'+Math.floor(Math.random() * 1000),
             width: 0,
             height: 0,
             queryStrSearch: {},
             searchFields: {},
             searchFieldsValues: {},
             searchFieldsOrder: {},
-            withTrashed: false
+            withTrashed: false,
+            body: [],
+            exporting: false,
+            bodyToExport: [],
+            pagination: this.props.pagination || null
         };
     }
 
@@ -26,9 +44,35 @@ class Table extends Component {
         this.setState({ width: window.innerWidth, height: window.innerHeight, search: '' });
     };
 
+    static getDerivedStateFromProps(nextProps, prevState) {
+
+        if(!_.isEqual(nextProps.body?.data || nextProps.body, prevState.body)) {
+            if(prevState.exporting) {
+                return {
+                    bodyToExport: nextProps.body?.data || nextProps.body
+                }
+            } else if(
+                (nextProps.body?.data || nextProps.body).length <= prevState.pagination?.per_page ||
+                prevState.body.length == 0) {
+                return {
+                    body: nextProps.body?.data || nextProps.body,
+                    pagination: nextProps.pagination || null,
+                }
+            }
+        }
+
+        return null
+    }
+
     componentDidMount() {
         this.updateDimensions()
         window.addEventListener('resize', this.updateDimensions);
+    }
+
+    componentDidUpdate() {
+        if(this.state.exporting && this.state.bodyToExport.length > 0) {
+            this.exportToExcel()
+        }
     }
 
     componentWillUnmount() {
@@ -49,7 +93,25 @@ class Table extends Component {
         this.props.generalSearch(val)
     }
 
-    doSearch = (e = null, search = null, page = null) => {
+    exportToExcel = () => {
+
+        if(this.state.exporting) {
+            const elt = document.getElementById(this.state.id)
+            const wb = utils.table_to_book(elt);
+            writeFileXLSX(
+                wb,
+                (this.props.exportName || this.props.title || 'planilha_') +
+                '_' + (new Date()).toLocaleString('pt-BR').replaceAll('/', '_')
+                .replaceAll(':', '_').replaceAll(' ', '__').replaceAll(',', '') + ".xlsx");
+        }
+
+        this.setState({
+            bodyToExport: [],
+            exporting: false
+        })
+    }
+
+    doSearch = (e = null, search = null, page = null, exporting = false) => {
 
         let queryStrSearch = this.state.queryStrSearch;
         let searchFields = this.state.searchFields
@@ -105,13 +167,14 @@ class Table extends Component {
         this.props.attributesSearch(
             pageQueryParam + '&search=' + queryStr + '&searchJoin=and' +
             (orderBy.length > 0 ? '&orderBy=' + orderBy : '') + 
-            (sortedBy.length > 0 ? '&sortedBy=' + sortedBy : ''));
+            (sortedBy.length > 0 ? '&sortedBy=' + sortedBy : '') +
+            (exporting ? '&export=true' : ''));
 
-        this.setState({ queryStrSearch, searchFields, searchFieldsValues })
+        this.setState({ queryStrSearch, searchFields, searchFieldsValues, exporting })
     }
 
     getBody() {
-        let body = this.props.paginate ? this.props.body.data : this.props.body
+        let body = this.state.exporting && this.state.bodyToExport.length > 0 ? this.state.bodyToExport : this.state.body
         const orderFields = Object.keys(this.state.searchFieldsOrder)
 
         if(orderFields.length > 0 && ( orderFields.toString().indexOf('.') > -1 || !this.props.attributesSearch )) {
@@ -215,7 +278,7 @@ class Table extends Component {
                 {this.props.actions && <th></th>}
             </tr>
 
-            {this.props.attributes && this.renderSearch(head)}          
+            {(!this.state.exporting && this.props.attributes) && this.renderSearch(head)}          
         </thead>
     }
 
@@ -513,7 +576,7 @@ class Table extends Component {
     }
     
     renderPagination() {
-        const { pagination } = this.props;
+        const { pagination } = this.state;
       
         if (!pagination || pagination.total === undefined) {
           return null;
@@ -591,6 +654,13 @@ class Table extends Component {
                   »
                 </a>
               </li>
+              <a onClick={() => this.doSearch(null, null, null, true)}
+                aria-label="Exportar em Planilha"
+                title="Exportar em Planilha"
+                style={{ marginLeft: '20px', cursor: 'pointer', color: '#3d9970', fontSize: '1.7em', marginTop: '-4px' }}
+                >
+                <i className='fas fa-file-excel' />
+            </a>
             </ul>
           </div>
         );
@@ -599,6 +669,7 @@ class Table extends Component {
     render() {
         return (
             <React.Fragment>
+                {this.state.exporting && <Loading />}
                 <If test={this.state.width < 600}>
                     {this.props.generalSearch &&
                         <LabelAndInput forceToShow={true} type="text" cols='12 12' placeholder='PESQUISAR' readOnly={false}
@@ -608,7 +679,7 @@ class Table extends Component {
                         {this.renderBodyAccordion()}
                     </div>
                 </If>
-                <If test={this.state.width > 600}>
+                <If test={this.state.width > 600} total={this.state.bodyToExport.length}>
                     <div className={'box ' + (this.props.isMaterial == undefined || (this.props.isMaterial != undefined && this.props.isMaterial) ? 'material-item ' : '') + 'pull-left'} style={{ paddingBottom: '3px', width: '100%', marginBottom: '0' }}>
                         <If test={this.props.title}>
                             <div className='box-header' style={{background: '#e8ecef'}}>
@@ -626,7 +697,7 @@ class Table extends Component {
                                     input={{ onChange: this.handleChangeSearch, value: this.state.search }} grid={{ style: { paddingTop: '15px' } }} />
                             }
 
-                            <table className={`table table-hover table-striped fixed`} id={this.props.id || ''} {...this.props.table || {}}>
+                            <table className={`table table-hover table-striped fixed`} id={this.state.id} {...this.props.table || {}}>
                                 {this.renderHead()}
                                 {this.renderBody()}
                                 {this.props.children}

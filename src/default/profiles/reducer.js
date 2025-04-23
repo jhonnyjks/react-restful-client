@@ -6,6 +6,7 @@ const INITIAL_STATE = {
         current_page: null,
         last_page: null,
         total: null,
+        per_page: null
     }
 }
 
@@ -25,10 +26,12 @@ export default (state = INITIAL_STATE, action) => {
                     current_page: paginationData.current_page ,
                     last_page: paginationData.last_page,
                     total: paginationData.total,
+                    per_page: paginationData.per_page
                 } : {
                     current_page: null,
                     last_page: null,
                     total: null,
+                    per_page: null
                 }
             };
 

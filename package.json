@@ -65,6 +65,7 @@
     "threads": "^1.0.0-beta.8",
     "url-loader": "^4.1.1",
     "web-vitals": "^1.0.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "xmldom": "^0.3.0"
   },
   "scripts": {
