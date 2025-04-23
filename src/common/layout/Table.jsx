@@ -49,13 +49,13 @@ class Table extends Component {
         if(!_.isEqual(nextProps.body?.data || nextProps.body, prevState.body)) {
             if(prevState.exporting) {
                 return {
-                    bodyToExport: nextProps.body?.data || nextProps.body
+                    bodyToExport: nextProps.body?.data || nextProps.body || []
                 }
             } else if(
-                (nextProps.body?.data || nextProps.body).length <= prevState.pagination?.per_page ||
+                (nextProps.body?.data || nextProps.body || []).length <= prevState.pagination?.per_page ||
                 prevState.body.length == 0) {
                 return {
-                    body: nextProps.body?.data || nextProps.body,
+                    body: nextProps.body?.data || nextProps.body || [],
                     pagination: nextProps.pagination || null,
                 }
             }
