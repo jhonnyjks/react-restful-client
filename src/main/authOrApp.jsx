@@ -323,7 +323,7 @@ class AuthOrApp extends Component {
             // Dividindo queries
             url[1] = url[1].split('&')
             url[1] = url[1].filter(v => v.length)
-            // Dividindo evalidando entidades com permissões de escopos
+            // Dividindo e validando entidades com permissões de escopos
             url[1] = url[1].map((queryy) => {
                 let query = queryy.split('=')
                 if(query[0] === 'with') {
@@ -370,6 +370,7 @@ class AuthOrApp extends Component {
             let search = ''
             let searchFields = ''
             let limit = ''
+            let page = ''
             let remaining = ''
 
 
@@ -393,6 +394,10 @@ class AuthOrApp extends Component {
                         limit = e.substring(e.indexOf('=')+1)
                         break;
 
+                    case 'page':
+                        page = e.substring(e.indexOf('=')+1)
+                        break;
+
                     // Joga aqui tudo que não for desconhecido pelo bloco de código
                     default:
                         remaining += (e.length > 0 ? (remaining.length > 0 ? '&' : '') + e : '')
@@ -406,10 +411,15 @@ class AuthOrApp extends Component {
             if(search.length > 0) url.push('search=' + search)
             if(searchFields.length > 0) url.push('searchFields=' + searchFields)
             if(withh.length > 0) url.push('with=' + withh.replace(';;', ';').replace(':;', ';'))
-            if(limit.length > 0) url.push('limit=' + limit)
+            if(limit.length > 0 && !conf.url.includes('&export=true')) url.push('limit=' + limit)
+            if(page.length > 0 && !conf.url.includes('&export=true')) url.push('page=' + page)
             if(remaining.length > 0) url.push(remaining)
 
             url = urll + '?' + url.join('&')
+
+            if(conf.url.includes('&export=true')) {
+                url = url.replace('&export=true', '')
+            }
         }
 
         // Tratando as permissões dos atributos enviados na requisição
