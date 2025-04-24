@@ -677,7 +677,29 @@ class Table extends Component {
                     <div className={'box ' + (this.props.isMaterial == undefined || (this.props.isMaterial != undefined && this.props.isMaterial) ? 'material-item ' : '') + 'pull-left'} style={{ paddingBottom: '3px', width: '100%', marginBottom: '0' }}>
                         <If test={this.props.title}>
                             <div className='box-header' style={{background: '#e8ecef'}}>
-                                <h5 className='box-title' style={{ paddingTop: this.props.renderHead ? '1rem' : '0.5rem', textAlign: 'center' }}>{this.props.title}</h5>
+                                <h5 className='box-title'
+                                style={{
+                                    paddingTop: this.props.renderHead ? '1rem' : '0.5rem',
+                                    textAlign: 'center',
+                                    width: '80%',
+                                    marginLeft: '10%',
+                                    float: 'left' }} >
+                                    {this.props.title}
+                                </h5>
+                                { this.props.export &&
+                                    <a onClick={() => this.doSearch(null, null, null, true)}
+                                        aria-label="Exportar em Planilha"
+                                        title="Exportar em Planilha"
+                                        style={{
+                                            cursor: 'pointer',
+                                            color: '#3d9970',
+                                            fontSize: '1.7em',
+                                            float: 'right',
+                                            paddingTop: '4px'
+                                        }} >
+                                        <i className='fas fa-file-excel' />
+                                    </a>
+                                }
                                 {this.props.renderHead && <hr />}
                             </div>
                         </If>
@@ -699,21 +721,6 @@ class Table extends Component {
                         </div>
                         <div className="box-footer">
                             <div className="card-footer clearfix">
-                                { this.props.export &&
-                                    <a onClick={() => this.doSearch(null, null, null, true)}
-                                        aria-label="Exportar em Planilha"
-                                        title="Exportar em Planilha"
-                                        style={{ 
-                                            marginLeft: '20px',
-                                            cursor: 'pointer',
-                                            color: '#3d9970',
-                                            fontSize: '1.7em',
-                                            marginTop: '12px',
-                                            float: 'right'
-                                        }} >
-                                        <i className='fas fa-file-excel' />
-                                    </a>
-                        }
                                 {this.renderPagination()}
                             </div>
                         </div>
