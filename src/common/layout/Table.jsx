@@ -96,7 +96,7 @@ class Table extends Component {
 
         if(this.state.exporting) {
             const elt = document.getElementById(this.state.id)
-            const wb = utils.table_to_book(elt);
+            const wb = utils.table_to_book(elt, {raw: true});
             writeFileXLSX(
                 wb,
                 (this.props.exportName || this.props.title || 'planilha_') +
@@ -400,10 +400,11 @@ class Table extends Component {
                                     if (this.props.attributes) {
                                         // Se houver callback no atributo, call back o callback
                                         if (this.props.attributes[val]) {
-                                            if (!isObj && this.props.attributes[val].callback) {
-                                                return <td style={this.props.attributes[val].style} key={index}>{this.props.attributes[val].callback(n, body[ii])}</td>
-                                            }
-                                            return <td style={this.props.attributes[val].style} key={index} title={n}>{n}</td>
+                                           
+                                            return <td style={this.props.attributes[val].style} key={index} title={n || ''}>
+                                                {(!isObj && this.props.attributes[val].callback) ? this.props.attributes[val].callback(n, body[ii]) : {n}}
+                                            </td>
+                         
                                         } else {
                                             return null;
                                         }
@@ -521,16 +522,9 @@ class Table extends Component {
                                                 if (this.props.attributes) {
                                                     // Se houver callback no atributo, call back o callback
                                                     if (this.props.attributes[key]) {
-                                                        if (!isObj && this.props.attributes[key].callback) {
-                                                            return <div key={index}>
-                                                                <div className="row" key={index}>
-                                                                    <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {this.props.attributes[key].callback(n, bodyAccordion[index])}
-                                                                </div>
-                                                            </div>
-                                                        }
                                                         return <div key={index}>
                                                             <div className="row" key={index}>
-                                                                <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {n}
+                                                                <strong>{this.props.attributes[key].title || this.props.attributes[key]}</strong> : {(!isObj && this.props.attributes[key].callback) ? this.props.attributes[key].callback(n, bodyAccordion[index]) : n}
                                                             </div>
                                                         </div>
                                                     } else {
