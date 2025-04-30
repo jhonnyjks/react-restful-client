@@ -402,7 +402,7 @@ class Table extends Component {
                                         if (this.props.attributes[val]) {
                                            
                                             return <td style={this.props.attributes[val].style} key={index} title={n || ''}>
-                                                {(!isObj && this.props.attributes[val].callback) ? this.props.attributes[val].callback(n, body[ii]) : {n}}
+                                                {(!isObj && this.props.attributes[val].callback) ? this.props.attributes[val].callback(n, body[ii]) : n}
                                             </td>
                          
                                         } else {
