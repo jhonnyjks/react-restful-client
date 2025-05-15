@@ -429,7 +429,14 @@ class Table extends Component {
                                         </button>
                                     }
 
-                                    {this.props.actions.remove &&
+                                    {(this.props.actions.remove && (typeof this.props.actions.remove) === 'object' && this.props.actions.remove.show(ntr)) &&
+                                        <button type='button' onClick={() => this.props.actions.remove.onClick(ntr) || null}
+                                            style={ !ntr.deleted_at ? { border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px' } : {visibility: 'hidden'}} >
+                                            <i className='fa fa-trash'></i>
+                                        </button>
+                                    }
+
+                                    {(this.props.actions.remove && (typeof this.props.actions.remove) === 'function') &&
                                         <button type='button' onClick={() => this.props.actions.remove(ntr)}
                                             style={ !ntr.deleted_at ? { border: '0px', background: 'none', fontSize: '1.2em', color: '#333', marginLeft: '20px' } : {visibility: 'hidden'}} >
                                             <i className='fa fa-trash'></i>
