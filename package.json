@@ -74,7 +74,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "prebuild": "./translate-pt-BR.sh",
     "postbuild": "ln -s ../src/app/processes/forms/fonts build/fonts",
     "build": "export NODE_OPTIONS=--max-old-space-size=4096; react-scripts build",
     "test": "react-scripts test",

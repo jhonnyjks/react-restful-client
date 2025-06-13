@@ -158,6 +158,10 @@ class LabelAndSelect extends Component {
                             onDragStart={this.props.onDragStart || this.props.input.onDragStart || null}
                             onDrop={this.props.onDrop || this.props.input.onDrop || null}
                             onFocus={this.props.onFocus || this.props.input.onFocus || null}
+                            isDisabled={this.props.input.disabled || this.props.disabled || this.props.input.readOnly || this.props.readOnly || false}
+                            isClearable={this.props.isClearable || false}
+                            placeholder={this.props.placeholder || 'Selecione...'}
+                            autoFocus={this.props.autoFocus || false}
                         />
                         <div className="invalid-feedback">
                             {this.state.error.flag && (this.state.error.message.replace(this.props.input.name, this.props.label))}
