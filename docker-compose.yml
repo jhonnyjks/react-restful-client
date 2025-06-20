@@ -1,11 +1,16 @@
-version: '3.5'
 services:
-  financeiro-client:
-    container_name: financeiro-client
+  client:
     build:
       context: .
-    restart: always
-    environment:
-      - NODE_ENV=production
+      dockerfile: Dockerfile
+    container_name: sigep2-client-dev
     ports:
-      - '3003:80'
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm start
+    stdin_open: true
+    tty: true
