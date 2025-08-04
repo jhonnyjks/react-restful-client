@@ -1,11 +1,14 @@
 version: '3.5'
 services:
   financeiro-client:
-    container_name: financeiro-client
+    container_name: simma-client
     build:
       context: .
+      dockerfile: Dockerfile
+    image: simma-client:prod
     restart: always
     environment:
       - NODE_ENV=production
+      - NVM_RC_VERSION=14.7.0
     ports:
-      - '3003:80'
+      - '3002:80'
