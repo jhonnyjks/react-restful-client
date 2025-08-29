@@ -12,6 +12,28 @@ Projeto base para desenvolvimento de Apps React. Esse projeto já vem com gerenc
   git clone https://github.com/jhonnyjks/react-restful-client client
   cd client
   ```
+    - **1.0** Dentro da raiz deste projeto, navegar até o diretório 'src'
+  
+      ```
+      cd src
+      ```
+    - **1.1** Para novo projeto, clonar skeleton:
+    
+      use o comando para clonar o skeleton em /src/app
+    
+      ```
+      git clone https://github.com/jhonnyjks/rrc-app-skeleton app
+      ```
+    - **1.2** Criar novo repositório na sua conta git e setar a url remota:
+    
+      use o comando para direcionar sua interação para seu novo repositório
+    
+      ```
+      git remote set-url origin https://github.com/SEU_USER/SEU_REPOSITORIO_DE_MODULOS
+      ```
+    
+      **1.3** Implementar seus módulos dentro desse repositório 'em /src/app' e manter em sua conta git, pois essa parte é seu projeto próprio (e talvez privado).
+      
 - **2** Rodar via docker
 
   ```
@@ -23,31 +45,6 @@ Projeto base para desenvolvimento de Apps React. Esse projeto já vem com gerenc
   - http://localhost:3000
   - Login: admin
   - Senha: 123
-
-## Desenvolvimento dos módulos customizados
-
-- Módulos específicos do seu projeto deverão ser implementados da seguinte forma:
-- **0** Dentro da raiz deste projeto, navegar até o diretório 'src'
-
-  ```
-  cd src
-  ```
-- **1** Clonar skeleton ou seu projeto já existente:
-
-  use o comando para clonar o skeleton em /src/app
-
-  ```
-  git clone https://github.com/jhonnyjks/rrc-app-skeleton app
-  ```
-- **2** Se for novo projeto, criar novo repositório e setar a url remota:
-
-  use o comando para direcionar sua interação para seu novo repositório
-
-  ```
-  git remote set-url origin https://github.com/SEU_USER/SEU_REPOSITORIO app
-  ```
-
-  **3** Implementar seus módulos dentro desse repositório 'em /src/app'.
 
 ## Demais configurações conforme padrão React
 
