@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sigep2-client-dev
+    container_name: cs-mvp-client-dev
     ports:
       - "3000:3000"
     volumes:
@@ -11,6 +11,8 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-    command: npm start
+    command: >
+      sh -c "if [ ! -f .env.development ]; then cp .env.development.example .env.development; fi && \
+        npm start"
     stdin_open: true
     tty: true

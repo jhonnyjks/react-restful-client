@@ -4,7 +4,6 @@ FROM node:14
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-COPY .env.development.example .env.development
 RUN npm install --legacy-peer-deps
 
 COPY . .
