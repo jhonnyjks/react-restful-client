@@ -40,7 +40,9 @@ export function setSideBar(status) {
 }
 
 export function getNotifications() {
-    const request = axios.get(`${process.env.REACT_APP_API_HOST}/notifications`)
+    const request = axios
+        .get(`${process.env.REACT_APP_API_HOST}/notifications`)
+        .catch(() => ({ data: { data: [] } }))
 
     return {
         type: 'NOTIFICATIONS_FETCHED',

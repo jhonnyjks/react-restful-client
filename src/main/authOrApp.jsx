@@ -131,7 +131,7 @@ class AuthOrApp extends Component {
                         for (let i = 0; i < obj[0].length; i++) { 
                             if(scopes && scopes[relRoute] && scopes[relRoute].relationships && scopes[relRoute].relationships[obj[0][i]]) {
                                 relRoute = _.findKey(scopes, ['entity', scopes[relRoute].relationships[obj[0][i]].entity])
-                            } else {
+                            } else if (!scopes || !scopes[relRoute]) {
                                 console.warn('Se a rota não existe no escopo, não deveria chegar até aqui. Possível bug.', scopes, relRoute)
                             }
                         }

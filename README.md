@@ -42,7 +42,7 @@ Projeto base para desenvolvimento de Apps React. Esse projeto já vem com gerenc
   ```
 - **3** O App deve estar acessível em:
 
-  - http://localhost:3000
+  - http://localhost:3100
   - Login: admin
   - Senha: 123
 

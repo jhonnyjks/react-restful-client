@@ -22,7 +22,8 @@ class Table extends Component {
             searchFields: {},
             searchFieldsValues: {},
             searchFieldsOrder: {},
-            withTrashed: false
+            withTrashed: false,
+            expandedId: null
         };
     }
 
@@ -140,6 +141,13 @@ class Table extends Component {
         }
 
         return body
+    }
+
+    toggleExpanded = (ntr, e) => {
+        if (!this.props.renderSubRow) return
+        if (e && e.target && e.target.closest && e.target.closest('button, a')) return
+        const id = ntr && ntr.id != null ? ntr.id : null
+        this.setState({ expandedId: this.state.expandedId === id ? null : id })
     }
 
     onClickReorder = (e, val) => {
@@ -337,7 +345,16 @@ class Table extends Component {
                             tr = Object.keys(ntr)
                         }
 
-                        return <tr key={tr.id || ii} >
+                        const colCount = tr.length + (this.props.actions ? 1 : 0)
+                        const rowId = ntr && ntr.id != null ? ntr.id : ii
+                        const expanded = this.props.renderSubRow && this.state.expandedId === (ntr && ntr.id != null ? ntr.id : null)
+
+                        return (
+                            <React.Fragment key={rowId}>
+                        <tr
+                            onClick={(e) => this.toggleExpanded(ntr, e)}
+                            style={this.props.renderSubRow ? { cursor: 'pointer' } : undefined}
+                        >
                             {
                                 tr.map((val, index) => {
                                     let n = ntr
@@ -429,6 +446,15 @@ class Table extends Component {
                                 </td>
                             }
                         </tr>
+                        {expanded && (
+                            <tr className='table-subrow'>
+                                <td colSpan={colCount} style={{ background: '#f7f7f7', padding: '12px 16px' }}>
+                                    {this.props.renderSubRow(ntr)}
+                                </td>
+                            </tr>
+                        )}
+                            </React.Fragment>
+                        )
                     })
                 }
             </tbody>
