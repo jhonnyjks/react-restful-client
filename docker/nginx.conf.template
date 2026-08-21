@@ -1,0 +1,86 @@
+server {
+    listen 80;
+    server_name sistema.queroatendimentos.com.br;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Resolver DNS dinamicamente (usando DNS do Docker)
+    # Nota: host.docker.internal é resolvido pelo entrypoint antes do nginx iniciar
+    resolver 127.0.0.11 valid=10s;
+    resolver_timeout 5s;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml text/javascript application/javascript application/json;
+
+    # Proxy para API (configurado via variável de ambiente)
+    # Usa comunicação interna via rede Docker (HTTP, não HTTPS)
+    location /api {
+        set $api_backend ${API_BACKEND};
+        proxy_pass $api_backend;
+        proxy_http_version 1.1;
+        # Host header deve corresponder ao server_name do nginx da API
+        # Como é comunicação interna, podemos usar o nome do serviço ou o domínio esperado
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header Cookie $http_cookie;
+        # SSL não é necessário em comunicação interna
+        proxy_ssl_verify off;
+        proxy_connect_timeout 5s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # Proxy para Sanctum (CSRF cookies)
+    location /sanctum {
+        set $api_backend ${API_BACKEND};
+        proxy_pass $api_backend;
+        proxy_http_version 1.1;
+        # Host header deve corresponder ao server_name do nginx da API
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header Cookie $http_cookie;
+        # SSL não é necessário em comunicação interna
+        proxy_ssl_verify off;
+        proxy_connect_timeout 5s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # Cache para assets estáticos
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # SPA routing - sempre retorna index.html para rotas não encontradas
+    location / {
+        try_files $uri $uri/ /index.html;
+        # Garantir que index.html existe
+        if (!-f $request_filename) {
+            rewrite ^.*$ /index.html last;
+        }
+    }
+    
+    # Garantir que index.html é servido
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+}
+
+

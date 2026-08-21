@@ -1,0 +1,88 @@
+name: Deploy Client
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch: # Permite execução manual
+
+env:
+  IMAGE_CLIENT: projetobase-client_client
+  IMAGE_TAG: latest
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Client image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: false
+          tags: ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }}
+          build-args: |
+            VITE_APP_NAME=${{ secrets.VITE_APP_NAME || 'Projeto Base' }}
+            VITE_API_BASE_URL=/api
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+      - name: Save Client image
+        run: |
+          docker save ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }} | gzip > client-image.tar.gz
+
+      - name: Copy image to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          source: "client-image.tar.gz"
+          target: "/tmp/docker-images/"
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          script: |
+            set -e
+            
+            echo "📦 Carregando imagem Docker..."
+            docker load -i /tmp/docker-images/client-image.tar.gz
+            
+            echo "🧹 Limpando arquivos temporários..."
+            rm -f /tmp/docker-images/*.tar.gz
+            
+            echo "🔄 Atualizando serviço Docker Swarm..."
+            
+            # Atualizar serviço Client
+            if docker service ls | grep -q "projetobase-client_client"; then
+              echo "Atualizando serviço Client..."
+              docker service update --image ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }} --force projetobase-client_client || true
+            else
+              echo "⚠️ Serviço Client não encontrado. Certifique-se de que a stack está criada no Portainer."
+            fi
+            
+            echo "✅ Deploy concluído!"
+            echo ""
+            echo "📋 Status do serviço:"
+            docker service ls | grep projetobase-client || true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f client-image.tar.gz
+
