@@ -95,7 +95,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         <div className="flex h-16 items-center justify-center border-b border-border">
           <div className="flex h-10 w-10 items-center justify-center rounded-medium bg-primary-500 text-sm font-bold text-white">
-            PB
+            AL
           </div>
         </div>
 

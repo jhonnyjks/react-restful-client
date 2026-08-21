@@ -1,9 +1,9 @@
 services:
   client:
     # No Portainer Swarm, o nome da imagem é gerado como: <stack-name>_<service-name>
-    # Stack: projetobase-client, Service: client
-    # Imagem: projetobase-client:latest
-    image: projetobase-client:latest
+    # Stack: alia-client, Service: client
+    # Imagem: alia-client:latest
+    image: alia-client:latest
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -12,10 +12,10 @@ services:
         # Elas são incorporadas no bundle JavaScript e não precisam estar em runtime
         # Passadas como build args e exportadas como variáveis de ambiente no Dockerfile
         - VITE_API_BASE_URL=/api
-        - VITE_APP_NAME=${VITE_APP_NAME:-Projeto Base}
+        - VITE_APP_NAME=${VITE_APP_NAME:-Alia}
     # Nota: container_name não é suportado no Docker Swarm mode
     # Se usar Docker Compose padrão, descomente a linha abaixo:
-    # container_name: projetobase-client
+    # container_name: alia-client
     deploy:
       restart_policy:
         condition: any
@@ -26,10 +26,10 @@ services:
       # Nota: Não especificamos traefik.docker.network para usar a rede ingress padrão do Swarm
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.projetobase-client.rule=Host(`localhost`)"
-        - "traefik.http.routers.projetobase-client.entrypoints=websecure"
-        - "traefik.http.routers.projetobase-client.tls.certresolver=letsencryptresolver"
-        - "traefik.http.services.projetobase-client.loadbalancer.server.port=80"
+        - "traefik.http.routers.alia-client.rule=Host(`localhost`)"
+        - "traefik.http.routers.alia-client.entrypoints=websecure"
+        - "traefik.http.routers.alia-client.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.alia-client.loadbalancer.server.port=80"
     # No Docker Swarm, portas devem estar no nível do serviço, não em deploy
     # Mantido para acesso direto via IP:3000 se necessário
     ports:
@@ -43,24 +43,24 @@ services:
       # Ela é usada pelo nginx para fazer proxy das requisições /api para a API
       # Usa comunicação interna via rede Docker (nome do serviço Swarm)
       # No Docker Swarm, o nome do serviço é: <stack-name>_<service-name>
-      # Stack: projetobase-api, Service: nginx
-      # Nome do serviço: projetobase-api_nginx
-      - API_BACKEND=${API_BACKEND:-http://projetobase-api_nginx:80}
+      # Stack: alia-api, Service: nginx
+      # Nome do serviço: alia-api_nginx
+      - API_BACKEND=${API_BACKEND:-http://alia-api_nginx:80}
     networks:
-      - projetobase-network  # Rede Diatech para Traefik
-      - projetobase-internal # Rede interna para comunicação com API
+      - alia-network  # Rede Diatech para Traefik
+      - alia-internal # Rede interna para comunicação com API
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
 networks:
-  projetobase-network:
+  alia-network:
     external: true
     name: Diatech
     # Usando a rede Diatech compartilhada onde o Traefik está
     # Isso permite que o Traefik acesse o serviço diretamente
-  projetobase-internal:
+  alia-internal:
     external: true
-    name: projetobase-internal
+    name: alia-internal
     # Rede interna para comunicação entre client e API
     # Permite que o client se comunique com a API via nome do serviço Docker Swarm
 

@@ -11,6 +11,6 @@ if (import.meta.env.DEV) {
 }
 
 export const appConfig = {
-  appName: import.meta.env.VITE_APP_NAME || 'Projeto Base',
+  appName: import.meta.env.VITE_APP_NAME || 'Alia',
 } as const;
 

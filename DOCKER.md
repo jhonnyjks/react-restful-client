@@ -13,13 +13,13 @@ As redes Docker devem existir antes de iniciar os containers. Se ainda não exis
 
 ```bash
 # Rede principal
-docker network create projeto-base-network
+docker network create alia-network
 
 # Rede da API (necessária se a API estiver rodando em Docker)
-docker network create api_projeto-base-network
+docker network create api_alia-network
 ```
 
-> **Importante**: Se a API estiver rodando em Docker, o container do client precisa estar conectado à rede `api_projeto-base-network` para se comunicar com o nginx. Isso já está configurado no `docker-compose.dev.yml` do client.
+> **Importante**: Se a API estiver rodando em Docker, o container do client precisa estar conectado à rede `api_alia-network` para se comunicar com o nginx. Isso já está configurado no `docker-compose.dev.yml` do client.
 
 ## Configuração via variáveis de ambiente
 
@@ -32,17 +32,17 @@ Crie o arquivo `.env.development` na raiz do projeto:
 ```bash
 # .env.development
 VITE_API_PROXY_TARGET=http://host.docker.internal:8080
-VITE_APP_NAME="Projeto Base"
+VITE_APP_NAME="Alia"
 ```
 
 **Variáveis disponíveis:**
 - `VITE_API_PROXY_TARGET`: URL do backend da API para proxy do Vite
-  - **API em Docker (mesma rede)**: `http://projeto-base-nginx:80` ⭐ **Recomendado quando ambos estão em Docker**
+  - **API em Docker (mesma rede)**: `http://alia-nginx:80` ⭐ **Recomendado quando ambos estão em Docker**
   - **API no host local**: `http://host.docker.internal:8080`
   - **API externa**: `http://api.example.com`
 - `VITE_APP_NAME`: Nome da aplicação (exibido no título e páginas)
 
-> **Nota**: Quando a API está em Docker, use o nome do container (`projeto-base-nginx`) na porta interna (80), não a porta mapeada do host (8080).
+> **Nota**: Quando a API está em Docker, use o nome do container (`alia-nginx`) na porta interna (80), não a porta mapeada do host (8080).
 
 ### Produção
 
@@ -52,16 +52,16 @@ Crie o arquivo `.env.production` na raiz do projeto:
 # .env.production
 API_BACKEND=http://host.docker.internal:8080
 CLIENT_PORT=3000
-VITE_APP_NAME="Projeto Base"
+VITE_APP_NAME="Alia"
 ```
 
 **Variáveis disponíveis:**
 - `API_BACKEND`: URL do backend da API
   - **API no host local**: `http://host.docker.internal:8080`
-  - **API em Docker (mesma rede)**: `http://projeto-base-nginx:80`
+  - **API em Docker (mesma rede)**: `http://alia-nginx:80`
   - **API externa**: `http://api.example.com`
 - `CLIENT_PORT`: Porta do cliente (padrão: `3000`)
-- `VITE_APP_NAME`: Nome da aplicação usado no título e páginas (padrão: `Projeto Base`)
+- `VITE_APP_NAME`: Nome da aplicação usado no título e páginas (padrão: `Alia`)
 
 > ⚠️ **Importante**: Para que `VITE_APP_NAME` seja aplicado corretamente durante o build de produção, você precisa:
 > 1. Passar a variável usando `--env-file .env.production`
@@ -141,19 +141,19 @@ O cliente pode rodar de forma completamente independente da API:
 
 ### Problema: Container não inicia
 
-**Solução**: Verifique se a rede `projeto-base-network` existe:
+**Solução**: Verifique se a rede `alia-network` existe:
 ```bash
-docker network ls | grep projeto-base-network
+docker network ls | grep alia-network
 # Se não existir:
-docker network create projeto-base-network
+docker network create alia-network
 ```
 
 ### Problema: Erro de conexão com a API
 
 **Solução**: Verifique a variável `VITE_API_PROXY_TARGET` (dev) ou `API_BACKEND` (prod):
 - Se a API está no host: use `http://host.docker.internal:8080`
-- Se a API está em Docker: use `http://projeto-base-nginx:80` (nome completo do container)
-- Certifique-se de que o container do client está conectado à rede `api_projeto-base-network` (já configurado no `docker-compose.dev.yml`)
+- Se a API está em Docker: use `http://alia-nginx:80` (nome completo do container)
+- Certifique-se de que o container do client está conectado à rede `api_alia-network` (já configurado no `docker-compose.dev.yml`)
 - Verifique se ambos os containers estão rodando: `docker ps | grep -E "nginx|client"`
 
 ### Problema: VITE_APP_NAME não está sendo aplicado
@@ -174,7 +174,7 @@ docker network create projeto-base-network
 ### 1. Criar a rede (se ainda não existir)
 
 - Vá em **Networks** → **Add network**
-- Nome: `projeto-base-network`
+- Nome: `alia-network`
 - Driver: `bridge`
 - Clique em **Create the network**
 
@@ -196,18 +196,18 @@ docker network create projeto-base-network
 **Variáveis necessárias para produção:**
 - `API_BACKEND`: URL do backend da API
 - `CLIENT_PORT`: Porta do cliente (opcional, padrão: 3000)
-- `VITE_APP_NAME`: Nome da aplicação (opcional, padrão: "Projeto Base")
+- `VITE_APP_NAME`: Nome da aplicação (opcional, padrão: "Alia")
 
 **Variáveis necessárias para desenvolvimento:**
 - `VITE_API_PROXY_TARGET`: URL do backend da API
-- `VITE_APP_NAME`: Nome da aplicação (opcional, padrão: "Projeto Base")
+- `VITE_APP_NAME`: Nome da aplicação (opcional, padrão: "Alia")
 
 ### 4. Deploy o stack
 
 - Clique em **Deploy the stack**
 - Aguarde o build e inicialização do container
 
-> ⚠️ **Importante**: A rede `projeto-base-network` deve existir antes de fazer o deploy do stack.
+> ⚠️ **Importante**: A rede `alia-network` deve existir antes de fazer o deploy do stack.
 
 ## Comandos úteis
 

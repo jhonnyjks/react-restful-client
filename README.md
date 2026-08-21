@@ -1,4 +1,4 @@
-# Cliente React (Vite) – Projeto Base
+# Cliente React (Vite) – Alia
 
 Interface administrativa construída em React + TypeScript seguindo metodologia Atomic Design, estilizada com Tailwind CSS e integrada à API Laravel via Sanctum.
 
@@ -17,13 +17,13 @@ Se ainda não existem, crie as redes Docker necessárias:
 
 ```bash
 # Rede principal (já criada automaticamente pelo docker-compose)
-docker network create projeto-base-network
+docker network create alia-network
 
 # Rede da API (necessária se a API estiver rodando em Docker)
-docker network create api_projeto-base-network
+docker network create api_alia-network
 ```
 
-> **Nota**: Se a API estiver rodando em Docker, o container do client precisa estar conectado à rede `api_projeto-base-network` para se comunicar com o nginx. Isso já está configurado no `docker-compose.dev.yml`.
+> **Nota**: Se a API estiver rodando em Docker, o container do client precisa estar conectado à rede `api_alia-network` para se comunicar com o nginx. Isso já está configurado no `docker-compose.dev.yml`.
 
 ### Desenvolvimento com Docker
 
@@ -34,7 +34,7 @@ Para rodar o ambiente de desenvolvimento com hot reload:
 cp .env.development.example .env.development
 
 # 2. Editar .env.development conforme necessário
-# Se a API está em Docker (mesma rede): VITE_API_PROXY_TARGET=http://projeto-base-nginx:80
+# Se a API está em Docker (mesma rede): VITE_API_PROXY_TARGET=http://alia-nginx:80
 # Se a API está no host: VITE_API_PROXY_TARGET=http://host.docker.internal:8080
 # VITE_APP_NAME="Meu App"
 
@@ -46,9 +46,9 @@ A aplicação estará disponível em `http://localhost:5173` com hot reload ativ
 
 **Variáveis de ambiente para desenvolvimento:**
 - `VITE_API_PROXY_TARGET`: URL do backend da API
-  - **API em Docker (mesma rede)**: `http://projeto-base-nginx:80` (recomendado)
+  - **API em Docker (mesma rede)**: `http://alia-nginx:80` (recomendado)
   - **API no host local**: `http://host.docker.internal:8080`
-- `VITE_APP_NAME`: Nome da aplicação (padrão: `Projeto Base`)
+- `VITE_APP_NAME`: Nome da aplicação (padrão: `Alia`)
 
 ### Produção com Docker
 
@@ -72,7 +72,7 @@ A aplicação estará disponível na porta configurada (padrão: `3000`).
 **Variáveis de ambiente para produção:**
 - `API_BACKEND`: URL do backend da API (padrão: `http://host.docker.internal:8080`)
 - `CLIENT_PORT`: Porta do cliente (padrão: `3000`)
-- `VITE_APP_NAME`: Nome da aplicação usado no título e páginas (padrão: `Projeto Base`)
+- `VITE_APP_NAME`: Nome da aplicação usado no título e páginas (padrão: `Alia`)
 
 > 💡 **Dica**: Para mais detalhes sobre configuração Docker, consulte o arquivo [DOCKER.md](./DOCKER.md).
 
@@ -101,7 +101,7 @@ npm install
 VITE_API_PROXY_TARGET=http://127.0.0.1:8080 npm run dev
 
 # Se a API está em Docker (mesma rede):
-VITE_API_PROXY_TARGET=http://projeto-base-nginx:80 npm run dev
+VITE_API_PROXY_TARGET=http://alia-nginx:80 npm run dev
 ```
 
 **Variáveis relevantes:**

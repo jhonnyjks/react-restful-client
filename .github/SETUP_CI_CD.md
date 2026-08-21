@@ -33,7 +33,7 @@ Adicione os seguintes secrets:
 | `DEPLOY_PORT` | Porta SSH (opcional) | `22` |
 
 **Opcional:**
-- `VITE_APP_NAME`: Nome da aplicação para o build (padrão: `Projeto Base`)
+- `VITE_APP_NAME`: Nome da aplicação para o build (padrão: `Alia`)
 
 ### 3. Preparar Servidor
 
@@ -62,8 +62,8 @@ sudo usermod -aG docker $USER
 
 3. Verifique no servidor:
    ```bash
-   docker service ls | grep projetobase-client
-   docker images | grep projetobase-client
+   docker service ls | grep alia-client
+   docker images | grep alia-client
    ```
 
 ## ✅ Pronto!
@@ -74,8 +74,8 @@ Agora, sempre que houver push/merge na `master`, o deploy será automático!
 
 ```bash
 # No servidor
-docker service ls | grep projetobase-client
-docker service logs projetobase-client_client --tail 20
+docker service ls | grep alia-client
+docker service logs alia-client_client --tail 20
 ```
 
 ## 🐛 Problemas Comuns
@@ -89,6 +89,6 @@ docker service logs projetobase-client_client --tail 20
 - Faça logout e login novamente
 
 ### "Service not found"
-- Certifique-se de que a stack `projetobase-client` está criada no Portainer
+- Certifique-se de que a stack `alia-client` está criada no Portainer
 - Crie a stack usando o `docker-compose.yml` antes de usar o CI/CD
 

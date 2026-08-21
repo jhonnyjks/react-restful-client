@@ -8,7 +8,7 @@ on:
   workflow_dispatch: # Permite execução manual
 
 env:
-  IMAGE_CLIENT: projetobase-client_client
+  IMAGE_CLIENT: alia-client_client
   IMAGE_TAG: latest
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
           push: false
           tags: ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }}
           build-args: |
-            VITE_APP_NAME=${{ secrets.VITE_APP_NAME || 'Projeto Base' }}
+            VITE_APP_NAME=${{ secrets.VITE_APP_NAME || 'Alia' }}
             VITE_API_BASE_URL=/api
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -69,9 +69,9 @@ jobs:
             echo "🔄 Atualizando serviço Docker Swarm..."
             
             # Atualizar serviço Client
-            if docker service ls | grep -q "projetobase-client_client"; then
+            if docker service ls | grep -q "alia-client_client"; then
               echo "Atualizando serviço Client..."
-              docker service update --image ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }} --force projetobase-client_client || true
+              docker service update --image ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }} --force alia-client_client || true
             else
               echo "⚠️ Serviço Client não encontrado. Certifique-se de que a stack está criada no Portainer."
             fi
@@ -79,7 +79,7 @@ jobs:
             echo "✅ Deploy concluído!"
             echo ""
             echo "📋 Status do serviço:"
-            docker service ls | grep projetobase-client || true
+            docker service ls | grep alia-client || true
 
       - name: Cleanup
         if: always()
