@@ -58,6 +58,46 @@ const allNavItems: NavItem[] = [
       </svg>
     ),
   },
+  {
+    label: 'Grupos',
+    to: '/grupos',
+    permission: 'manter-grupos',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
+        <path
+          d="M7 4C4.79086 4 3 5.79086 3 8C3 10.2091 4.79086 12 7 12C9.20914 12 11 10.2091 11 8C11 5.79086 9.20914 4 7 4ZM5 8C5 6.89543 5.89543 6 7 6C8.10457 6 9 6.89543 9 8C9 9.10457 8.10457 10 7 10C5.89543 10 5 9.10457 5 8Z"
+          fill="currentColor"
+          fillOpacity="0.96"
+        />
+        <path
+          d="M17 4C14.7909 4 13 5.79086 13 8C13 10.2091 14.7909 12 17 12C19.2091 12 21 10.2091 21 8C21 5.79086 19.2091 4 17 4ZM15 8C15 6.89543 15.8954 6 17 6C18.1046 6 19 6.89543 19 8C19 9.10457 18.1046 10 17 10C15.8954 10 15 9.10457 15 8Z"
+          fill="currentColor"
+          fillOpacity="0.96"
+        />
+        <path
+          d="M12 14C8.68629 14 6 16.6863 6 20H8C8 17.7909 9.79086 16 12 16C14.2091 16 16 17.7909 16 20H18C18 16.6863 15.3137 14 12 14Z"
+          fill="currentColor"
+          fillOpacity="0.96"
+        />
+      </svg>
+    ),
+  },
+  {
+    label: 'Scatters',
+    to: '/scatters',
+    permission: 'manter-scatters',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
+        <path
+          d="M4 6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6V14C20 15.1046 19.1046 16 18 16H9L5 20V16H6C4.89543 16 4 15.1046 4 14V6Z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          fill="none"
+        />
+        <path d="M8 9H16M8 12H13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+  },
 ];
 
 type SidebarProps = {

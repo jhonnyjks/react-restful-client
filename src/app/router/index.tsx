@@ -9,6 +9,10 @@ import { UsuariosListPage } from '@/modules/usuarios/pages/UsuariosListPage';
 import { UsuarioFormPage } from '@/modules/usuarios/pages/UsuarioFormPage';
 import { PerfisListPage } from '@/modules/perfis/pages/PerfisListPage';
 import { PerfilFormPage } from '@/modules/perfis/pages/PerfilFormPage';
+import { GruposListPage } from '@/modules/grupos/pages/GruposListPage';
+import { ScattersListPage } from '@/modules/scatters/pages/ScattersListPage';
+import { ScatterFormPage } from '@/modules/scatters/pages/ScatterFormPage';
+import { ScatterScheduleStatsPage } from '@/modules/scatters/pages/ScatterScheduleStatsPage';
 
 export const appRouter = createBrowserRouter([
   {
@@ -60,6 +64,36 @@ export const appRouter = createBrowserRouter([
               {
                 path: '/perfis/:id',
                 element: <PerfilFormPage />,
+              },
+            ],
+          },
+          {
+            element: <PermissionRoute permission="manter-grupos" />,
+            children: [
+              {
+                path: '/grupos',
+                element: <GruposListPage />,
+              },
+            ],
+          },
+          {
+            element: <PermissionRoute permission="manter-scatters" />,
+            children: [
+              {
+                path: '/scatters',
+                element: <ScattersListPage />,
+              },
+              {
+                path: '/scatters/novo',
+                element: <ScatterFormPage />,
+              },
+              {
+                path: '/scatters/:id',
+                element: <ScatterFormPage />,
+              },
+              {
+                path: '/scatters/:id/schedules/:scheduleId',
+                element: <ScatterScheduleStatsPage />,
               },
             ],
           },
