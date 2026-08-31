@@ -45,7 +45,11 @@ class AuthOrApp extends Component {
             return r
         }, function (error) {
             // Se o token não é válido, redireciona para a tela de login
-            if(error.response?.data?.message.includes('Não autenticado.')) {
+            const unauthenticated = error.response?.status === 401 ||
+                error.response?.data?.message?.includes('Não autenticado.') ||
+                error.response?.data?.error?.includes('Não autenticado.')
+
+            if (this.props.auth.token && unauthenticated) {
                 this.props.logout()
             }
 

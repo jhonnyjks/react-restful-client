@@ -6,10 +6,11 @@ const INITIAL_STATE = JSON.parse(localStorage.getItem(sesionKey)) ? {
     profile: JSON.parse(localStorage.getItem(profileKey)),
     custom: JSON.parse(localStorage.getItem(sesionKey)).custom,
     profiles: [],
+    permissoes: [],
     validToken: false,
     loading: false
 } : {
-        validToken: false, user: null, token: null, profile: null, profiles: [], entities:[], loading: false, custom: null
+        validToken: false, user: null, token: null, profile: null, profiles: [], permissoes: [], entities:[], loading: false, custom: null
     }
 
 export default (state = INITIAL_STATE, action) => {
@@ -25,6 +26,7 @@ export default (state = INITIAL_STATE, action) => {
                         ...action.payload.data.token
                     },
                     profiles: action.payload.data.profiles,
+                    permissoes: action.payload.data.permissoes || [],
                     entities: action.payload.data.entities ? action.payload.data.entities : [],
                     profile: null,
                     validToken: true
@@ -38,6 +40,7 @@ export default (state = INITIAL_STATE, action) => {
                         ...action.payload.data.token
                     },
                     profiles: action.payload.data.profiles,
+                    permissoes: action.payload.data.permissoes || [],
                     entities: action.payload.data.entities ? action.payload.data.entities : [],
                     profile: null,
                     validToken: true
@@ -47,7 +50,7 @@ export default (state = INITIAL_STATE, action) => {
             } else {
                 localStorage.removeItem(sesionKey)
                 localStorage.removeItem(profileKey)
-                return { ...state, validToken: false, user: null, token: null, profile: null, profiles: [], entities:[], custom: null }
+                return { ...state, validToken: false, user: null, token: null, profile: null, profiles: [], permissoes: [], entities:[], custom: null }
             }
 
         case 'PROFILE_SELECTED':

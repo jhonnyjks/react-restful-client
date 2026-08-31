@@ -55,6 +55,21 @@ O Vite também disponibiliza variáveis compatíveis com aplicações legadas:
 
 `APP_SOURCE_DIR` seleciona o diretório da aplicação no build e usa `src/app` por padrão. Ele permite que o CI valide uma aplicação de fixture sem depender de um checkout de produto.
 
+## Autenticação
+
+O runtime padrão mantém compatibilidade com a resposta legada
+`{ message, data: { user, token, profiles } }`. Ele também reconhece APIs que
+retornam uma sessão Bearer plana:
+
+```json
+{ "token": "...", "token_type": "Bearer", "user": {}, "perfis": [], "permissoes": [] }
+```
+
+Nesse caso, a sessão é renovada em `POST /auth/refresh`, encerrada em
+`POST /auth/logout` e as permissões já retornadas pela API são preservadas no
+estado. A integração continua limitada ao `exports.js`; não exige que o
+skeleton importe módulos internos de `src/app`.
+
 ## Validação
 
 ```bash

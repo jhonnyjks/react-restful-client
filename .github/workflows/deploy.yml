@@ -38,7 +38,7 @@ jobs:
       - name: Build generic production image
         run: |
           docker build \
-            --build-arg APP_SOURCE_DIR=fixtures/legacy-app \
+            --build-arg APP_SOURCE_DIR=src/.contract-fixture \
             --build-arg VITE_APP_NAME="React Client" \
             --build-arg VITE_API_BASE_URL=/api \
             -f docker/Dockerfile \

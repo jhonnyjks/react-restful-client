@@ -8,6 +8,56 @@ export function login(values, url) {
     return submit(values, url)
 }
 
+function isBearerSession(token) {
+    return token?.sessionType === 'bearer'
+}
+
+function isBearerResponse(response) {
+    return Boolean(response?.token && response?.user && !response?.data)
+}
+
+function normalizeResponse(response) {
+    if (!isBearerResponse(response)) {
+        return response
+    }
+
+    const permissoes = Array.isArray(response.permissoes) ? response.permissoes : []
+    const profiles = Array.isArray(response.perfis)
+        ? response.perfis.map(profile => ({
+            ...profile,
+            noun: profile.noun || profile.nome,
+            scopes: profile.scopes || {},
+            permissoes: profile.permissoes || permissoes
+        }))
+        : []
+
+    return {
+        message: response.message || 'Sessão iniciada com sucesso.',
+        data: {
+            user: response.user,
+            token: {
+                type: response.token_type || 'Bearer',
+                token: response.token,
+                sessionType: 'bearer'
+            },
+            profiles,
+            permissoes
+        }
+    }
+}
+
+function selectAvailableProfile(session, currentProfile = null) {
+    const profiles = session.data.profiles || []
+
+    return profiles.find(profile => profile.id === currentProfile?.id) ||
+        profiles[0] || {
+            id: 'default',
+            noun: 'Acesso',
+            scopes: {},
+            permissoes: session.data.permissoes || []
+        }
+}
+
 function submit(values, url) {
     switch (url) {
         case 'login':
@@ -30,22 +80,36 @@ function submit(values, url) {
 
         dispatch({ type: 'AUTH_LOADING', payload: true });
 
-        return axios.post(url, values)
+        const payload = url.endsWith('/auth/login')
+            ? {
+                ...values,
+                email: values.email || values.login,
+                login: values.login || values.email
+            }
+            : values
+
+        return axios.post(url, payload)
             .then(resp => {
-                if (resp.data.data && resp.data.data.profiles && resp.data.data.profiles.length === 1) {
-                    toastr.success('Sucesso', resp.data.message);
+                const session = normalizeResponse(resp.data)
+                const profiles = session.data?.profiles || []
+                const bearerSession = isBearerSession(session.data?.token)
+
+                dispatch({ type: 'USER_FETCHED', payload: session });
+
+                if (bearerSession) {
+                    dispatch({ type: 'PROFILE_SELECTED', payload: selectAvailableProfile(session) });
+                    dispatch({ type: 'AUTH_LOADING', payload: false });
+                    toastr.success('Sucesso', session.message);
+                } else if (profiles.length === 1) {
+                    toastr.success('Sucesso', session.message);
                     dispatch([
-                        selectProfile(
-                            resp.data.data.profiles.length ? resp.data.data.profiles[0] : null,
-                            resp.data.data.token
-                        )
+                        selectProfile(profiles[0], session.data.token)
                     ]);
                 } else {
-                    toastr.info('Sucesso', resp.data.message);
+                    toastr.info('Sucesso', session.message);
                     dispatch({ type: 'AUTH_LOADING', payload: false });
                 }
 
-                dispatch({ type: 'USER_FETCHED', payload: resp.data });
                 return resp;
             })
             .catch(e => {
@@ -61,7 +125,7 @@ function submit(values, url) {
                         ([key, error]) => toastr.error(key, error[0])
                     );
                 } else if (e.response.data) {
-                    toastr.error('Erro', e.response.data.message);
+                    toastr.error('Erro', e.response.data.message || e.response.data.error || 'Não foi possível autenticar.');
                 }
 
                 return e.response;
@@ -70,11 +134,18 @@ function submit(values, url) {
 }
 
 export function logout() {
-    axios.get(`${process.env.REACT_APP_API_HOST}/auth/logout`)
-    return dispatch => {
-        dispatch(initNotifications());
-        dispatch({ type: 'USER_FETCHED', payload: {} })
-        return 
+    return (dispatch, getState) => {
+        const token = getState().auth.token
+        const request = isBearerSession(token)
+            ? axios.post(`${process.env.REACT_APP_API_HOST}/auth/logout`, {}, {
+                headers: { authorization: token.type + ' ' + token.token }
+            })
+            : axios.get(`${process.env.REACT_APP_API_HOST}/auth/logout`)
+
+        return request.catch(() => null).then(() => {
+            dispatch(initNotifications());
+            dispatch({ type: 'USER_FETCHED', payload: {} })
+        })
     }
 }
 
@@ -82,6 +153,20 @@ export function validateToken(token, profile) {
     return dispatch => {
 
         dispatch({ type: 'AUTH_LOADING', payload: true })
+
+        if (isBearerSession(token)) {
+            return axios.post(`${process.env.REACT_APP_API_HOST}/auth/refresh`, {}, {
+                headers: { authorization: token.type + ' ' + token.token }
+            }).then(resp => {
+                const session = normalizeResponse(resp.data)
+                dispatch({ type: 'USER_FETCHED', payload: session })
+                dispatch({ type: 'PROFILE_SELECTED', payload: selectAvailableProfile(session, profile) })
+                dispatch({ type: 'AUTH_LOADING', payload: false })
+            }).catch(() => {
+                dispatch({ type: 'USER_FETCHED', payload: false })
+                dispatch({ type: 'AUTH_LOADING', payload: false })
+            })
+        }
 
         // Obtendo sessão salva para evitar requisição
         let devSession = JSON.parse(localStorage.getItem(sesionKey))
@@ -124,8 +209,17 @@ export function selectProfile(profile, token) {
 
         dispatch({ type: 'AUTH_LOADING', payload: true })
 
+        if (isBearerSession(token)) {
+            dispatch({
+                type: 'PROFILE_SELECTED',
+                payload: { ...profile, scopes: profile.scopes || {}, permissoes: profile.permissoes || [] }
+            })
+            dispatch({ type: 'AUTH_LOADING', payload: false })
+            return Promise.resolve()
+        }
+
         if (profile) {
-            axios.get(`${process.env.REACT_APP_API_HOST}/auth/define_profile/${profile.id}`, {
+            return axios.get(`${process.env.REACT_APP_API_HOST}/auth/define_profile/${profile.id}`, {
                 headers: { authorization: token.type + ' ' + token.token }
             }).then(resp => {
                 dispatch({ type: 'PROFILE_SELECTED', payload: { ...profile, scopes: resp.data.scopes } })

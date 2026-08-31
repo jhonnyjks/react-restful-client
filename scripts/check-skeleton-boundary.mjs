@@ -49,7 +49,9 @@ const exportsPath = path.join(appRoot, 'exports.js');
 if (fs.existsSync(exportsPath)) {
   const appExports = fs.readFileSync(exportsPath, 'utf8');
   for (const exportName of ['routes', 'menu', 'reducers']) {
-    if (!new RegExp(`export\\s+(?:const|let|var)\\s+${exportName}\\b`).test(appExports)) {
+    const declaresExport = new RegExp(`export\\s+(?:const|let|var)\\s+${exportName}\\b`).test(appExports);
+    const reExportsName = new RegExp(`export\\s*\\{[^}]*\\b${exportName}\\b[^}]*\\}`, 's').test(appExports);
+    if (!declaresExport && !reExportsName) {
       violations.push(`${appDirectory}/exports.js deve exportar ${exportName}.`);
     }
   }
