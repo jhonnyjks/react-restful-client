@@ -1,0 +1,6 @@
+.search-select__menu { width: 450px !important }
+.custom-select:disabled {
+    color: #495057 !important;
+    background-color: #e9ecef !important;
+    opacity: 1;
+}

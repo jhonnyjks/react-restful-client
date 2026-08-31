@@ -1,0 +1,14 @@
+  .dropdown-menu {
+    max-width: 300px; /* Defina uma largura máxima */
+    overflow-y: auto; /* Adicione rolagem, se necessário */
+  }
+  
+  .dropdown-item {
+    white-space: normal; /* Permita que o texto quebre em várias linhas */
+  }
+  
+  .navbar-nav .dropdown-menu {
+    left: 10px; /* Ajuste o posicionamento */
+    right: 0;
+  }
+  

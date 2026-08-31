@@ -51,9 +51,11 @@ docker compose --env-file .env.production up --build
 Variáveis:
 
 - `API_BACKEND`: URL da API usada pelo nginx
+- `NGINX_SERVER_NAME`: hostname do servidor nginx (padrão `_`)
 - `CLIENT_PORT`: porta publicada (padrão `3000`)
 - `VITE_APP_NAME`: nome da aplicação no build
-- `EDGE_NETWORK` / `API_NETWORK`: redes Traefik/API
+- `APP_SOURCE_DIR`: checkout da aplicação usado no build (padrão `src/app`)
+- `APP_NETWORK` / `API_NETWORK`: redes Traefik/API
 - `CLIENT_IMAGE` / `CLIENT_HOST` / `TRAEFIK_ROUTER`: identidade do serviço
 
 O Dockerfile lê `.env.production` durante o build, mas `VITE_*` passadas como build args têm prioridade.

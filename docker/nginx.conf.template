@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name sistema.queroatendimentos.com.br;
+    server_name ${NGINX_SERVER_NAME};
     root /usr/share/nginx/html;
     index index.html;
 

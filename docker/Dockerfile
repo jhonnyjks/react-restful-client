@@ -6,6 +6,7 @@ WORKDIR /app
 # Declarar build args para variáveis do Vite
 ARG VITE_APP_NAME=React Client
 ARG VITE_API_BASE_URL=/api
+ARG APP_SOURCE_DIR=src/app
 
 # Copiar arquivos de dependências
 COPY package*.json ./
@@ -22,6 +23,7 @@ RUN set -a && \
     # Exportar build args (eles têm prioridade)
     export VITE_APP_NAME="${VITE_APP_NAME}" && \
     export VITE_API_BASE_URL="${VITE_API_BASE_URL}" && \
+    export APP_SOURCE_DIR="${APP_SOURCE_DIR}" && \
     # Carregar .env.production se existir (apenas para outras variáveis não passadas como build args)
     if [ -f .env.production ]; then \
       echo "Loading .env.production (build args have priority)..." && \
@@ -43,7 +45,8 @@ RUN set -a && \
     # Garantir valores padrão se não definidos
     export VITE_APP_NAME=${VITE_APP_NAME:-React Client} && \
     export VITE_API_BASE_URL=${VITE_API_BASE_URL:-/api} && \
-    echo "Building with VITE_APP_NAME=${VITE_APP_NAME}" && \
+    export APP_SOURCE_DIR=${APP_SOURCE_DIR:-src/app} && \
+    echo "Building ${APP_SOURCE_DIR} with VITE_APP_NAME=${VITE_APP_NAME}" && \
     echo "Building with VITE_API_BASE_URL=${VITE_API_BASE_URL}" && \
     npm run build && \
     set +a
