@@ -1,87 +1,45 @@
-name: Deploy Client
+name: Validate Client Skeleton
 
 on:
   push:
     branches:
       - master
       - main
+      - "upgrade/**"
+  pull_request:
   workflow_dispatch:
 
-env:
-  IMAGE_CLIENT: ${{ vars.CLIENT_IMAGE || secrets.CLIENT_IMAGE || 'react-client' }}
-  IMAGE_TAG: latest
-  CLIENT_SERVICE: ${{ vars.CLIENT_SERVICE || secrets.CLIENT_SERVICE || 'react-client_client' }}
+permissions:
+  contents: read
 
 jobs:
-  build-and-deploy:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Client image
-        uses: docker/build-push-action@v5
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          context: .
-          file: ./docker/Dockerfile
-          push: false
-          tags: ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }}
-          build-args: |
-            VITE_APP_NAME=${{ secrets.VITE_APP_NAME || 'React Client' }}
-            VITE_API_BASE_URL=/api
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          load: true
+          node-version: 20
+          cache: npm
 
-      - name: Save Client image
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint reusable TypeScript
+        run: npm run lint
+
+      - name: Build standard extension fixture
+        run: npm run test:contract:legacy
+
+      - name: Build generic production image
         run: |
-          docker save ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }} | gzip > client-image.tar.gz
-
-      - name: Copy image to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT || 22 }}
-          source: "client-image.tar.gz"
-          target: "/tmp/docker-images/"
-
-      - name: Deploy to server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT || 22 }}
-          script: |
-            set -e
-
-            echo "Carregando imagem Docker..."
-            docker load -i /tmp/docker-images/client-image.tar.gz
-
-            echo "Limpando arquivos temporários..."
-            rm -f /tmp/docker-images/*.tar.gz
-
-            echo "Atualizando serviço Docker Swarm..."
-            SERVICE_NAME="${{ env.CLIENT_SERVICE }}"
-            IMAGE_REF="${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }}"
-
-            if docker service ls | grep -q "${SERVICE_NAME}"; then
-              echo "Atualizando serviço ${SERVICE_NAME}..."
-              docker service update --image "${IMAGE_REF}" --force "${SERVICE_NAME}" || true
-            else
-              echo "Serviço ${SERVICE_NAME} não encontrado. Crie a stack no Portainer antes do deploy."
-            fi
-
-            echo "Deploy concluído."
-            docker service ls | grep -E "client|${SERVICE_NAME}" || true
-
-      - name: Cleanup
-        if: always()
-        run: |
-          rm -f client-image.tar.gz
+          docker build \
+            --build-arg APP_SOURCE_DIR=src/.contract-fixture \
+            --build-arg VITE_APP_NAME="React Client" \
+            --build-arg VITE_API_BASE_URL=/api \
+            -f docker/Dockerfile \
+            .

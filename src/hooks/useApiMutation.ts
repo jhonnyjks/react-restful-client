@@ -3,24 +3,31 @@ import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-quer
 import { useToast } from './useToast';
 import { parseApiError } from '@/utils/error';
 
+export type UseApiMutationResult<TData, TError, TVariables, TContext> = Omit<
+  UseMutationResult<TData, TError, TVariables, TContext>,
+  'isPending'
+> & {
+  isPending: boolean;
+};
+
 export function useApiMutation<TData = unknown, TError = unknown, TVariables = void, TContext = unknown>(
   options: UseMutationOptions<TData, TError, TVariables, TContext>,
   feedback?: { successMessage?: string; errorMessage?: string },
-): UseMutationResult<TData, TError, TVariables, TContext> {
+): UseApiMutationResult<TData, TError, TVariables, TContext> {
   const toast = useToast();
   const { onSuccess, onError, ...rest } = options;
 
-  return useMutation({
+  const mutation = useMutation<TData, TError, TVariables, TContext>({
     ...rest,
-    onSuccess: (data, variables, context, mutation) => {
+    onSuccess: (data, variables, context) => {
       if (feedback?.successMessage) {
         toast.success({
           title: feedback.successMessage,
         });
       }
-      onSuccess?.(data, variables, context, mutation);
+      onSuccess?.(data, variables, context);
     },
-    onError: (error, variables, context, mutation) => {
+    onError: (error, variables, context) => {
       const parsed = parseApiError(error);
       
       // Se há uma mensagem específica do erro (não é a mensagem padrão), usa ela como título
@@ -59,8 +66,13 @@ export function useApiMutation<TData = unknown, TError = unknown, TVariables = v
         title: errorTitle,
         description: errorDescription,
       });
-      onError?.(error, variables, context, mutation);
+      onError?.(error, variables, context);
     },
   });
+
+  return {
+    ...mutation,
+    isPending: mutation.isLoading,
+  };
 }
 

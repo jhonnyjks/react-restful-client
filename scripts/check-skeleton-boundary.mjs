@@ -4,7 +4,13 @@ import { fileURLToPath } from 'node:url';
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourceRoot = path.join(repositoryRoot, 'src');
-const appRoot = path.join(sourceRoot, 'app');
+const defaultAppRoot = path.join(sourceRoot, 'app');
+const appDirectory = process.env.APP_SOURCE_DIR ?? 'src/app';
+const appRoot = path.resolve(repositoryRoot, appDirectory);
+
+if (!appRoot.startsWith(`${repositoryRoot}${path.sep}`)) {
+  throw new Error('APP_SOURCE_DIR deve apontar para um diretório dentro do skeleton.');
+}
 
 const forbiddenSkeletonPaths = [
   'modules',
@@ -19,7 +25,12 @@ const forbiddenSkeletonPaths = [
   'components/templates/AppLayout.tsx',
 ];
 
-const requiredAppPaths = ['App.tsx', 'exports.ts', 'README.md', 'navigation.ts'];
+const requiredAppPaths = ['exports.js'];
+const allowedAppConsumers = new Set([
+  'src/main/reducers.js',
+  'src/main/routes.jsx',
+  'src/common/template/Menu.jsx',
+]);
 const violations = [];
 
 for (const relativePath of forbiddenSkeletonPaths) {
@@ -30,7 +41,19 @@ for (const relativePath of forbiddenSkeletonPaths) {
 
 for (const relativePath of requiredAppPaths) {
   if (!fs.existsSync(path.join(appRoot, relativePath))) {
-    violations.push(`Contrato da aplicação ausente: src/app/${relativePath}`);
+    violations.push(`Contrato da aplicação ausente: ${appDirectory}/${relativePath}`);
+  }
+}
+
+const exportsPath = path.join(appRoot, 'exports.js');
+if (fs.existsSync(exportsPath)) {
+  const appExports = fs.readFileSync(exportsPath, 'utf8');
+  for (const exportName of ['routes', 'menu', 'reducers']) {
+    const declaresExport = new RegExp(`export\\s+(?:const|let|var)\\s+${exportName}\\b`).test(appExports);
+    const reExportsName = new RegExp(`export\\s*\\{[^}]*\\b${exportName}\\b[^}]*\\}`, 's').test(appExports);
+    if (!declaresExport && !reExportsName) {
+      violations.push(`${appDirectory}/exports.js deve exportar ${exportName}.`);
+    }
   }
 }
 
@@ -39,10 +62,10 @@ function walk(directory) {
     const entryPath = path.join(directory, entry.name);
 
     if (entry.isDirectory()) {
-      return entryPath === appRoot || entry.name.startsWith('.') ? [] : walk(entryPath);
+      return entryPath === defaultAppRoot || entryPath === appRoot || entry.name.startsWith('.') ? [] : walk(entryPath);
     }
 
-    return /\.(?:ts|tsx)$/.test(entry.name) ? [entryPath] : [];
+    return /\.(?:js|jsx|ts|tsx)$/.test(entry.name) ? [entryPath] : [];
   });
 }
 
@@ -50,20 +73,10 @@ for (const filePath of walk(sourceRoot)) {
   const relativePath = path.relative(repositoryRoot, filePath);
   const source = fs.readFileSync(filePath, 'utf8');
 
-  const stripped = source
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\/\/.*$/gm, '')
-    .trim();
-
-  if (relativePath === 'src/App.tsx') {
-    if (stripped !== "export { App as default } from '@app/exports';") {
-      violations.push('src/App.tsx deve ser somente o adaptador para @app/exports.');
-    }
-    continue;
-  }
-
   if (/(?:from\s+|import\s*\()['"](?:@app(?:\/|['"])|\.\/app\/)/.test(source)) {
-    violations.push(`${relativePath} importa a aplicação de domínio.`);
+    if (!allowedAppConsumers.has(relativePath)) {
+      violations.push(`${relativePath} importa a aplicação de domínio fora do contrato padrão.`);
+    }
   }
 
   if (/(?:from\s+|import\s*\()['"]@\/(?:modules|services\/api)\//.test(source)) {

@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+: "${NGINX_SERVER_NAME:=_}"
+export NGINX_SERVER_NAME
+
 # Obter o IP do gateway (host.docker.internal)
 # O extra_hosts adiciona host.docker.internal ao /etc/hosts
 # Vamos ler o IP de lá, ou usar o gateway da rede

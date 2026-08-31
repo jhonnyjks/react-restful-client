@@ -1,0 +1,46 @@
+table.fixed          { overflow: auto; height: 100px; }
+table.fixed thead { position: sticky; top: 0; z-index: 1; }
+table.fixed thead tr {
+    background: #fff;
+    color: #555;
+ }
+ table.fixed thead > tr > th {
+    font-weight: normal;
+ }
+.table-carret {
+    color: #ADB5BD;
+}
+.table-carret:hover {
+    color: unset;
+    cursor: pointer;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #000 !important;
+}
+.carret-up-down {
+    display: block;
+    float: left;
+    width: 20px;
+}
+.carret-up-down.up > .fa-caret-up, .carret-up-down.down > .fa-caret-down {
+    color: #0D6EFD;
+}
+.carret-up-down > i {
+    line-height: 16px;
+    float: left;
+    display: block;
+}
+.carret-up-down > .fa-caret-up {
+    margin-bottom: -5px;
+}
+.carret-up-down > .fa-caret-down {
+    margin-top: -5px;
+}
+.table-container {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.table-container table {
+    width: 100%;
+}

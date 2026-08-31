@@ -7,6 +7,7 @@ services:
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
         VITE_APP_NAME: ${VITE_APP_NAME:-React Client}
+        APP_SOURCE_DIR: ${APP_SOURCE_DIR:-src/app}
     deploy:
       restart_policy:
         condition: any
@@ -26,16 +27,17 @@ services:
         mode: ingress
     environment:
       API_BACKEND: ${API_BACKEND:-http://api-nginx:80}
+      NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:-_}
     networks:
-      - edge-network
+      - app-network
       - api-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
 networks:
-  edge-network:
+  app-network:
     external: true
-    name: ${EDGE_NETWORK:-edge-network}
+    name: ${APP_NETWORK:-app-network}
   api-network:
     external: true
     name: ${API_NETWORK:-api-network}
