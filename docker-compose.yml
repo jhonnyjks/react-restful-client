@@ -1,66 +1,42 @@
 services:
   client:
-    # No Portainer Swarm, o nome da imagem é gerado como: <stack-name>_<service-name>
-    # Stack: alia-client, Service: client
-    # Imagem: alia-client:latest
-    image: alia-client:latest
+    image: ${CLIENT_IMAGE:-react-client}:${CLIENT_IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: docker/Dockerfile
       args:
-        # IMPORTANTE: Todas as variáveis VITE_* são usadas APENAS durante o build
-        # Elas são incorporadas no bundle JavaScript e não precisam estar em runtime
-        # Passadas como build args e exportadas como variáveis de ambiente no Dockerfile
-        - VITE_API_BASE_URL=/api
-        - VITE_APP_NAME=${VITE_APP_NAME:-Alia}
-    # Nota: container_name não é suportado no Docker Swarm mode
-    # Se usar Docker Compose padrão, descomente a linha abaixo:
-    # container_name: alia-client
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        VITE_APP_NAME: ${VITE_APP_NAME:-React Client}
     deploy:
       restart_policy:
         condition: any
         delay: 5s
         max_attempts: 3
         window: 120s
-      # Labels do Traefik para roteamento automático
-      # Nota: Não especificamos traefik.docker.network para usar a rede ingress padrão do Swarm
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.alia-client.rule=Host(`localhost`)"
-        - "traefik.http.routers.alia-client.entrypoints=websecure"
-        - "traefik.http.routers.alia-client.tls.certresolver=letsencryptresolver"
-        - "traefik.http.services.alia-client.loadbalancer.server.port=80"
-    # No Docker Swarm, portas devem estar no nível do serviço, não em deploy
-    # Mantido para acesso direto via IP:3000 se necessário
+        - "traefik.http.routers.${TRAEFIK_ROUTER:-react-client}.rule=Host(`${CLIENT_HOST:-localhost}`)"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:-react-client}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:-react-client}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
+        - "traefik.http.services.${TRAEFIK_ROUTER:-react-client}.loadbalancer.server.port=80"
     ports:
       - target: 80
-        published: 3000
+        published: ${CLIENT_PORT:-3000}
         protocol: tcp
         mode: ingress
-    # env_file removido - variáveis são passadas via Portainer
     environment:
-      # IMPORTANTE: Esta é a ÚNICA variável necessária em runtime
-      # Ela é usada pelo nginx para fazer proxy das requisições /api para a API
-      # Usa comunicação interna via rede Docker (nome do serviço Swarm)
-      # No Docker Swarm, o nome do serviço é: <stack-name>_<service-name>
-      # Stack: alia-api, Service: nginx
-      # Nome do serviço: alia-api_nginx
-      - API_BACKEND=${API_BACKEND:-http://alia-api_nginx:80}
+      API_BACKEND: ${API_BACKEND:-http://api-nginx:80}
     networks:
-      - alia-network  # Rede Diatech para Traefik
-      - alia-internal # Rede interna para comunicação com API
+      - edge-network
+      - api-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
 networks:
-  alia-network:
+  edge-network:
     external: true
-    name: Diatech
-    # Usando a rede Diatech compartilhada onde o Traefik está
-    # Isso permite que o Traefik acesse o serviço diretamente
-  alia-internal:
+    name: ${EDGE_NETWORK:-edge-network}
+  api-network:
     external: true
-    name: alia-internal
-    # Rede interna para comunicação entre client e API
-    # Permite que o client se comunique com a API via nome do serviço Docker Swarm
+    name: ${API_NETWORK:-api-network}
 

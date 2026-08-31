@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', '.playwright']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -18,6 +18,27 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/app/**', 'src/App.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@app/*', './app/*'],
+              message: 'O skeleton não pode depender da aplicação de domínio.',
+            },
+            {
+              group: ['@/modules/*', '@/services/api/*'],
+              message: 'Módulos e APIs de domínio devem viver em src/app.',
+            },
+          ],
+        },
+      ],
     },
   },
 ])

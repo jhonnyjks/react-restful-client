@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint --max-warnings=0 . && npm run check:boundaries",
+    "check:boundaries": "node scripts/check-skeleton-boundary.mjs",
     "preview": "vite preview",
-    "test:e2e": "playwright test -c playwright.config.mjs"
+    "test:e2e": "playwright test -c playwright.config.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.8",

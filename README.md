@@ -1,165 +1,99 @@
-# Cliente React (Vite) – Alia
+# Cliente React (Vite) – Skeleton
 
-Interface administrativa construída em React + TypeScript seguindo metodologia Atomic Design, estilizada com Tailwind CSS e integrada à API Laravel via Sanctum.
+Projeto-base reutilizável para aplicações administrativas em React + TypeScript. Ele fornece Atomic Design, Tailwind CSS, integração genérica com APIs Laravel via Sanctum e a infraestrutura de build. **Não coloque regras de negócio aqui.**
 
-## 🚀 Início Rápido com Docker (Recomendado)
+O domínio do produto vive em `src/app`, um checkout Git independente, no mesmo contrato do [rrc-app-skeleton](https://github.com/jhonnyjks/rrc-app-skeleton).
 
-A forma mais simples e recomendada de executar o projeto é através do Docker, que garante um ambiente consistente e isolado.
+## Fronteira skeleton / app
 
-### Pré-requisitos
+| Camada | Caminho | Responsabilidade |
+| --- | --- | --- |
+| Skeleton | este repositório | Componentes, hooks de feedback, utilitários, Vite, Docker |
+| Aplicação | `src/app` | Rotas, autenticação, módulos, APIs, navegação e identidade do produto |
 
-- Docker e Docker Compose instalados
-- Redes Docker necessárias criadas (veja abaixo)
+O skeleton só conhece a aplicação por `src/App.tsx`, que reexporta o contrato em `src/app/exports.ts`.
 
-### Criar as redes compartilhadas
-
-Se ainda não existem, crie as redes Docker necessárias:
+### Como criar um produto a partir deste skeleton
 
 ```bash
-# Rede principal (já criada automaticamente pelo docker-compose)
-docker network create alia-network
-
-# Rede da API (necessária se a API estiver rodando em Docker)
-docker network create api_alia-network
+git clone <url-deste-skeleton> client
+cd client/src
+git clone https://github.com/jhonnyjks/rrc-app-skeleton app
+# em seguida, aponte o origin de src/app para o repositório específico do produto
+cd app
+git remote set-url origin https://github.com/SEU_USER/SEU_REPOSITORIO_DE_MODULOS
 ```
 
-> **Nota**: Se a API estiver rodando em Docker, o container do client precisa estar conectado à rede `api_alia-network` para se comunicar com o nginx. Isso já está configurado no `docker-compose.dev.yml`.
+Implemente páginas, serviços e rotas apenas em `src/app`. O projeto-base não deve importar `@app/*`, exceto no adaptador `src/App.tsx`.
 
-### Desenvolvimento com Docker
-
-Para rodar o ambiente de desenvolvimento com hot reload:
+## Início rápido com Docker
 
 ```bash
-# 1. Criar arquivo de ambiente (se ainda não existir)
+docker network create app-network
+docker network create api-network
 cp .env.development.example .env.development
-
-# 2. Editar .env.development conforme necessário
-# Se a API está em Docker (mesma rede): VITE_API_PROXY_TARGET=http://alia-nginx:80
-# Se a API está no host: VITE_API_PROXY_TARGET=http://host.docker.internal:8080
-# VITE_APP_NAME="Meu App"
-
-# 3. Iniciar o container
 docker compose -f docker-compose.dev.yml --env-file .env.development up --build
 ```
 
-A aplicação estará disponível em `http://localhost:5173` com hot reload ativo.
+A aplicação fica em `http://localhost:5173`.
 
-**Variáveis de ambiente para desenvolvimento:**
-- `VITE_API_PROXY_TARGET`: URL do backend da API
-  - **API em Docker (mesma rede)**: `http://alia-nginx:80` (recomendado)
-  - **API no host local**: `http://host.docker.internal:8080`
-- `VITE_APP_NAME`: Nome da aplicação (padrão: `Alia`)
+**Variáveis de desenvolvimento**
 
-### Produção com Docker
+- `VITE_API_PROXY_TARGET`: URL da API para o proxy do Vite (`http://host.docker.internal:8080` no host, ou o hostname interno do nginx da API em Docker)
+- `VITE_APP_NAME`: nome exibido no título e nas páginas (padrão: `React Client`)
+- `APP_NETWORK` / `API_NETWORK`: nomes das redes Docker externas
+- `CLIENT_CONTAINER_NAME`: nome do container de desenvolvimento
 
-Para rodar o ambiente de produção:
+## Produção com Docker
 
 ```bash
-# 1. Criar arquivo de ambiente (se ainda não existir)
 cp .env.production.example .env.production
-
-# 2. Editar .env.production conforme necessário
-# API_BACKEND=http://host.docker.internal:8080
-# CLIENT_PORT=3000
-# VITE_APP_NAME="Meu App"
-
-# 3. Iniciar o container
 docker compose --env-file .env.production up --build
 ```
 
-A aplicação estará disponível na porta configurada (padrão: `3000`).
+A aplicação fica na porta configurada (padrão: `3000`).
 
-**Variáveis de ambiente para produção:**
-- `API_BACKEND`: URL do backend da API (padrão: `http://host.docker.internal:8080`)
-- `CLIENT_PORT`: Porta do cliente (padrão: `3000`)
-- `VITE_APP_NAME`: Nome da aplicação usado no título e páginas (padrão: `Alia`)
+> Detalhes de redes, Traefik e Portainer: [DOCKER.md](./DOCKER.md).
 
-> 💡 **Dica**: Para mais detalhes sobre configuração Docker, consulte o arquivo [DOCKER.md](./DOCKER.md).
+## Execução sem Docker
 
----
-
-## 💻 Execução sem Docker
-
-Se preferir executar o projeto diretamente no seu ambiente local, siga as instruções abaixo.
-
-### Pré-requisitos
-
-- Node.js ≥ 20
-- npm ≥ 10
-
-### Instalação
+Pré-requisitos: Node.js ≥ 20 e npm ≥ 10.
 
 ```bash
 npm install
-```
-
-### Desenvolvimento
-
-```bash
-# Executa a aplicação com Vite e proxy para a API
-# Se a API está rodando localmente:
 VITE_API_PROXY_TARGET=http://127.0.0.1:8080 npm run dev
-
-# Se a API está em Docker (mesma rede):
-VITE_API_PROXY_TARGET=http://alia-nginx:80 npm run dev
 ```
 
-**Variáveis relevantes:**
+O proxy do Vite encaminha `/api` e `/sanctum` para a API e reescreve cookies para o host atual, compatível com Laravel Sanctum.
 
-| Variável | Ambiente | Descrição |
-| --- | --- | --- |
-| `VITE_API_PROXY_TARGET` | dev | URL do contêiner/host da API para o proxy do Vite. Se omitida, usa `http://127.0.0.1:8080`. |
-| `VITE_API_BASE_URL` | build/dev | Base utilizada pelo `axios`. Padrão: `/api`. Mantenha `/api` quando existir proxy reverso cuidando do roteamento também em produção. |
+## Padrões
 
-O proxy do Vite encaminha `'/api'` e `'/sanctum'` para a API e reescreve cookies para o domínio atual, garantindo compatibilidade com Laravel Sanctum.
+- **Atomic Design**: `components/atoms`, `molecules`, `organisms` e `templates`.
+- **Estado genérico**: Zustand (toast) + React Query via hooks reutilizáveis.
+- **Feedback**: `useApiQuery` e `useApiMutation` padronizam loading e erro.
+- **Domínio**: exclusivamente em `src/app`.
 
-### Produção
-
-```bash
-VITE_API_BASE_URL=https://api.seudominio.com npm run build
-npm run preview
-```
-
-**Recomendações:**
-
-- Configure o reverse proxy (ex.: Nginx) do frontend para encaminhar `/api` e `/sanctum` para o backend.
-- Garanta que as variáveis `SANCTUM_STATEFUL_DOMAINS`, `SESSION_DOMAIN` e CORS no backend incluam o host do frontend.
-- Se mantiver `VITE_API_BASE_URL=/api`, certifique-se de que o proxy em produção trate o roteamento entre contêineres (sem paths absolutos entre eles).
-
----
-
-## 📋 Padrões adotados
-
-- **Atomic Design**: componentes em `components/atoms`, `molecules`, `organisms` e `templates`.
-- **Estado**: zustand + React Query para sessões, permissões e carregamento de dados.
-- **Feedback de requisições**: hooks `useApiQuery` e `useApiMutation` padronizam loading e tratamento de erro.
-- **Sanctum**: `sanctum/csrf-cookie` é solicitado automaticamente antes de operações autenticadas; o cliente envia cookies (`withCredentials`) e cabeçalhos `X-XSRF-TOKEN`.
-
-## 🛠️ Scripts úteis
+## Scripts
 
 | Script | Descrição |
 | --- | --- |
-| `npm run dev` | Modo desenvolvimento com HMR e proxy |
-| `npm run build` | Gera build otimizado |
-| `npm run preview` | Faz serve do build localmente |
+| `npm run dev` | Desenvolvimento com HMR e proxy |
+| `npm run build` | Typecheck + build |
+| `npm run lint` | ESLint + verificação de fronteira |
+| `npm run check:boundaries` | Impede vazamento de domínio no skeleton |
+| `npm run preview` | Serve o build localmente |
+| `npm run test:e2e` | Playwright contra a aplicação em `src/app/e2e` |
 
-## 📁 Estrutura principal
+## Estrutura
 
 ```
 src/
-├─ app/                # Providers e roteamento
-├─ components/         # Atomic design
-├─ hooks/              # Hooks reutilizáveis (axios, toast, auth)
-├─ modules/            # Domínios: auth, usuários, perfis
-├─ services/api/       # Cliente axios + mapeamento de API
-└─ store/              # Zustand stores (auth, toast)
+├─ App.tsx             # Adaptador do contrato @app/exports
+├─ app/                # Checkout Git da aplicação (ignorado por este repositório)
+├─ components/         # Atomic Design reutilizável
+├─ hooks/              # Hooks genéricos (query, mutation, toast, máscaras)
+├─ store/              # Stores genéricos (toast)
+└─ utils/              # Utilitários neutros
 ```
 
-## 🔐 Fluxo de autenticação
-
-1. `getCsrfCookie()` requisita `/sanctum/csrf-cookie` (com proxy/cookies).
-2. O login envia credenciais e armazena o token Sanctum + perfis/permissões.
-3. Todas as requisições subsequentes enviam cookies e `Authorization` (se aplicável).
-4. Respostas `401` limpam sessão e redirecionam para `/login`.
-
-Para dúvidas adicionais consulte a documentação da API (`/api-docs`) ou o time responsável pelo backend.
+A autenticação, as permissões e o cliente HTTP do produto pertencem a `src/app`.

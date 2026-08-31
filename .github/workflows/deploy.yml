@@ -5,16 +5,17 @@ on:
     branches:
       - master
       - main
-  workflow_dispatch: # Permite execução manual
+  workflow_dispatch:
 
 env:
-  IMAGE_CLIENT: alia-client_client
+  IMAGE_CLIENT: ${{ vars.CLIENT_IMAGE || secrets.CLIENT_IMAGE || 'react-client' }}
   IMAGE_TAG: latest
+  CLIENT_SERVICE: ${{ vars.CLIENT_SERVICE || secrets.CLIENT_SERVICE || 'react-client_client' }}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
           push: false
           tags: ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }}
           build-args: |
-            VITE_APP_NAME=${{ secrets.VITE_APP_NAME || 'Alia' }}
+            VITE_APP_NAME=${{ secrets.VITE_APP_NAME || 'React Client' }}
             VITE_API_BASE_URL=/api
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -59,30 +60,28 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT || 22 }}
           script: |
             set -e
-            
-            echo "📦 Carregando imagem Docker..."
+
+            echo "Carregando imagem Docker..."
             docker load -i /tmp/docker-images/client-image.tar.gz
-            
-            echo "🧹 Limpando arquivos temporários..."
+
+            echo "Limpando arquivos temporários..."
             rm -f /tmp/docker-images/*.tar.gz
-            
-            echo "🔄 Atualizando serviço Docker Swarm..."
-            
-            # Atualizar serviço Client
-            if docker service ls | grep -q "alia-client_client"; then
-              echo "Atualizando serviço Client..."
-              docker service update --image ${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }} --force alia-client_client || true
+
+            echo "Atualizando serviço Docker Swarm..."
+            SERVICE_NAME="${{ env.CLIENT_SERVICE }}"
+            IMAGE_REF="${{ env.IMAGE_CLIENT }}:${{ env.IMAGE_TAG }}"
+
+            if docker service ls | grep -q "${SERVICE_NAME}"; then
+              echo "Atualizando serviço ${SERVICE_NAME}..."
+              docker service update --image "${IMAGE_REF}" --force "${SERVICE_NAME}" || true
             else
-              echo "⚠️ Serviço Client não encontrado. Certifique-se de que a stack está criada no Portainer."
+              echo "Serviço ${SERVICE_NAME} não encontrado. Crie a stack no Portainer antes do deploy."
             fi
-            
-            echo "✅ Deploy concluído!"
-            echo ""
-            echo "📋 Status do serviço:"
-            docker service ls | grep alia-client || true
+
+            echo "Deploy concluído."
+            docker service ls | grep -E "client|${SERVICE_NAME}" || true
 
       - name: Cleanup
         if: always()
         run: |
           rm -f client-image.tar.gz
-

@@ -36,7 +36,7 @@ a {
   @apply min-h-screen bg-surface-subtle;
 }
 
-/* Ripple effect similar to Nubank */
+/* Efeito de interação reutilizável para superfícies clicáveis. */
 .ripple {
   position: relative;
   overflow: hidden;

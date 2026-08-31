@@ -33,7 +33,9 @@ Adicione os seguintes secrets:
 | `DEPLOY_PORT` | Porta SSH (opcional) | `22` |
 
 **Opcional:**
-- `VITE_APP_NAME`: Nome da aplicação para o build (padrão: `Alia`)
+- `VITE_APP_NAME`: nome da aplicação no build (padrão: `React Client`)
+- `CLIENT_IMAGE`: nome da imagem Docker (padrão configurado no workflow)
+- `CLIENT_SERVICE`: nome do serviço Swarm a atualizar
 
 ### 3. Preparar Servidor
 
@@ -62,8 +64,8 @@ sudo usermod -aG docker $USER
 
 3. Verifique no servidor:
    ```bash
-   docker service ls | grep alia-client
-   docker images | grep alia-client
+   docker service ls | grep client
+   docker images | grep client
    ```
 
 ## ✅ Pronto!
@@ -74,8 +76,8 @@ Agora, sempre que houver push/merge na `master`, o deploy será automático!
 
 ```bash
 # No servidor
-docker service ls | grep alia-client
-docker service logs alia-client_client --tail 20
+docker service ls | grep client
+docker service logs <stack>_client --tail 20
 ```
 
 ## 🐛 Problemas Comuns
@@ -89,6 +91,6 @@ docker service logs alia-client_client --tail 20
 - Faça logout e login novamente
 
 ### "Service not found"
-- Certifique-se de que a stack `alia-client` está criada no Portainer
+- Certifique-se de que a stack do client está criada no Portainer
 - Crie a stack usando o `docker-compose.yml` antes de usar o CI/CD
 

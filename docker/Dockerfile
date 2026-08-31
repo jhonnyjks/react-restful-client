@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Declarar build args para variáveis do Vite
-ARG VITE_APP_NAME=Quero Atendimentos IA
+ARG VITE_APP_NAME=React Client
 ARG VITE_API_BASE_URL=/api
 
 # Copiar arquivos de dependências
@@ -41,7 +41,7 @@ RUN set -a && \
       done < .env.production; \
     fi && \
     # Garantir valores padrão se não definidos
-    export VITE_APP_NAME=${VITE_APP_NAME:-Quero Atendimentos IA} && \
+    export VITE_APP_NAME=${VITE_APP_NAME:-React Client} && \
     export VITE_API_BASE_URL=${VITE_API_BASE_URL:-/api} && \
     echo "Building with VITE_APP_NAME=${VITE_APP_NAME}" && \
     echo "Building with VITE_API_BASE_URL=${VITE_API_BASE_URL}" && \

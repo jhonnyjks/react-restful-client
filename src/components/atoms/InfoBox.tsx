@@ -33,8 +33,8 @@ const descriptionStyles: Record<InfoBoxVariant, string> = {
  * @example
  * ```tsx
  * <InfoBox
- *   title="Informe seu e-mail ou WhatsApp"
- *   description="Verificaremos se você já iniciou seu cadastro para continuar de onde parou."
+ *   title="Informe seu e-mail"
+ *   description="Verificaremos se você já possui cadastro para continuar."
  *   variant="info"
  * />
  * ```

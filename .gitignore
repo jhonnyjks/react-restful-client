@@ -26,6 +26,9 @@ dist-ssr
 .env.development
 .env.production
 
+# Aplicação de domínio: checkout Git independente, conforme rrc-app-skeleton.
+/src/app/
+
 # Playwright (evita conflito com artefatos criados como root no Docker)
 .playwright/
 test-results/

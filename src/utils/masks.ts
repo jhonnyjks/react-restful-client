@@ -65,14 +65,6 @@ export function maskCellPhone(value: string): string {
 }
 
 /**
- * Aplica máscara de WhatsApp (número sem código do país): (00) 00000-0000
- * Similar ao celular, mas assume que o código do país já foi removido
- */
-export function maskWhatsAppNumber(value: string): string {
-  return maskCellPhone(value);
-}
-
-/**
  * Valida CNPJ (formato e dígitos verificadores)
  */
 export function validateCNPJ(cnpj: string): boolean {
@@ -164,14 +156,6 @@ export function validatePhone(phone: string): boolean {
  */
 export function validateCellPhone(phone: string): boolean {
   const numbers = removeNonNumeric(phone);
-  return numbers.length === 11;
-}
-
-/**
- * Valida WhatsApp número (formato brasileiro: 11 dígitos)
- */
-export function validateWhatsAppNumber(whatsapp: string): boolean {
-  const numbers = removeNonNumeric(whatsapp);
   return numbers.length === 11;
 }
 

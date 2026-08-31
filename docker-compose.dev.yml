@@ -3,31 +3,31 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.dev
-    container_name: alia-client-dev
+    container_name: ${CLIENT_CONTAINER_NAME:-react-client-dev}
     restart: unless-stopped
     env_file:
       - .env.development
+    environment:
+      VITE_API_PROXY_TARGET: ${VITE_API_PROXY_TARGET:-http://api-nginx:80}
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+      VITE_APP_NAME: ${VITE_APP_NAME:-React Client}
     ports:
-      - "5173:5173"
+      - "${CLIENT_DEV_PORT:-5173}:5173"
     volumes:
       - .:/app
       - /app/node_modules
-    # As variáveis são carregadas automaticamente do .env.development via env_file
-    # O Vite acessa via import.meta.env.VITE_APP_NAME em runtime
-    # O .env.development será criado automaticamente pelo command se não existir
     networks:
-      - alia-network
-      - api_alia-network
+      - app-network
+      - api-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    # Criar .env.development no host antes de iniciar (se não existir)
-    command: sh -c "test -f .env.development || (test -f .env.development.example && cp .env.development.example .env.development) || (echo 'VITE_API_PROXY_TARGET=http://alia-nginx:80' > .env.development && echo 'VITE_APP_NAME=\"Alia\"' >> .env.development && echo 'VITE_API_BASE_URL=/api' >> .env.development); npm run dev -- --host 0.0.0.0"
+    command: npm run dev -- --host 0.0.0.0
 
 networks:
-  alia-network:
+  app-network:
     external: true
-    name: alia-network
-  api_alia-network:
+    name: ${APP_NETWORK:-app-network}
+  api-network:
     external: true
-    name: api_alia-network
+    name: ${API_NETWORK:-api-network}
 

@@ -18,9 +18,10 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     resolve: {
-      alias: {
-        '@': path.resolve(__dirname, './src'),
-      },
+      alias: [
+        { find: '@app', replacement: path.resolve(__dirname, './src/app') },
+        { find: '@', replacement: path.resolve(__dirname, './src') },
+      ],
     },
     server: {
       proxy: {
