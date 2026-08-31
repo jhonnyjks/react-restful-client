@@ -8,8 +8,8 @@ ARG VITE_APP_NAME=React Client
 ARG VITE_API_BASE_URL=/api
 ARG APP_SOURCE_DIR=src/app
 
-# Copiar arquivos de dependências
-COPY package*.json ./
+# Copiar metadados e política de resolução de dependências
+COPY package*.json .npmrc ./
 
 # Instalar dependências
 RUN npm ci
