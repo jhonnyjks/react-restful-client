@@ -8,6 +8,16 @@ services:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
         VITE_APP_NAME: ${VITE_APP_NAME:-React Client}
         APP_SOURCE_DIR: ${APP_SOURCE_DIR:-src/app}
+    restart: unless-stopped
+    # Container labels support ordinary Docker Compose; deploy.labels below
+    # retain the same routing when this file is deployed as a Swarm stack.
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-Diatech}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.rule=Host(`${CLIENT_HOST:?CLIENT_HOST is required}`)"
+      - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
+      - "traefik.http.services.${TRAEFIK_ROUTER:-alia-admin}.loadbalancer.server.port=80"
     deploy:
       restart_policy:
         condition: any
@@ -16,29 +26,24 @@ services:
         window: 120s
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.${TRAEFIK_ROUTER:-react-client}.rule=Host(`${CLIENT_HOST:-localhost}`)"
-        - "traefik.http.routers.${TRAEFIK_ROUTER:-react-client}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
-        - "traefik.http.routers.${TRAEFIK_ROUTER:-react-client}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
-        - "traefik.http.services.${TRAEFIK_ROUTER:-react-client}.loadbalancer.server.port=80"
-    ports:
-      - target: 80
-        published: ${CLIENT_PORT:-3000}
-        protocol: tcp
-        mode: ingress
+        - "traefik.docker.network=${TRAEFIK_NETWORK:-Diatech}"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.rule=Host(`${CLIENT_HOST:?CLIENT_HOST is required}`)"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
+        - "traefik.http.services.${TRAEFIK_ROUTER:-alia-admin}.loadbalancer.server.port=80"
+    # Production is served only by Traefik/TLS. docker-compose.dev.yml
+    # publishes Vite on port 5173 for a local browser.
     environment:
-      API_BACKEND: ${API_BACKEND:-http://api-nginx:80}
-      NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:-_}
+      API_BACKEND: ${API_BACKEND:?API_BACKEND is required}
+      NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:?NGINX_SERVER_NAME is required}
     networks:
       - app-network
       - api-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
 networks:
   app-network:
     external: true
-    name: ${APP_NETWORK:-app-network}
+    name: ${APP_NETWORK:-Diatech}
   api-network:
     external: true
-    name: ${API_NETWORK:-api-network}
+    name: ${API_NETWORK:-alia-internal}
 

@@ -8,7 +8,9 @@ services:
     env_file:
       - .env.development
     environment:
-      VITE_API_PROXY_TARGET: ${VITE_API_PROXY_TARGET:-http://api-nginx:80}
+      # api/docker-compose.dev.yml exposes nginx as alia-nginx on this shared
+      # Docker network. Keeping the browser base URL relative avoids CORS.
+      VITE_API_PROXY_TARGET: ${VITE_API_PROXY_TARGET:-http://alia-nginx:80}
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
       VITE_APP_NAME: ${VITE_APP_NAME:-React Client}
       APP_SOURCE_DIR: ${APP_SOURCE_DIR:-src/app}
@@ -20,8 +22,6 @@ services:
     networks:
       - app-network
       - api-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     command: npm run dev -- --host 0.0.0.0
 
 networks:
@@ -30,5 +30,5 @@ networks:
     name: ${APP_NETWORK:-app-network}
   api-network:
     external: true
-    name: ${API_NETWORK:-api-network}
+    name: ${API_NETWORK:-api_alia-network}
 

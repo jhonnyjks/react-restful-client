@@ -1,0 +1,30 @@
+name: alia-admin
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        VITE_APP_NAME: ${VITE_APP_NAME:-Alia}
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        APP_SOURCE_DIR: ${APP_SOURCE_DIR:-src/app}
+    image: alia-admin:local
+    container_name: alia-admin
+    restart: unless-stopped
+    environment:
+      API_BACKEND: ${API_BACKEND:-http://alia-api-nginx:80}
+      NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:?NGINX_SERVER_NAME is required}
+    networks:
+      - public
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/ | grep -qi '<!doctype html>'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+networks:
+  public:
+    external: true
+    name: ${PUBLIC_NETWORK:-aliabrasil}
