@@ -25,6 +25,7 @@ dist-ssr
 
 .env.development
 .env.production
+.env.vps
 
 # Aplicação de domínio: checkout Git independente, conforme rrc-app-skeleton.
 /src/app/
