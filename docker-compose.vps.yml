@@ -13,9 +13,10 @@ services:
     container_name: alia-admin
     restart: unless-stopped
     environment:
-      API_BACKEND: ${API_BACKEND:-http://alia-api-nginx:80}
+      API_BACKEND: ${API_BACKEND:-http://alia-api-internal:80}
       NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:?NGINX_SERVER_NAME is required}
     networks:
+      - application
       - public
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/ | grep -qi '<!doctype html>'"]
@@ -25,6 +26,9 @@ services:
       start_period: 20s
 
 networks:
+  application:
+    external: true
+    name: ${APPLICATION_NETWORK:-alia-internal}
   public:
     external: true
     name: ${PUBLIC_NETWORK:-aliabrasil}
