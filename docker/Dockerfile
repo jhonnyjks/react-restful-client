@@ -6,6 +6,7 @@ WORKDIR /app
 # Declarar build args para variáveis do Vite
 ARG VITE_APP_NAME=React Client
 ARG VITE_API_BASE_URL=/api
+ARG VITE_SHOW_MAIN_FOOTER=true
 ARG APP_SOURCE_DIR=src/app
 
 # Copiar metadados e política de resolução de dependências
@@ -23,6 +24,7 @@ RUN set -a && \
     # Exportar build args (eles têm prioridade)
     export VITE_APP_NAME="${VITE_APP_NAME}" && \
     export VITE_API_BASE_URL="${VITE_API_BASE_URL}" && \
+    export VITE_SHOW_MAIN_FOOTER="${VITE_SHOW_MAIN_FOOTER}" && \
     export APP_SOURCE_DIR="${APP_SOURCE_DIR}" && \
     # Carregar .env.production se existir (apenas para outras variáveis não passadas como build args)
     if [ -f .env.production ]; then \
@@ -35,7 +37,7 @@ RUN set -a && \
         [ -z "$line" ] && continue; \
         var_name=$(echo "$line" | cut -d'=' -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'); \
         # Ignorar variáveis que já foram passadas como build args
-        if [ "$var_name" != "VITE_APP_NAME" ] && [ "$var_name" != "VITE_API_BASE_URL" ]; then \
+        if [ "$var_name" != "VITE_APP_NAME" ] && [ "$var_name" != "VITE_API_BASE_URL" ] && [ "$var_name" != "VITE_SHOW_MAIN_FOOTER" ]; then \
           var_value=$(echo "$line" | cut -d'=' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'); \
           var_value=$(echo "$var_value" | sed 's/^"\(.*\)"$/\1/' | sed "s/^'\(.*\)'$/\1/"); \
           eval "export ${var_name}=\"${var_value}\""; \
@@ -45,9 +47,11 @@ RUN set -a && \
     # Garantir valores padrão se não definidos
     export VITE_APP_NAME=${VITE_APP_NAME:-React Client} && \
     export VITE_API_BASE_URL=${VITE_API_BASE_URL:-/api} && \
+    export VITE_SHOW_MAIN_FOOTER=${VITE_SHOW_MAIN_FOOTER:-true} && \
     export APP_SOURCE_DIR=${APP_SOURCE_DIR:-src/app} && \
     echo "Building ${APP_SOURCE_DIR} with VITE_APP_NAME=${VITE_APP_NAME}" && \
     echo "Building with VITE_API_BASE_URL=${VITE_API_BASE_URL}" && \
+    echo "Building with VITE_SHOW_MAIN_FOOTER=${VITE_SHOW_MAIN_FOOTER}" && \
     npm run build && \
     set +a
 

@@ -10,6 +10,8 @@ import Messages from '../common/msg/Message'
 import Routes from './routes'
 
 
+const showMainFooter = process.env.REACT_APP_SHOW_MAIN_FOOTER !== 'false'
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +24,7 @@ class App extends Component {
                         <Header />
                         <SideBar />
                         <Routes />
-                        <Footer />
+                        {showMainFooter ? <Footer /> : null}
                         <Messages />
                     </div>
             </HashRouter>

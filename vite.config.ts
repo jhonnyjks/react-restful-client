@@ -11,6 +11,8 @@ export default defineConfig(({ mode }) => {
   const legacyAppName = env.REACT_APP_NAME ?? env.VITE_APP_NAME ?? 'React Client';
   const legacyLogo = env.REACT_APP_LOGO ?? '';
   const legacyLoginLogo = env.REACT_APP_LOGIN_LOGO ?? '';
+  const showMainFooterRaw = env.VITE_SHOW_MAIN_FOOTER ?? env.REACT_APP_SHOW_MAIN_FOOTER ?? 'true';
+  const showMainFooter = !['0', 'false', 'no', 'off'].includes(showMainFooterRaw.trim().toLowerCase());
 
   if (!appRoot.startsWith(`${projectRoot}${path.sep}`)) {
     throw new Error('APP_SOURCE_DIR deve apontar para um diretório dentro do skeleton.');
@@ -24,6 +26,7 @@ export default defineConfig(({ mode }) => {
       'process.env.REACT_APP_NAME': JSON.stringify(legacyAppName),
       'process.env.REACT_APP_LOGO': JSON.stringify(legacyLogo),
       'process.env.REACT_APP_LOGIN_LOGO': JSON.stringify(legacyLoginLogo),
+      'process.env.REACT_APP_SHOW_MAIN_FOOTER': JSON.stringify(showMainFooter ? 'true' : 'false'),
     },
     resolve: {
       alias: [

@@ -8,6 +8,7 @@ services:
       args:
         VITE_APP_NAME: ${VITE_APP_NAME:-Alia}
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        VITE_SHOW_MAIN_FOOTER: ${VITE_SHOW_MAIN_FOOTER:-false}
         APP_SOURCE_DIR: ${APP_SOURCE_DIR:-src/app}
     image: alia-admin:local
     container_name: alia-admin
