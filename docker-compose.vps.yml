@@ -1,0 +1,29 @@
+# PrivZap Admin UI — produção VPS (estático nginx + rede aliabrasil).
+# Build a pasta `build/` no CI/lab (Node 14) e publique junto com este compose.
+#
+#   REACT_APP_API_HOST=https://api.privzap.com/api npm run build
+#   docker compose --env-file .env.vps -f docker-compose.vps.yml up -d
+
+name: privzap-admin-ui
+
+services:
+  privzap-admin-ui:
+    image: nginx:alpine
+    container_name: privzap-admin-ui
+    restart: unless-stopped
+    volumes:
+      - ./build:/usr/share/nginx/html:ro
+      - ./docker/nginx-spa.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - public
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/ | grep -qi 'html'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+networks:
+  public:
+    external: true
+    name: ${PUBLIC_NETWORK:-aliabrasil}
