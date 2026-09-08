@@ -1,13 +1,18 @@
 import axios from 'axios'
 
+function bodyClassName() {
+    return document.body.getAttribute('class') || ''
+}
+
 export function openCloseSideBar(e) {
     if (e) {
         e.preventDefault();
     }
-    if (document.body.getAttribute('class').indexOf('sidebar-collapse') > -1) {
-        document.body.setAttribute('class', document.body.getAttribute('class').replace('sidebar-collapse', ''));
+    const current = bodyClassName()
+    if (current.indexOf('sidebar-collapse') > -1) {
+        document.body.setAttribute('class', current.replace('sidebar-collapse', '').trim());
     } else {
-        document.body.setAttribute('class', document.body.getAttribute('class') + ' sidebar-collapse');
+        document.body.setAttribute('class', `${current} sidebar-collapse`.trim());
     }
 
     return {
@@ -20,10 +25,11 @@ export function openCloseMiniSideBar(e) {
     if (typeof e === 'object') {
         e.preventDefault()
     }
-    if (document.body.getAttribute('class').indexOf('sidebar-open') > -1) {
-        document.body.setAttribute('class', document.body.getAttribute('class').replace('sidebar-open', ''))
+    const current = bodyClassName()
+    if (current.indexOf('sidebar-open') > -1) {
+        document.body.setAttribute('class', current.replace('sidebar-open', '').trim())
     } else {
-        document.body.setAttribute('class', document.body.getAttribute('class') + ' sidebar-open')
+        document.body.setAttribute('class', `${current} sidebar-open`.trim())
     }
 
     return {
