@@ -1,0 +1,45 @@
+# Auto-deploy gated by repository variable AUTO_DEPLOY_ENABLED=true.
+# Secrets: VPS_SSH_HOST, VPS_SSH_PORT, VPS_SSH_USER, VPS_SSH_KEY
+# Keep AUTO_DEPLOY_ENABLED=false until Ops + watchdog are proven.
+
+name: deploy-vps
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: vps-deploy-client-react
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm ci || npm install
+      - name: Build
+        run: npm run build
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider --max-old-space-size=4096
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.AUTO_DEPLOY_ENABLED == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
+    steps:
+      - name: SSH deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_SSH_HOST }}
+          port: ${{ secrets.VPS_SSH_PORT }}
+          username: ${{ secrets.VPS_SSH_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: /opt/aliabrasil/bin/deploy-service.sh client-react
