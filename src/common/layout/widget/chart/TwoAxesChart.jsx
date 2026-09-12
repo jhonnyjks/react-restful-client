@@ -306,7 +306,7 @@ export default class TwoAxesChart extends React.PureComponent {
 
                     {this.props.stack ? <Stack /> : ''}
 
-                    {this.renderLegend(legend || {})}
+                    {legend === false ? null : this.renderLegend(legend || {})}
 
                     <EventTracker />
                     <HoverState
