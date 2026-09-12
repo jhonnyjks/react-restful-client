@@ -16,7 +16,7 @@ class AuthOrApp extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            laoding:false,
+            loading: false,
         }
 
         //GLOBALS
@@ -32,8 +32,14 @@ class AuthOrApp extends Component {
         })
 
         axios.interceptors.response.use((response) => {
-            if(!response.config.url.includes('notifications'))
+            const silent = response.config && (
+                response.config.silent === true
+                || response.config.skipLoading === true
+                || (response.config.url && response.config.url.includes('notifications'))
+            )
+            if (!silent) {
                 this.setState({loading:false})
+            }
             return response;
         }, (error) => {
             this.setState({loading:false})
@@ -98,8 +104,14 @@ class AuthOrApp extends Component {
     }
 
     interceptRequest = (conf) => {
-        if(!conf.url.includes('notifications'))
-            this.setState({loading:true})
+        const silent = conf.silent === true
+            || conf.skipLoading === true
+            || (conf.headers && (conf.headers['X-Silent-Request'] === '1' || conf.headers['x-silent-request'] === '1'))
+            || (conf.url && conf.url.includes('notifications'))
+
+        if (!silent) {
+            this.setState({ loading: true })
+        }
 
         const scopes = this.props.auth.profile ? this.props.auth.profile.scopes : {}
         let url = conf.url       
