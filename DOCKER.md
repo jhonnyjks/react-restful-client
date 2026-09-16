@@ -60,6 +60,15 @@ Variáveis:
 
 O Dockerfile lê `.env.production` durante o build, mas `VITE_*` passadas como build args têm prioridade.
 
+## Rotas de nginx próprias do projeto
+
+Esta base não recebe configuração de projeto. Quando o produto precisa de uma
+rota extra no nginx (um redirecionador, um webhook, um proxy para outro
+serviço), o app declara os arquivos em `${APP_SOURCE_DIR}/docker/nginx/*.conf`
+e o build os injeta dentro do `server` já existente. Cada arquivo contém
+apenas blocos `location`, e `${API_BACKEND}` e `${NGINX_SERVER_NAME}` são
+resolvidos na subida do container. Sem esses arquivos, nada muda.
+
 ## Estrutura
 
 ```

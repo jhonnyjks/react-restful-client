@@ -15,23 +15,10 @@ server {
     gzip_min_length 1024;
     gzip_types text/plain text/css text/xml text/javascript application/javascript application/json;
 
-    # Clique rastreado de scatter: /l/{token} → API /api/r/{token}
-    location ~ ^/l/([A-Za-z0-9]+)$ {
-        set $api_backend ${API_BACKEND};
-        rewrite ^/l/(.*)$ /api/r/$1 break;
-        proxy_pass $api_backend;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header User-Agent $http_user_agent;
-        proxy_ssl_verify off;
-        proxy_connect_timeout 5s;
-        proxy_send_timeout 15s;
-        proxy_read_timeout 15s;
-    }
+    # Locations próprias do produto, se houver: o app publica arquivos .conf em
+    # ${APP_SOURCE_DIR}/docker/nginx/ e eles entram aqui. O curinga faz o nginx
+    # ignorar a ausência, então a base segue servindo qualquer projeto.
+    include /etc/nginx/app-locations/*.conf;
 
     # Proxy para API (configurado via variável de ambiente)
     # Usa comunicação interna via rede Docker (HTTP, não HTTPS)

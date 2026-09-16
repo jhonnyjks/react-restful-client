@@ -18,6 +18,11 @@ RUN npm ci
 # Copiar código fonte (inclui .env.production se existir)
 COPY . .
 
+# Reunir as locations de nginx que o app declarar. Fica sempre criado, mesmo
+# vazio, para o estágio de produção poder copiar sem saber se o app usa isso.
+RUN mkdir -p /app/app-locations && \
+    cp -f "${APP_SOURCE_DIR}"/docker/nginx/*.conf /app/app-locations/ 2>/dev/null || true
+
 # Exportar build args como variáveis de ambiente para o Vite
 # Build args têm prioridade sobre .env.production
 RUN set -a && \
@@ -63,6 +68,10 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copiar template do nginx
 COPY docker/nginx.conf.template /etc/nginx/templates/default.conf.template
+
+# Locations do produto (diretório vazio quando o app não declara nenhuma)
+RUN mkdir -p /etc/nginx/app-locations
+COPY --from=builder /app/app-locations/ /etc/nginx/app-locations/
 
 # Copiar entrypoint customizado
 COPY docker/docker-entrypoint.sh /custom-entrypoint.sh
