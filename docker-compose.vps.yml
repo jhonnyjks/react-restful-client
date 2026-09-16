@@ -1,4 +1,10 @@
-name: alia-admin
+# Deploy em Docker Compose numa VPS, atrás de um proxy já existente.
+#
+# A base não conhece nenhum projeto: identidade (nome da stack, imagem,
+# container) e redes vêm do .env.vps, que fica só na VPS. São obrigatórias de
+# propósito — um default aqui faria o projeto seguinte subir com o nome do
+# anterior.
+name: ${CLIENT_STACK_NAME:?CLIENT_STACK_NAME is required}
 
 services:
   client:
@@ -6,15 +12,15 @@ services:
       context: .
       dockerfile: docker/Dockerfile
       args:
-        VITE_APP_NAME: ${VITE_APP_NAME:-Alia}
+        VITE_APP_NAME: ${VITE_APP_NAME:-React Client}
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
-        VITE_SHOW_MAIN_FOOTER: ${VITE_SHOW_MAIN_FOOTER:-false}
+        VITE_SHOW_MAIN_FOOTER: ${VITE_SHOW_MAIN_FOOTER:-true}
         APP_SOURCE_DIR: ${APP_SOURCE_DIR:-src/app}
-    image: alia-admin:local
-    container_name: alia-admin
+    image: ${CLIENT_IMAGE:?CLIENT_IMAGE is required}:${CLIENT_IMAGE_TAG:-local}
+    container_name: ${CLIENT_CONTAINER_NAME:?CLIENT_CONTAINER_NAME is required}
     restart: unless-stopped
     environment:
-      API_BACKEND: ${API_BACKEND:-http://alia-api-internal:80}
+      API_BACKEND: ${API_BACKEND:?API_BACKEND is required}
       NGINX_SERVER_NAME: ${NGINX_SERVER_NAME:?NGINX_SERVER_NAME is required}
     networks:
       - application
@@ -29,7 +35,7 @@ services:
 networks:
   application:
     external: true
-    name: ${APPLICATION_NETWORK:-alia-internal}
+    name: ${APPLICATION_NETWORK:?APPLICATION_NETWORK is required}
   public:
     external: true
-    name: ${PUBLIC_NETWORK:-aliabrasil}
+    name: ${PUBLIC_NETWORK:?PUBLIC_NETWORK is required}

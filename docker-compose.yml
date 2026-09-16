@@ -13,11 +13,11 @@ services:
     # retain the same routing when this file is deployed as a Swarm stack.
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=${TRAEFIK_NETWORK:-Diatech}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.rule=Host(`${CLIENT_HOST:?CLIENT_HOST is required}`)"
-      - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
-      - "traefik.http.services.${TRAEFIK_ROUTER:-alia-admin}.loadbalancer.server.port=80"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:?TRAEFIK_NETWORK is required}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.rule=Host(`${CLIENT_HOST:?CLIENT_HOST is required}`)"
+      - "traefik.http.routers.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
+      - "traefik.http.services.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.loadbalancer.server.port=80"
     deploy:
       restart_policy:
         condition: any
@@ -26,11 +26,11 @@ services:
         window: 120s
       labels:
         - "traefik.enable=true"
-        - "traefik.docker.network=${TRAEFIK_NETWORK:-Diatech}"
-        - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.rule=Host(`${CLIENT_HOST:?CLIENT_HOST is required}`)"
-        - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
-        - "traefik.http.routers.${TRAEFIK_ROUTER:-alia-admin}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
-        - "traefik.http.services.${TRAEFIK_ROUTER:-alia-admin}.loadbalancer.server.port=80"
+        - "traefik.docker.network=${TRAEFIK_NETWORK:?TRAEFIK_NETWORK is required}"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.rule=Host(`${CLIENT_HOST:?CLIENT_HOST is required}`)"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+        - "traefik.http.routers.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencryptresolver}"
+        - "traefik.http.services.${TRAEFIK_ROUTER:?TRAEFIK_ROUTER is required}.loadbalancer.server.port=80"
     # Production is served only by Traefik/TLS. docker-compose.dev.yml
     # publishes Vite on port 5173 for a local browser.
     environment:
@@ -42,8 +42,8 @@ services:
 networks:
   app-network:
     external: true
-    name: ${APP_NETWORK:-Diatech}
+    name: ${APP_NETWORK:?APP_NETWORK is required}
   api-network:
     external: true
-    name: ${API_NETWORK:-alia-internal}
+    name: ${API_NETWORK:?API_NETWORK is required}
 

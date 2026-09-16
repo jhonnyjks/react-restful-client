@@ -1,5 +1,6 @@
 # Auto-deploy gated by repository variable AUTO_DEPLOY_ENABLED=true.
 # Secrets: VPS_SSH_HOST, VPS_SSH_PORT, VPS_SSH_USER, VPS_SSH_KEY
+# Variables: VPS_DEPLOY_SCRIPT (comando de deploy da VPS do projeto)
 # Keep AUTO_DEPLOY_ENABLED=false until Ops + watchdog are proven.
 
 name: deploy-vps
@@ -35,6 +36,11 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (vars.AUTO_DEPLOY_ENABLED == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
     steps:
+      - name: Require deploy target
+        if: vars.VPS_DEPLOY_SCRIPT == ''
+        run: |
+          echo "Defina a variável VPS_DEPLOY_SCRIPT com o comando de deploy da VPS." >&2
+          exit 1
       - name: SSH deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -42,4 +48,4 @@ jobs:
           port: ${{ secrets.VPS_SSH_PORT }}
           username: ${{ secrets.VPS_SSH_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          script: /opt/aliabrasil/bin/deploy-service.sh client-react
+          script: ${{ vars.VPS_DEPLOY_SCRIPT }}
