@@ -6,9 +6,9 @@ import promisse from "redux-promise";
 import multi from "redux-multi";
 import thunk from "redux-thunk";
 
-import * as serviceWorker from "./serviceWorker";
 import AuthOrApp from "./main/authOrApp";
 import reducers from "./main/reducers";
+import { initPwa } from "./common/pwa/pwa";
 
 const devTools =
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({ trace: true, traceLimit: 25 });
@@ -23,7 +23,5 @@ ReactDOM.render(
   document.getElementById("app")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// PWA + Web Push (sw.js em /public). Registro também no Header via PwaControls.
+initPwa();

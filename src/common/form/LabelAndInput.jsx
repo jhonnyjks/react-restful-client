@@ -122,6 +122,7 @@ class LabelAndInput extends Component {
                         maxLength={this.props.maxLength}
                         min={ this.props.type == 'number' ? this.props.min  : {} }
                         max={ this.props.type == 'number' ? this.props.max  : {} }
+                        step={ this.props.type == 'number' ? this.props.step : undefined }
                         onInput={ this.props.onInput }
                         // required={rules['required'] || false} 
                         id={this.props.id}/>

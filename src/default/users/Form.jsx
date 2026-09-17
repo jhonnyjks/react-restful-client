@@ -62,6 +62,14 @@ class Form extends Component {
                                 label='Status' cols='12 4' placeholder=' - Selecione - ' 
                                 options={this.state.generalStatuses} error={this.props.errors} />
                         </Row>
+                        <Row>
+                            <Field name='blaze_email' component={LabelAndInput} readOnly={this.props.readOnly}
+                                type='email' label='E-mail da Blaze' cols='12 4' placeholder='login usado na Blaze' error={this.props.errors}
+                                title='Credencial da casa, usada pelo bot para logar na Blaze. Em branco, o bot usa o e-mail acima.' />
+                            <Field name='blaze_pass' component={LabelAndInput} readOnly={this.props.readOnly}
+                                label='Senha da Blaze' cols='12 4' placeholder='senha usada na Blaze' error={this.props.errors}
+                                title='Necessária apenas para usuários do perfil Bot.' />
+                        </Row>
                     </div>
                     <div className='card-footer'>
                         <SubmitButton label='Salvar' />
@@ -81,6 +89,8 @@ const mapStateToProps = state => ({
     login: selector(state, 'login'),
     password: selector(state, 'password'),
     general_status_id: selector(state, 'general_status_id'),
+    blaze_email: selector(state, 'blaze_email'),
+    blaze_pass: selector(state, 'blaze_pass'),
     errors: state.user.errors
 })
 const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch)

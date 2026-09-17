@@ -6,6 +6,7 @@ import {
   openCloseMiniSideBar,
   getNotifications,
 } from "./templateActions";
+import PwaControls from "../pwa/PwaControls";
 
 class Header extends Component {
   constructor(props) {
@@ -211,17 +212,21 @@ class Header extends Component {
         {this.state.width >= 600 ? (
           <ul
             className={"navbar-nav ml-auto"}
-            style={{ paddingRight: "40px" }}
+            style={{ paddingRight: "40px", position: "relative" }}
           >
+            <PwaControls />
             {this.props.notifications &&
               this.props.notifications.length > 0 &&
               this.renderNotifications(this.props.notifications)}
           </ul>
         ) : (
-          <ul className="navbar-nav ml-auto">
-            <a className="nav-link" onClick={this.toggleNotifications}>
-              <i className="fas fa-th-large"></i>
-            </a>
+          <ul className="navbar-nav ml-auto" style={{ position: "relative" }}>
+            <PwaControls />
+            {this.props.notifications && this.props.notifications.length > 0 && (
+              <a className="nav-link" onClick={this.toggleNotifications}>
+                <i className="fas fa-th-large"></i>
+              </a>
+            )}
           </ul>
         )}
         {/* Renderizar o menu de notificações apenas quando showNotifications for true */}
