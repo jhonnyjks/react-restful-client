@@ -1,5 +1,6 @@
 # Stage 1: Build
-FROM node:20-alpine AS builder
+# Node 20 is EOL; Oct 2026 security line is 22.23.4+ (Brotli/CVE cluster).
+FROM node:22.23.4-alpine AS builder
 
 WORKDIR /app
 
