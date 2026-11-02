@@ -34,7 +34,7 @@
     "leaflet-kml": "^1.0.1",
     "loam": "^1.0.0",
     "lodash": "^4.17.21",
-    "node-sass": "^4.14.1",
+    "sass": "^1.77.8",
     "pdf-lib": "^1.17.1",
     "react": "16.8.6",
     "react-bootstrap": "^1.6.4",
